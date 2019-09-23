@@ -20,14 +20,16 @@ router.get('/', (req, res) => {
   res.render('campgrounds', { campgrounds: inMemoryDb });
 });
 
+// /campgrounds
 router.post('/', (req, res) => {
-  console.log('Sending form data');
-  res.redirect('/');
+  console.log('Sending form data by POST');
+
+  res.redirect('/campgrounds');
 });
 
 // /campgrounds/new
 router.get('/new', (req, res) => {
-  res.send('Showing the form for a new campground');
+  // res.send('Showing the form for a new campground');
   res.render('newcampground');
 });
 
