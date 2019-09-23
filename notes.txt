@@ -39,6 +39,7 @@ Stage 3
 
 1. npm i eslint  eslint-config-airbnb-base eslint-plugin-import 
     and then:
+    npm i eslint -D
     eslint init (to generate .eslintrc)
       if jquery then add in .eslintrc:
       env: {
@@ -46,7 +47,7 @@ Stage 3
       },
 
 
-4. npm i htmlhint
+4. npm i htmlhint -D
     and then add
 .htmlhintrc : ("spec-char-escape": false for .ejs files )
 {
