@@ -41,8 +41,8 @@ router.post('/', (req, res) => {
     console.log(typeof body); // string
     const moviesObj = JSON.parse(body); // now: object
 
-    res.render('movies', { movies: moviesObj }); 
-  });*/
+    res.render('movies', { movies: moviesObj });
+  }); */
 });
 
 router.get('/new', (req, res) => {
