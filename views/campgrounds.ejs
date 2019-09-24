@@ -1,15 +1,19 @@
 <% include partials/header.ejs %>
 
-<h1>List of campgrounds</h1>
+<div class="container">
+    <header class="jumbotron">
+        <h1>Welcome to Expresscamp!</h1>
+        <p>View our handpicked campgrounds from the whole world</p>
+        <p><a class="btn btn-primary btn-sm" href="/campgrounds/new">Add new campground</a></p>
+    </header>
 
-<a href="/">Home</a><br><br>
+    <% campgrounds.forEach((camp) =>{ %>
+    <div>
+        <%= camp.name %> <br><br>
+        <img src="<%= camp.image %>">
+    </div><br><br>
 
-<% campgrounds.forEach((camp) =>{ %>
-<div>
-    <%= camp.name %> <br><br>
-    <img src="<%= camp.image %>">
-</div><br><br>
+    <% }) %>
 
-<% }) %>
-
+</div>
 <% include partials/footer.ejs %>
