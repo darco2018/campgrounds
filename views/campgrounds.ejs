@@ -7,13 +7,14 @@
         <p><a class="btn btn-primary btn-sm" href="/campgrounds/new">Add new campground</a></p>
     </header>
 
-    <% campgrounds.forEach((camp) =>{ %>
-    <div>
-        <%= camp.name %> <br><br>
-        <img src="<%= camp.image %>">
-    </div><br><br>
-
-    <% }) %>
-
+    <div class="row">
+        <% campgrounds.forEach((camp) =>{ %>
+        <figure class="figure col-sm-6 col-md-3">
+            <img class="img-thumbnail img-fluid" src="<%= camp.image %>">
+            <figcaption class="figure-caption text-center"><%= camp.name %> </figcaption>
+        </figure>
+        <% }) %>
+    </div>
 </div>
+
 <% include partials/footer.ejs %>
