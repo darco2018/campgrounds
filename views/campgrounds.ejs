@@ -11,7 +11,11 @@
         <% campgrounds.forEach((camp) =>{ %>
         <figure class="figure col-sm-6 col-md-3">
             <img class="img-thumbnail img-fluid" src="<%= camp.image %>">
-            <figcaption class="figure-caption text-center"><%= camp.name %> </figcaption>
+            <figcaption class="figure-caption text-center">
+                <h4> <%= camp.name %></h4>
+            </figcaption>
+            <div class="text-center"><a class="btn btn-primary btn-sm" href="campgrounds/<%= camp.id %>">Details</a>
+            </div>
         </figure>
         <% }) %>
     </div>
