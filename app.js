@@ -1,17 +1,23 @@
 const createError = require('http-errors');
 const express = require('express');
+
+const app = express();
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
-
+// routes
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const moviesRouter = require('./routes/movies');
 const campgroundsRouter = require('./routes/campgrounds');
 // const catsRouter = require('./routes/cats');
 
-const app = express();
+/* ---------- SEED DB start -------------*/
+const seedDb = require('./seeds');
+
+seedDb();
+/* ---------- SEED DB end -------------*/
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
