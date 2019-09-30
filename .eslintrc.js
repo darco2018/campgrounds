@@ -3,20 +3,19 @@ module.exports = {
     browser: true,
     es6: true,
     node: true,
-    "jquery": true
+    jquery: true
   },
-  extends: [
-    'airbnb-base',
-  ],
+  extends: ['airbnb-base'],
   globals: {
     Atomics: 'readonly',
-    SharedArrayBuffer: 'readonly',
+    SharedArrayBuffer: 'readonly'
   },
   parserOptions: {
     ecmaVersion: 2018,
-    sourceType: 'module',
+    sourceType: 'module'
   },
   rules: {
-    "no-console": 0
-  },
+    'no-console': 0,
+    'no-unused-vars': 0
+  }
 };
