@@ -1,6 +1,4 @@
-
-
-    $(document).ready(() => {
-        const welcomeParag = document.getElementById('welcome');
-        welcomeParag.innerHTML = "Welcome ...";
-      });
+$(document).ready(() => {
+  const welcomeParag = document.getElementById('welcome');
+  welcomeParag.innerHTML = 'Welcome ...';
+});

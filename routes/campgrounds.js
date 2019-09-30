@@ -7,7 +7,10 @@ const router = express.Router();
 
 // ----------START create connection ----------
 const dbName = 'express_camp';
-mongoose.connect(`mongodb://localhost:27017/${dbName}`, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(`mongodb://localhost:27017/${dbName}`, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error'));
 // ----------END create connection ----------
@@ -16,7 +19,6 @@ db.once('open', () => {
   console.log(`-------- Successfully connected to ${dbName} -------`);
   // saveMockCampgrounds(); run once to seed db
 });
-
 
 // --------- START create model ----------
 
@@ -49,15 +51,18 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => {
   console.log('Receiving form data by POST');
 
-  const newCampground = { name: req.body.name, image: req.body.image, description: req.body.desc };
-  Campground.create(newCampground,
-    (err, savedCamp) => {
-      if (err) {
-        return console.log(`Error is: ${err}`);
-      }
-      console.log(`${savedCamp} has been saved`);
-      res.redirect('/campgrounds');
-    });
+  const newCampground = {
+    name: req.body.name,
+    image: req.body.image,
+    description: req.body.desc,
+  };
+  Campground.create(newCampground, (err, savedCamp) => {
+    if (err) {
+      return console.log(`Error is: ${err}`);
+    }
+    console.log(`${savedCamp} has been saved`);
+    res.redirect('/campgrounds');
+  });
 });
 
 // NEW - show form to create new campground
@@ -70,7 +75,7 @@ router.get('/new', (req, res) => {
 // campgrounds/234
 // must be below /new
 router.get('/:id', (req, res) => {
-  const campground = Campground.findById(req.params.id, (err, foundCamp) => {
+  Campground.findById(req.params.id, (err, foundCamp) => {
     if (err) {
       return console.log.bind(console, err);
     }
@@ -100,9 +105,24 @@ const inMemoryDb = [
 function saveMockCampgrounds() {
   console.log('Saving mock campgrounds');
   const campgrounds = [
-    { name: 'Camp1', image: 'https://images.unsplash.com/photo-1497900304864-273dfb3aae33?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60', description: 'Nicely situated. Clean' },
-    { name: 'Camp2', image: 'https://images.unsplash.com/photo-1515408320194-59643816c5b2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60', description: 'No dogs allowed. dirty.' },
-    { name: 'Camp3', image: 'https://images.unsplash.com/photo-1476041800959-2f6bb412c8ce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60', description: 'Far from the beach. noisy' },
+    {
+      name: 'Camp1',
+      image:
+        'https://images.unsplash.com/photo-1497900304864-273dfb3aae33?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60',
+      description: 'Nicely situated. Clean',
+    },
+    {
+      name: 'Camp2',
+      image:
+        'https://images.unsplash.com/photo-1515408320194-59643816c5b2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60',
+      description: 'No dogs allowed. dirty.',
+    },
+    {
+      name: 'Camp3',
+      image:
+        'https://images.unsplash.com/photo-1476041800959-2f6bb412c8ce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60',
+      description: 'Far from the beach. noisy',
+    },
   ];
 
   campgrounds.forEach((item) => {
@@ -111,11 +131,12 @@ function saveMockCampgrounds() {
 }
 
 function createCampground(camp) {
-  Campground.create(camp,
-    (err, savedCamp) => {
-      if (err) { return console.log(`Error is: ${err}`); }
-      console.log(`${savedCamp} has been saved`);
-    });
+  Campground.create(camp, (err, savedCamp) => {
+    if (err) {
+      return console.log(`Error is: ${err}`);
+    }
+    console.log(`${savedCamp} has been saved`);
+  });
 }
 
 module.exports = router;
