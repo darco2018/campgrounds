@@ -5,10 +5,10 @@ const commentSchema = new mongoose.Schema({
   author: String,
 });
 
-console.log('Compiling Comment schema');
+const commentModel = mongoose.model('Comment', commentSchema);
 
 module.exports = {
   commentSchema,
-  commentModel: mongoose.model('Comment', commentSchema),
+  commentModel,
   // method: function()
 };
