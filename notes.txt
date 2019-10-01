@@ -20,14 +20,15 @@ npm i                  (i=install  >> installs dependencies  added in package.js
     add in package.json: 
         "start": "node ./bin/www",
         "devstart": "nodemon ./bin/www"
-DEBUG=express-generator-boilerplate:* npm start      (should start the server at localhost:3000)            
-DEBUG=express-generator-boilerplate:* npm run devstart (should start the server in debug mode for development)  ( rs - force server restart)
+DEBUG=myappname:* npm start      (should start the server at localhost:3000)            
+DEBUG=myappname:* npm run devstart (should start the server in debug mode for development)  ( rs - force server restart)
 
 git init
 -----------------------------------------------
 Stage 2
 
-2. npm i body-parser     (will be necessary for parsing req.body)
+2. NOT ANY MORE NECESSARY - express.urlencoded replaces body-parser
+npm i body-parser     (will be necessary for parsing req.body)
     add in app.js (or routers):
         var bodyParser = require("body-parser");
         app.use(bodyParser.urlencoded({ extended: 'true' })); // const requestBodyStr = JSON.stringify(req.body);
@@ -40,7 +41,7 @@ Stage 2
 
 3. npm i request         (a wrapper for Fetch interface to handle API requests)
 
-4. add movies.js + movies.ejs + moviesRouter in app.js (how to use request package with OMDB api)
+4. add movies.js + movies.ejs + moviesRouter in app.js (example -how to use request package with OMDB api)
 -----------------------------------------------
 Stage 3
 For mongodb:
