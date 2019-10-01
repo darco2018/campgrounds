@@ -15,7 +15,7 @@ router.get('/', (req, res) => {
     if (err) {
       console.log(`Error when finding campground ${err}`);
     } else {
-      res.render('campgrounds', { campgrounds: allCampgrounds });
+      res.render('campground/index', { campgrounds: allCampgrounds });
     }
   });
 });
@@ -28,7 +28,7 @@ router.post('/', (req, res) => {
   const newCampground = {
     name: req.body.name,
     image: req.body.image,
-    description: req.body.desc,
+    description: req.body.desc
   };
 
   Campground.create(newCampground, (err, savedCamp) => {
@@ -43,7 +43,7 @@ router.post('/', (req, res) => {
 // NEW - show form to create new campground
 // /campgrounds/new
 router.get('/new', (req, res) => {
-  res.render('new');
+  res.render('campground/new');
 });
 
 // SHOW - show details about campground
@@ -56,7 +56,7 @@ router.get('/:id', (req, res) => {
       if (err) {
         console.log(err);
       }
-      res.render('show', { camp: foundCamp });
+      res.render('campground/show', { camp: foundCamp });
     });
 });
 
