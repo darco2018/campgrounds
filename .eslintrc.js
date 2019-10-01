@@ -16,6 +16,7 @@ module.exports = {
   },
   rules: {
     'no-console': 0,
-    'no-unused-vars': 0
+    'no-unused-vars': 0,
+    'no-use-before-define': 0
   }
 };
