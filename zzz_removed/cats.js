@@ -11,7 +11,10 @@ let Kitten;
 // ---------- RUNS on app startup as this router is added to app.js -------------
 
 // create connection ------------------------------
-mongoose.connect(`mongodb://localhost:27017/${dbName}`, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(`mongodb://localhost:27017/${dbName}`, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error'));
 // -------------- end connection ------------------
@@ -38,7 +41,6 @@ router.get('/', (req, res) => {
   res.send('Cats ok.');
 });
 
-
 function createKittenModel() {
   const kittySchema = new mongoose.Schema({
     name: String,
@@ -59,36 +61,42 @@ function createKittenModel() {
   Kitten = mongoose.model('Kitten', kittySchema); // creates collection db.kittens
 }
 
-
 function createCat(catsName) {
-  const cat = new Kitten({ name: catsName }); // kitten document
+  const cat = new Kitten({ name: catsName }); // create an instance, ie kitten document Kitten is the mongoose-compiled model
   console.log(`Created cat object: ${cat.name}`);
   cat.speak();
   return cat;
 }
 
-function addToDbWithSave(item) {
+function addToDbWithSave(cat) {
   // SAVE TO DB
-  item.save((err, item) => { // cat refers to what came out of the db
-    if (err) { return console.log(`Error is: ${err}`); }
-    console.log(`${item} has been saved to db`);
+  cat.save((err, savedCat) => {
+    // savedCat refers to what came out of the db
+    if (err) {
+      return console.log(`Error is: ${err}`);
+    }
+    console.log(`${savedCat} has been saved to db`);
   });
 }
 
-function addToDbWithCreate(item) {
+function addToDbWithCreate(cat) {
   // SAVE TO DB      // db.kittens.drop() to clear collection
 
-  Kitten.create(item,
-    // { name: 'Georgini' },
-    (err, cat) => {
-      if (err) { return console.log(`Error is: ${err}`); }
-      console.log(`${cat} has been saved`);
-    });
+  Kitten.create(
+    cat, // or { name: 'Georgini' },
+    (err, savedCat) => {
+      if (err) {
+        return console.log(err);
+      }
+      console.log(`${savedCat} has been saved`);
+    },
+  );
 }
 
 function showAllKittens() {
-// FIND/CREATE/REMOVE called on model Kitten
-  Kitten.find((err, cats) => { // cats is whats returen from db
+  // FIND/CREATE/REMOVE called on model Kitten
+  Kitten.find((err, cats) => {
+    // cats is whats returen from db
     if (err) {
       return console.log(`Error is: ${err}`);
     }
@@ -96,7 +104,6 @@ function showAllKittens() {
     console.log(cats);
   });
 }
-
 
 //-------------------------
 /*
@@ -122,6 +129,5 @@ const fluffy = new Kot({ name: 'fluffy' });
 fluffy.speak(); // "Meow name is fluffy"
  */
 //---------------
-
 
 module.exports = router;
