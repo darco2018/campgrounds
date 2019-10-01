@@ -6,37 +6,36 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
-// routes
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
-const moviesRouter = require('./routes/movies');
-const campgroundsRouter = require('./routes/campgrounds');
-// const catsRouter = require('./routes/cats');
-
-/* ---------- SEED DB start -------------*/
+// custom files
 const seedDb = require('./seeds');
+// routes
+const landingRouter = require('./routes/landing');
+const campgroundsRouter = require('./routes/campgrounds');
 
-seedDb();
-/* ---------- SEED DB end -------------*/
-
-// view engine setup
+/* ---------- VIEW ENGINE -------------*/
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+/* ---------- MIDDLEWARE-------------*/
+
 app.use(logger('dev'));
+// express.json & express.urlencoded are only needed for POST & PUT as you send data object to server
 app.use(express.json());
-app.use(express.urlencoded({ extended: false })); // vs urlencoded for body-parser?!
 app.use(cookieParser());
+// express.urlencoded true recognizes incoming Request Object as string or array or rich object
+// but fails to interprete ? correctly
+app.use(express.urlencoded({ extended: true })); // // for application/x-www-form-urlencoded
 app.use(express.static(path.join(__dirname, 'public')));
 
-// move to routers?
-app.use(bodyParser.urlencoded({ extended: 'true' })); // const requestBodyStr = JSON.stringify(req.body);
+/* ---------- SEED DB -------------*/
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/movies', moviesRouter);
+seedDb();
+
+/* ---------- ROUTERS -------------*/
+app.use('/', landingRouter);
 app.use('/campgrounds', campgroundsRouter);
-// app.use('/cats', catsRouter);
+
+/* ---------- ERROR HANDLING -------------*/
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -54,4 +53,4 @@ app.use((err, req, res) => {
   res.render('error');
 });
 
-module.exports = app;
+module.exports = app; // export used in bin/www
