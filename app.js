@@ -5,7 +5,8 @@ const app = express();
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+
 // custom files
 const seedDb = require('./seeds');
 // routes
@@ -13,13 +14,27 @@ const landingRouter = require('./routes/landing');
 const campgroundsRouter = require('./routes/campgrounds');
 
 /* ---------- VIEW ENGINE -------------*/
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
+/* ---------- CREATE DB CONNECTION -------------*/
+
+const dbName = 'express_camp';
+mongoose.connect(`mongodb://localhost:27017/${dbName}`, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error'));
+db.once('open', () => {
+  console.log(`-------- Successfully connected to ${dbName} -------`);
+});
 
 /* ---------- MIDDLEWARE-------------*/
 
 app.use(logger('dev'));
-// express.json & express.urlencoded are only needed for POST & PUT as you send data object to server
+// express.json & express.urlencoded are only needed for POST & PUT
 app.use(express.json());
 app.use(cookieParser());
 // express.urlencoded true recognizes incoming Request Object as string or array or rich object
@@ -32,6 +47,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 seedDb();
 
 /* ---------- ROUTERS -------------*/
+
 app.use('/', landingRouter);
 app.use('/campgrounds', campgroundsRouter);
 
