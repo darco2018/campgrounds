@@ -7,37 +7,43 @@ const Comment = comment.commentModel;
 
 const mockComments = [
   {
-    text: 'It was horrible. Very dirty - I hated it.',
+    text:
+      'A great little park ( about 40 spaces ) which is very neat and well-kept. The staff is very friendly and each site was about 80 feet long. There is no cable. We camped at Gold Mountain RV Park in a Motorhome.',
     author: 'Mike'
   },
   {
-    text: "It was absoultely fantastic. I'd like to go back there again.",
-    author: 'Thomas'
+    text:
+      'This is our 3rd stay here. My 7/16 review gives a better description of the park. We again had a fairly level, FHU, pull through site that was satellite friendly. There is no cable or OTA TV. As others have noted, the Wi-Fi is very good. The lodge, bathrooms, and laundry are perfect for a small park like this one. While there is nothing recreational in the park, the reasonable nightly cost makes that negative acceptable.',
+    author: 'thomas@friendly.com'
   },
   {
-    text: 'Best pace in the world, Friendly stuff & clean toilets.',
+    text:
+      'Excellent WiFi. No cable or over air reception, but WiFi good enough to stream via our Roku. Manager very friendly as was camp host. We camped at Gold Mountain RV Park in a Fifth Wheel.',
     author: 'Mike'
   }
 ];
 
 const mockCampgrounds = [
   {
-    name: 'Camp1',
+    name: 'Wooden Paradise',
     image:
       'https://images.unsplash.com/photo-1497900304864-273dfb3aae33?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60',
-    description: 'Nicely situated. Clean'
+    description:
+      'Our first class campsites are unmatched in proximity to the lake and include water, electric (30/50 amp service), wireless internet and cable hook-ups, fire ring and picnic table. Whether you’re bringing a tent, travel trailer or a luxury motor home, you will find the perfect site.'
   },
   {
-    name: 'Camp2',
+    name: 'Starry Night',
     image:
       'https://images.unsplash.com/photo-1515408320194-59643816c5b2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60',
-    description: 'No dogs allowed. dirty.'
+    description:
+      'We don’t call this area the “middle of the park” for nothing - it’s centrally located to all of our amenities and is perfect for families with kids. With the best access to the pools, cafe, playground, and splash park, there are plenty of places to play and still be close to home. Guests looking for a little more quiet would be happier in the 700s, and satellite reception is best in the 900s and the odd-numbered 700s and 800s.'
   },
   {
-    name: 'Camp3',
+    name: 'Meadow Mountains',
     image:
       'https://images.unsplash.com/photo-1476041800959-2f6bb412c8ce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60',
-    description: 'Far from the beach. noisy'
+    description:
+      'It is an area with older growth pine trees, making them some of the prettier and more wooded sites at Cherry Hill Park. Tucked away in their own loop, they offer more privacy while still being an easy walk to the bus depot and main office. Folks looking for a shady site will be happy here.'
   }
 ];
 

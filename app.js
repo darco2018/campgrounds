@@ -15,7 +15,7 @@ const campgroundsRouter = require('./routes/campgrounds');
 
 /* ---------- VIEW ENGINE -------------*/
 
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'views')); //__dirname = workspace
 app.set('view engine', 'ejs');
 
 /* ---------- CREATE DB CONNECTION -------------*/
@@ -23,7 +23,7 @@ app.set('view engine', 'ejs');
 const dbName = 'express_camp';
 mongoose.connect(`mongodb://localhost:27017/${dbName}`, {
   useNewUrlParser: true,
-  useUnifiedTopology: true,
+  useUnifiedTopology: true
 });
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error'));

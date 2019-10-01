@@ -82,4 +82,10 @@ Stage 4
     "title-require": true
 }
 
+----------------- VS --------------------
+// ctrl + P  > go to file...
+// ctrl tick -> terminal
+// select text, CTrl +D -> automatic multicursor
+// Ctrl + click -> manual muticursor
+// Ctrl + Shift + R -> refactor to new method
 
