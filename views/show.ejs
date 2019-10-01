@@ -5,7 +5,13 @@
     <h1><%= camp.name %></h1>
     <img class="img-fluid" src="<%= camp.image %>" />
     <p><%= camp.description %></p>
-    <p><%= camp.comments[0] %></p>
+
+    <% camp.comments.forEach((comment)=>{ %>
+    <p>
+      <strong><%= camp.comments[0].author %></strong> -
+      <%=camp.comments[0].text%>
+    </p>
+    <% }) %>
   </figure>
 </div>
 
