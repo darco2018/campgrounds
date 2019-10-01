@@ -1,18 +1,22 @@
 <% include ../partials/header.ejs %>
 
 <div class="container">
-  <figure class="figure">
-    <h1><%= camp.name %></h1>
-    <img class="img-fluid" src="<%= camp.image %>" />
-    <p><%= camp.description %></p>
+  <p>
+    <a class="btn btn-sm btn-success mt-3" href="/campgrounds/<%= camp._id %>/comments/new">Add new comment</a></p>
 
-    <% camp.comments.forEach((comment)=>{ %>
-    <p>
-      <strong><%= camp.comments[0].author %></strong> -
-      <%=camp.comments[0].text%>
-    </p>
-    <% }) %>
-  </figure>
+    <figure class="figure">
+      <h1><%= camp.name %></h1>
+      <img class="img-fluid" src="<%= camp.image %>" />
+      <p><%= camp.description %></p>
+
+      <% camp.comments.forEach((comment)=>{ %>
+      <p>
+        <strong><%= comment.author %></strong> -
+        <%= comment.text%>
+      </p>
+      <% }) %>
+    </figure>
+  </p>
 </div>
 
 <% include ../partials/footer.ejs %>
