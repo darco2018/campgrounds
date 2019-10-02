@@ -16,6 +16,7 @@ const seedDb = require('./seeds');
 // routes
 const landingRouter = require('./routes/landing');
 const campgroundsRouter = require('./routes/campgrounds');
+const authRouter = require('./routes/auth');
 
 /* ---------- VIEW ENGINE -------------*/
 
@@ -70,6 +71,7 @@ passport.deserializeUser(User.deserializeUser());
 
 app.use('/', landingRouter);
 app.use('/campgrounds', campgroundsRouter);
+app.use('/auth', authRouter);
 
 /* ---------- ERROR HANDLING -------------*/
 
