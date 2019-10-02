@@ -33,4 +33,14 @@ router.post('/register', (req, res) => {
   });
 });
 
+// show login form
+router.get('/login', (req, res) => {
+  res.render('auth/login');
+});
+
+// show login form
+router.post('/login', (req, res) => {
+  res.send('LOGIN POST ROUTE');
+});
+
 module.exports = router;
