@@ -50,6 +50,22 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 seedDb();
 
+/* ---------- PASSWORD CONFIG -------------*/
+
+app.use(
+  require('express-session')({
+    secret: 'I am a cool coder',
+    resave: false,
+    saveUnitialized: false
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 /* ---------- ROUTERS -------------*/
 
 app.use('/', landingRouter);
