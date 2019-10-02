@@ -8,6 +8,15 @@ const Comment = comment.commentModel;
 
 const router = express.Router();
 
+/* ---------- LOGGED in -------------*/
+// move it to auth
+function isLoggedIn(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect('/auth/login');
+}
+
 /* ------------------------- ROUTES ------------------------------- */
 
 // /campgrounds
@@ -64,7 +73,7 @@ router.get('/:id', (req, res) => {
 
 // NEW - show form to create new comment
 // /campgrounds/:id/comments/new
-router.get('/:id/comments/new', (req, res) => {
+router.get('/:id/comments/new', isLoggedIn, (req, res) => {
   // find campground and send it back
   Campground.findById(req.params.id, (err, found) => {
     console.log('id: ' + req.params.id);
@@ -81,7 +90,7 @@ router.get('/:id/comments/new', (req, res) => {
 // CREATE - add new comment
 // /campgrounds/:id/comments
 // /campgrounds/5d9372fa6c3da9223bcb1662/comments
-router.post('/:id/comments', (req, res) => {
+router.post('/:id/comments', isLoggedIn, (req, res) => {
   console.log('Receiving COMMENT form data by POST');
 
   Campground.findById(req.params.id, (err, savedCampground) => {
