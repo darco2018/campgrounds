@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 // authentication
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
+const User = require('./models/user');
 
 // custom files
 const seedDb = require('./seeds');
