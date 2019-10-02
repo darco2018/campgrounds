@@ -22,27 +22,35 @@ router.get('/', (req, res) => {
 
 // CREATE - add new campground
 // /campgrounds
-router.post('/', (req, res) => {
+router.post('/', isLoggedIn, (req, res) => {
   console.log('Receiving form data by POST');
 
+  const author = {
+    id: req.user.id,
+    username: req.user.username
+  };
   const newCampground = {
     name: req.body.name,
     image: req.body.image,
-    description: req.body.desc
+    description: req.body.desc,
+    author: author
   };
+
+  console.log(req.user);
 
   Campground.create(newCampground, (err, savedCamp) => {
     if (err) {
       return console.log(err);
     }
-    console.log(`${savedCamp} has been saved`);
+
+    console.log(`Campground: ${savedCamp} has been saved`);
     res.redirect('/campgrounds');
   });
 });
 
 // NEW - show form to create new campground
 // /campgrounds/new
-router.get('/new', (req, res) => {
+router.get('/new', isLoggedIn, (req, res) => {
   res.render('campground/new');
 });
 
@@ -59,5 +67,14 @@ router.get('/:id', (req, res) => {
       res.render('campground/show', { camp: foundCamp });
     });
 });
+
+/* ---------- LOGGEDIN middleware ------------*/
+// move it to auth
+function isLoggedIn(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect('/auth/login');
+}
 
 module.exports = router;
