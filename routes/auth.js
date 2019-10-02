@@ -8,11 +8,13 @@ const passportLocalMongoose = require('passport-local-mongoose');
 const User = require('../models/user');
 
 // show register form
+// /auth/register
 router.get('/register', (req, res) => {
   res.render('auth/register');
 });
 
 // process register data
+// /auth/register
 router.post('/register', (req, res) => {
   const newUser = new User({
     username: req.body.username
@@ -34,13 +36,21 @@ router.post('/register', (req, res) => {
 });
 
 // show login form
+// /auth/login
 router.get('/login', (req, res) => {
   res.render('auth/login');
 });
 
-// show login form
-router.post('/login', (req, res) => {
-  res.send('LOGIN POST ROUTE');
-});
+// process login data
+// /auth/login
+router.post(
+  '/login',
+  // middleware
+  passport.authenticate('local', {
+    successRedirect: '/campgrounds',
+    failureRedirect: '/auth/login'
+  }),
+  function(req, res) {}
+);
 
 module.exports = router;
