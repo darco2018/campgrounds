@@ -82,6 +82,9 @@ Stage 4
     "title-require": true
 }
 
+-------------------- authentication -------------
+npm i passport passport-local passport-local-mongoose express-session
+
 ----------------- VS --------------------
 // ctrl + P  > go to file...
 // ctrl tick -> terminal
