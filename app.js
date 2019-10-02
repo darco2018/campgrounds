@@ -50,7 +50,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 /* ---------- SEED DB -------------*/
 
-seedDb();
+// seedDb();
 
 /* ---------- PASSWORD CONFIG -------------*/
 

@@ -75,6 +75,15 @@ function seedDb() {
     if (err) console.log(`Error when removing campgrounds: ${err}`);
     console.log('Removed campgrounds');
 
+    /*  must be commented off when you change in comment model the author to: 
+    author: {
+    id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    },
+    username: String
+  }
+    
     Comment.remove({}, error => {
       if (err) console.log(`Error when removing comments: ${err}`);
       console.log('Removed comments');
@@ -84,7 +93,7 @@ function seedDb() {
       mockCampgrounds.forEach(camp => {
         createCampground(camp);
       });
-    });
+    }); */
   });
 }
 

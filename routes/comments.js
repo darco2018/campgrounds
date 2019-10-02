@@ -30,7 +30,8 @@ router.get('/new', isLoggedIn, (req, res) => {
 router.post('/', isLoggedIn, (req, res) => {
   console.log('Receiving COMMENT form data by POST');
 
-  Campground.findById(req.params.id, (err, savedCampground) => {
+  // will execute only for logged users
+  Campground.findById(req.params.id, (err, foundCampground) => {
     if (err) {
       console.log(err);
       res.redirect('/campgrounds/' + req.params.id);
@@ -40,9 +41,13 @@ router.post('/', isLoggedIn, (req, res) => {
       if (err) {
         console.log(err);
       }
-      savedCampground.comments.push(savedComment);
-      savedCampground.save();
-      console.log('Saved a new comment');
+      // add username & id to comment
+      savedComment.author.id = req.user.id;
+      savedComment.author.username = req.user.username;
+      savedComment.save();
+      foundCampground.comments.push(savedComment);
+      foundCampground.save();
+      console.log('Saved a new comment: ' + savedComment);
 
       res.redirect('/campgrounds/' + req.params.id);
     });
