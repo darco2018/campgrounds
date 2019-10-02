@@ -3,19 +3,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const Campground = require('../models/campground');
-const comment = require('../models/comment');
-const Comment = comment.commentModel;
 
 const router = express.Router();
-
-/* ---------- LOGGED in -------------*/
-// move it to auth
-function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect('/auth/login');
-}
 
 /* ------------------------- ROUTES ------------------------------- */
 
@@ -69,47 +58,6 @@ router.get('/:id', (req, res) => {
       }
       res.render('campground/show', { camp: foundCamp });
     });
-});
-
-// NEW - show form to create new comment
-// /campgrounds/:id/comments/new
-router.get('/:id/comments/new', isLoggedIn, (req, res) => {
-  // find campground and send it back
-  Campground.findById(req.params.id, (err, found) => {
-    console.log('id: ' + req.params.id);
-    console.log('found: ' + found);
-
-    if (err) {
-      console.log(err);
-      res.redirect('/campgrounds/' + found._id);
-    }
-    res.render('comment/new', { campground: found });
-  });
-});
-
-// CREATE - add new comment
-// /campgrounds/:id/comments
-// /campgrounds/5d9372fa6c3da9223bcb1662/comments
-router.post('/:id/comments', isLoggedIn, (req, res) => {
-  console.log('Receiving COMMENT form data by POST');
-
-  Campground.findById(req.params.id, (err, savedCampground) => {
-    if (err) {
-      console.log(err);
-      res.redirect('/campgrounds/' + req.params.id);
-    }
-
-    Comment.create(req.body.comment, (err, savedComment) => {
-      if (err) {
-        console.log(err);
-      }
-      savedCampground.comments.push(savedComment);
-      savedCampground.save();
-      console.log('Saved a new comment');
-
-      res.redirect('/campgrounds/' + req.params.id);
-    });
-  });
 });
 
 module.exports = router;

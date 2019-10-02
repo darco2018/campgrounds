@@ -1,9 +1,7 @@
 const express = require('express');
 const router = express.Router();
-// authentication
+// authentication imports
 const passport = require('passport');
-//const LocalStrategy = require('passport-local');
-const passportLocalMongoose = require('passport-local-mongoose');
 
 const User = require('../models/user');
 
@@ -57,5 +55,14 @@ router.get('/logout', (req, res) => {
   req.logout();
   res.redirect('/campgrounds');
 });
+
+/* ---------- LOGGED IN middleware -------------*/
+// move it to auth
+function isLoggedIn(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect('/auth/login');
+}
 
 module.exports = router;

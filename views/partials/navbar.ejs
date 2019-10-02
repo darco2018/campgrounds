@@ -28,13 +28,19 @@
     <!-- login -->
     <!-- ml-auto left-aligns navbar -->
     <ul class="navbar-nav  ml-auto pr-3">
+      <% if(!currentUser) { %>
       <li class="nav-item"><a class="nav-link" href="/auth/login">Login</a></li>
       <li class="nav-item">
         <a class="nav-link" href="/auth/register">Sign up</a>
       </li>
+      <% } else { %>
+      <li class="nav-item">
+        <a class="nav-link" href=""><%= currentUser.username %></a>
+      </li>
       <li class="nav-item">
         <a class="nav-link" href="/auth/logout">Logout</a>
       </li>
+      <% } %>
     </ul>
   </div>
 </nav>

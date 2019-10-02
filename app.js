@@ -17,6 +17,7 @@ const seedDb = require('./seeds');
 const landingRouter = require('./routes/landing');
 const campgroundsRouter = require('./routes/campgrounds');
 const authRouter = require('./routes/auth');
+const commentsRouter = require('./routes/comments');
 
 /* ---------- VIEW ENGINE -------------*/
 
@@ -67,11 +68,18 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+app.use(function(req, res, next) {
+  // whatever available in locals is available in each template
+  res.locals.currentUser = req.user;
+  next(); // will stop without it!
+});
+
 /* ---------- ROUTERS -------------*/
 
 app.use('/', landingRouter);
-app.use('/campgrounds', campgroundsRouter);
 app.use('/auth', authRouter);
+app.use('/campgrounds', campgroundsRouter);
+app.use('/campgrounds/:id/comments', commentsRouter);
 
 /* ---------- ERROR HANDLING -------------*/
 
