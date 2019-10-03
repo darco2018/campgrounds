@@ -70,21 +70,19 @@ router.get('/:id', (req, res) => {
 
 // EDIT - show edit form
 // campgrounds/234/edit
-router.get('/:id/edit', (req, res) => {
-  Campground.findById(req.params.id)
-    .populate('comments') // populate the comments array in a campground !!!
-    .exec((err, foundCamp) => {
-      if (err) {
-        console.log(err);
-      }
-      res.render('campground/edit', { campground: foundCamp });
-    });
+router.get('/:id/edit', checkCampgroundOwnership, (req, res) => {
+  Campground.findById(req.params.id, (err, foundCampground) => {
+    if (err) {
+      console.log(err);
+    }
+    res.render('campground/edit', { campground: foundCampground });
+  });
 });
 
 // UPDATE
 // campgrounds/234/update
 // add ?_method=PUT in url  (method-override)
-router.put('/:id/update', (req, res) => {
+router.put('/:id/update', checkCampgroundOwnership, (req, res) => {
   // PUT uses this part of query string: _method=PUT
 
   const campgroundId = req.params.id;
@@ -109,7 +107,7 @@ router.put('/:id/update', (req, res) => {
 // DESTROY - delete campground
 // campgrounds/234/delete
 // needs a FORM with post + method_override
-router.delete('/:id', (req, res) => {
+router.delete('/:id', checkCampgroundOwnership, (req, res) => {
   console.log('--------deleting-------------');
 
   Campground.findByIdAndDelete(req.params.id, err => {
@@ -122,13 +120,37 @@ router.delete('/:id', (req, res) => {
   });
 });
 
-/* ---------- LOGGEDIN middleware ------------*/
+/* ---------- LOGGEDIN  & AUTHORISATION middleware ------------*/
 // move it to auth
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   }
   res.redirect('/auth/login');
+}
+
+function checkCampgroundOwnership(req, res, next) {
+  // replaces isLoggedIn
+  if (req.isAuthenticated()) {
+    //find campground & check permissions to edit/upadte/delete cmapground
+    Campground.findById(req.params.id, (err, foundCampground) => {
+      if (err) {
+        console.log(err);
+      }
+
+      // equals is a mongoose method as foundCampground.author.id isa mongoose object, not string
+      if (foundCampground.author.id.equals(req.user.id)) {
+        // User is campground's owner
+        next();
+      } else {
+        // User is not authorized to do this operation
+        res.redirect('back');
+      }
+    });
+  } else {
+    // User is NOT authenticated'
+    res.redirect('back');
+  }
 }
 
 module.exports = router;
