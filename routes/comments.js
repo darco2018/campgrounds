@@ -123,8 +123,27 @@ function isLoggedIn(req, res, next) {
 }
 
 function checkCommentOwnership(req, res, next) {
-  // do stuff
-  next();
+  // replaces isLoggedIn
+  if (req.isAuthenticated()) {
+    //find campground & check permissions to edit/upadte/delete cmapground
+    Comment.findById(req.params.comment_id, (err, foundComment) => {
+      if (err) {
+        console.log(err);
+      }
+
+      // equals is a mongoose method as foundCampground.author.id isa mongoose object, not string
+      if (foundComment.author.id.equals(req.user.id)) {
+        // User is campground's owner
+        next();
+      } else {
+        // User is not authorized to do this operation
+        res.redirect('back');
+      }
+    });
+  } else {
+    // User is NOT authenticated'
+    res.redirect('back');
+  }
 }
 
 module.exports = router;
