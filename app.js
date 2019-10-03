@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
+const flash = require('connect-flash');
 
 // authentication
 const passport = require('passport');
@@ -50,6 +51,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true })); // // for application/x-www-form-urlencoded
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(methodOverride('_method'));
+app.use(flash());
 
 /* ---------- SEED DB -------------*/
 

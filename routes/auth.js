@@ -36,7 +36,7 @@ router.post('/register', (req, res) => {
 // show login form
 // /auth/login
 router.get('/login', (req, res) => {
-  res.render('auth/login');
+  res.render('auth/login', { message: req.flash('error') });
 });
 
 // process login data
