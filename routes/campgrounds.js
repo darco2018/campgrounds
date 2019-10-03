@@ -64,7 +64,7 @@ router.get('/:id', (req, res) => {
       if (err) {
         console.log(err);
       }
-      res.render('campground/show', { camp: foundCamp });
+      res.render('campground/show', { campground: foundCamp });
     });
 });
 
@@ -85,7 +85,25 @@ router.get('/:id/edit', (req, res) => {
 // campgrounds/234/edit
 // add ?_method=PUT in url  (method-override)
 router.put('/:id/update', (req, res) => {
-  res.send('UPDATE ROUTE');
+  // PUT uses this part of query string: _method=PUT
+
+  const campgroundId = req.params.id;
+
+  Campground.findByIdAndUpdate(
+    campgroundId,
+    req.body.campground, // thanks to campground[name]/[url]/[description] in view
+    (err, updatedCampground) => {
+      if (err) {
+        return console
+          .log()
+          .call(
+            console,
+            `Error when retrieving campground ${updatedCampground}; ${err}`
+          );
+      }
+      res.redirect(`/campgrounds/${campgroundId}`);
+    }
+  );
 });
 
 /* ---------- LOGGEDIN middleware ------------*/

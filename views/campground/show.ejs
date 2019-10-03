@@ -12,20 +12,25 @@
     <div class="col-md-9 ">
       <div class="card">
         <div class="card-body">
-          <img class="card-img img-fluid mb-3" src="<%= camp.image %>" />
+          <img class="card-img img-fluid mb-3" src="<%= campground.image %>" />
           <div class="px-4">
             <div class="float-none"></div>
             <div class="float-left  font-weight-bold h4">
-              <a href="#"><%= camp.name %></a>
+              <a href="#"><%= campground.name %></a>
             </div>
             <div class="float-right text-muted font-weight-bold h4">
               $7.99 / night
             </div>
             <br /><br />
-            <div class="card-text mb-2"><%= camp.description %></div>
+            <div class="card-text mb-2"><%= campground.description %></div>
             <div class="card-text">
-              <em>Submitted by <%= camp.author.username %></em>
+              <em>Submitted by <%= campground.author.username %></em>
             </div>
+            <a
+              class="btn btn-warning mt-3"
+              href="/campgrounds/<%= campground.id %>/edit"
+              >Edit</a
+            >
           </div>
         </div>
       </div>
@@ -33,12 +38,12 @@
         <div class="card-body  pt-3 px-5">
           <div class="mb-5">
             <a
-              href="/campgrounds/<%= camp._id %>/comments/new"
+              href="/campgrounds/<%= campground.id %>/comments/new"
               class="btn btn-success float-right my-1"
               >Leave a review</a
             >
           </div>
-          <% camp.comments.forEach((comment)=>{ %>
+          <% campground.comments.forEach((comment)=>{ %>
           <div class="row pt-2">
             <div class="col-md-12">
               <strong><%= comment.author.username %></strong>
