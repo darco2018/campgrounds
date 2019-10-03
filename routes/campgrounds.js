@@ -68,6 +68,26 @@ router.get('/:id', (req, res) => {
     });
 });
 
+// EDIT - show edit form
+// campgrounds/234/edit
+router.get('/:id/edit', (req, res) => {
+  Campground.findById(req.params.id)
+    .populate('comments') // populate the comments array in a campground !!!
+    .exec((err, foundCamp) => {
+      if (err) {
+        console.log(err);
+      }
+      res.render('campground/edit', { campground: foundCamp });
+    });
+});
+
+// EDIT - show edit form
+// campgrounds/234/edit
+// add ?_method=PUT in url  (method-override)
+router.put('/:id/update', (req, res) => {
+  res.send('UPDATE ROUTE');
+});
+
 /* ---------- LOGGEDIN middleware ------------*/
 // move it to auth
 function isLoggedIn(req, res, next) {
