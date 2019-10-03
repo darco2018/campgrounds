@@ -141,7 +141,7 @@ function checkCommentOwnership(req, res, next) {
       }
     });
   } else {
-    // User is NOT authenticated'
+    // User is NOT authenticated
     res.redirect('back');
   }
 }
