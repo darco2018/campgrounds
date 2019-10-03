@@ -28,7 +28,7 @@ middlewareObj.isLoggedIn = function(req, res, next) {
     return next();
   }
   // put this line before redirect, to pass it to hext route
-  req.flash('error', 'Please log in first'); // error is the key
+  req.flash('error', 'Please have to be logged in to do that.'); // error is the key
   res.redirect('/auth/login');
 };
 
@@ -47,11 +47,13 @@ middlewareObj.checkCommentOwnership = function(req, res, next) {
         next();
       } else {
         // User is not authorized to do this operation
+        req.flash('error', "You don't have permission to do that");
         res.redirect('back');
       }
     });
   } else {
     // User is NOT authenticated
+    req.flash('error', 'You  have to be logged in to do that.'); // error is the key
     res.redirect('back');
   }
 };
@@ -63,6 +65,8 @@ middlewareObj.checkCampgroundOwnership = function(req, res, next) {
     Campground.findById(req.params.id, (err, foundCampground) => {
       if (err) {
         console.log(err);
+        req.flash('error', 'Campground not found');
+        req.redirect('back');
       }
 
       // equals is a mongoose method as foundCampground.author.id isa mongoose object, not string
@@ -71,11 +75,13 @@ middlewareObj.checkCampgroundOwnership = function(req, res, next) {
         next();
       } else {
         // User is not authorized to do this operation
+        req.flash('error', "You don't have permission to do that");
         res.redirect('back');
       }
     });
   } else {
     // User is NOT authenticated'
+    req.flash('error', 'You have to be logged in to do that.'); // error is the key
     res.redirect('back');
   }
 };

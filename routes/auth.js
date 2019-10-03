@@ -18,16 +18,19 @@ router.post('/register', (req, res) => {
     username: req.body.username
   });
   // passportLocalMongoose method to hash pswd
-  User.register(newUser, req.body.password, (err, user) => {
+  User.register(newUser, req.body.password, (err, savedUser) => {
     console.log('-------- Registering user ' + newUser.username);
 
     if (err) {
       console.log(err);
-      return res.render('auth/register');
+      req.flash('error', err.message);
+      //absolute url when redirect
+      return res.redirect('/auth/register'); // redirect rather than register to prevent double-click button to see flash message
     }
 
     passport.authenticate('local')(req, res, function() {
       console.log('------------Local-authenticating');
+      req.flash('success', 'Welcome ' + savedUser.username + '!');
       res.redirect('/campgrounds');
     });
   });
@@ -46,7 +49,8 @@ router.post(
   // middleware
   passport.authenticate('local', {
     successRedirect: '/campgrounds',
-    failureRedirect: '/auth/login'
+    failureRedirect: '/auth/login',
+    failureFlash: true
   }),
   function(req, res) {}
 );
