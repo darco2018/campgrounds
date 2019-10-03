@@ -5,12 +5,13 @@ const mongoose = require('mongoose');
 const Campground = require('../models/campground');
 const comment = require('../models/comment');
 const Comment = comment.commentModel;
+const middleware = require('../middleware'); //index.js is imported by default from middleware folder
 
 const router = express.Router({ mergeParams: true });
 
 // NEW - show form to create new comment
 // /campgrounds/:id/comments/new
-router.get('/new', isLoggedIn, (req, res) => {
+router.get('/new', middleware.isLoggedIn, (req, res) => {
   // find campground and send it back
   Campground.findById(req.params.id, (err, found) => {
     console.log('id: ' + req.params.id);
@@ -27,7 +28,7 @@ router.get('/new', isLoggedIn, (req, res) => {
 // CREATE - add new comment
 // /campgrounds/:id/comments
 // /campgrounds/5d9372fa6c3da9223bcb1662/comments
-router.post('/', isLoggedIn, (req, res) => {
+router.post('/', middleware.isLoggedIn, (req, res) => {
   console.log('Receiving COMMENT form data by POST');
 
   // will execute only for logged users
@@ -56,48 +57,56 @@ router.post('/', isLoggedIn, (req, res) => {
 
 // EDIT - show edit form
 // campgrounds/:id/comments/:comment_id/edit
-router.get('/:comment_id/edit', checkCommentOwnership, (req, res) => {
-  Comment.findById(req.params.comment_id, (err, foundComment) => {
-    if (err) {
-      console.log(err);
-    }
-    console.log('-------------foundComment id: ' + foundComment);
+router.get(
+  '/:comment_id/edit',
+  middleware.checkCommentOwnership,
+  (req, res) => {
+    Comment.findById(req.params.comment_id, (err, foundComment) => {
+      if (err) {
+        console.log(err);
+      }
+      console.log('-------------foundComment id: ' + foundComment);
 
-    res.render('comment/edit', {
-      comment: foundComment,
-      campgroundId: req.params.id
+      res.render('comment/edit', {
+        comment: foundComment,
+        campgroundId: req.params.id
+      });
     });
-  });
-});
+  }
+);
 
 // UPDATE
 // campgrounds/:id/comments/:comment_id/update
 // add ?_method=PUT in url  (method-override)
-router.put('/:comment_id/update', checkCommentOwnership, (req, res) => {
-  const campgroundID = req.params.id;
-  const commentID = req.params.comment_id;
+router.put(
+  '/:comment_id/update',
+  middleware.checkCommentOwnership,
+  (req, res) => {
+    const campgroundID = req.params.id;
+    const commentID = req.params.comment_id;
 
-  Comment.findByIdAndUpdate(
-    commentID,
-    req.body.comment, // thanks to campground[name]/[url]/[description] in view
-    (err, updatedComment) => {
-      if (err) {
-        return console
-          .log()
-          .call(
-            console,
-            `Error when retrieving comment ${updatedComment}; ${err}`
-          );
+    Comment.findByIdAndUpdate(
+      commentID,
+      req.body.comment, // thanks to campground[name]/[url]/[description] in view
+      (err, updatedComment) => {
+        if (err) {
+          return console
+            .log()
+            .call(
+              console,
+              `Error when retrieving comment ${updatedComment}; ${err}`
+            );
+        }
+        res.redirect(`/campgrounds/${campgroundID}`);
       }
-      res.redirect(`/campgrounds/${campgroundID}`);
-    }
-  );
-});
+    );
+  }
+);
 
 // DESTROY - delete comment
 // campgrounds/:id/comments/:comment_id/
 // needs a FORM with post + method_override
-router.delete('/:comment_id', checkCommentOwnership, (req, res) => {
+router.delete('/:comment_id', middleware.checkCommentOwnership, (req, res) => {
   console.log('--------deleting-------------');
 
   const campgroundID = req.params.id;
@@ -112,38 +121,5 @@ router.delete('/:comment_id', checkCommentOwnership, (req, res) => {
     res.redirect('/campgrounds/' + campgroundID);
   });
 });
-
-/* ---------- LOGGEDIN middleware ------------*/
-// move it to auth
-function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect('/auth/login');
-}
-
-function checkCommentOwnership(req, res, next) {
-  // replaces isLoggedIn
-  if (req.isAuthenticated()) {
-    //find campground & check permissions to edit/upadte/delete cmapground
-    Comment.findById(req.params.comment_id, (err, foundComment) => {
-      if (err) {
-        console.log(err);
-      }
-
-      // equals is a mongoose method as foundCampground.author.id isa mongoose object, not string
-      if (foundComment.author.id.equals(req.user.id)) {
-        // User is campground's owner
-        next();
-      } else {
-        // User is not authorized to do this operation
-        res.redirect('back');
-      }
-    });
-  } else {
-    // User is NOT authenticated
-    res.redirect('back');
-  }
-}
 
 module.exports = router;
