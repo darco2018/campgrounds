@@ -56,7 +56,7 @@ router.post('/', isLoggedIn, (req, res) => {
 
 // EDIT - show edit form
 // campgrounds/:id/comments/:comment_id/edit
-router.get('/:comment_id/edit', (req, res) => {
+router.get('/:comment_id/edit', checkCommentOwnership, (req, res) => {
   Comment.findById(req.params.comment_id, (err, foundComment) => {
     if (err) {
       console.log(err);
@@ -73,7 +73,7 @@ router.get('/:comment_id/edit', (req, res) => {
 // UPDATE
 // campgrounds/:id/comments/:comment_id/update
 // add ?_method=PUT in url  (method-override)
-router.put('/:comment_id/update', (req, res) => {
+router.put('/:comment_id/update', checkCommentOwnership, (req, res) => {
   const campgroundID = req.params.id;
   const commentID = req.params.comment_id;
 
@@ -93,6 +93,26 @@ router.put('/:comment_id/update', (req, res) => {
     }
   );
 });
+
+// DESTROY - delete comment
+// campgrounds/:id/comments/:comment_id/
+// needs a FORM with post + method_override
+router.delete('/:comment_id', checkCommentOwnership, (req, res) => {
+  console.log('--------deleting-------------');
+
+  const campgroundID = req.params.id;
+  const commentID = req.params.comment_id;
+
+  Comment.findByIdAndDelete(commentID, err => {
+    if (err) {
+      console.log(err);
+      res.redirect('back'); // ????
+    }
+    console.log('Deleted comment with id ' + commentID);
+    res.redirect('/campgrounds/' + campgroundID);
+  });
+});
+
 /* ---------- LOGGEDIN middleware ------------*/
 // move it to auth
 function isLoggedIn(req, res, next) {
@@ -100,6 +120,11 @@ function isLoggedIn(req, res, next) {
     return next();
   }
   res.redirect('/auth/login');
+}
+
+function checkCommentOwnership(req, res, next) {
+  // do stuff
+  next();
 }
 
 module.exports = router;

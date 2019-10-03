@@ -105,7 +105,7 @@ router.put('/:id/update', checkCampgroundOwnership, (req, res) => {
 });
 
 // DESTROY - delete campground
-// campgrounds/234/delete
+// campgrounds/:id
 // needs a FORM with post + method_override
 router.delete('/:id', checkCampgroundOwnership, (req, res) => {
   console.log('--------deleting-------------');
