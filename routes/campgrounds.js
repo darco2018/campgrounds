@@ -81,8 +81,8 @@ router.get('/:id/edit', (req, res) => {
     });
 });
 
-// EDIT - show edit form
-// campgrounds/234/edit
+// UPDATE
+// campgrounds/234/update
 // add ?_method=PUT in url  (method-override)
 router.put('/:id/update', (req, res) => {
   // PUT uses this part of query string: _method=PUT
@@ -104,6 +104,22 @@ router.put('/:id/update', (req, res) => {
       res.redirect(`/campgrounds/${campgroundId}`);
     }
   );
+});
+
+// DESTROY - delete campground
+// campgrounds/234/delete
+// needs a FORM with post + method_override
+router.delete('/:id', (req, res) => {
+  console.log('--------deleting-------------');
+
+  Campground.findByIdAndDelete(req.params.id, err => {
+    if (err) {
+      console.log(err);
+      res.redirect('/campgrounds/');
+    }
+    console.log('Deleted campground with id ' + req.params.id);
+    res.redirect('/campgrounds/');
+  });
 });
 
 /* ---------- LOGGEDIN middleware ------------*/

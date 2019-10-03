@@ -23,14 +23,22 @@
             </div>
             <br /><br />
             <div class="card-text mb-2"><%= campground.description %></div>
-            <div class="card-text">
+            <div class="card-text mb-3">
               <em>Submitted by <%= campground.author.username %></em>
             </div>
             <a
-              class="btn btn-warning mt-3"
+              class="btn btn-warning "
               href="/campgrounds/<%= campground.id %>/edit"
-              >Edit</a
             >
+              Edit
+            </a>
+            <form
+              class="d-inline"
+              action="/campgrounds/<%= campground.id %>?_method=delete"
+              method="post"
+            >
+              <button class="btn btn-danger">Delete</button>
+            </form>
           </div>
         </div>
       </div>
