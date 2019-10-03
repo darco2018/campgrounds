@@ -26,6 +26,8 @@
             <div class="card-text mb-3">
               <em>Submitted by <%= campground.author.username %></em>
             </div>
+            <% if (currentUser && campground.author.id.equals(currentUser.id)) {
+            %>
             <a
               class="btn btn-warning "
               href="/campgrounds/<%= campground.id %>/edit"
@@ -39,6 +41,7 @@
             >
               <button class="btn btn-danger">Delete</button>
             </form>
+            <% } %>
           </div>
         </div>
       </div>
