@@ -6,6 +6,8 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
+const methodOverride = require('method-override');
+
 // authentication
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
@@ -47,6 +49,7 @@ app.use(cookieParser());
 // but fails to interprete ? correctly
 app.use(express.urlencoded({ extended: true })); // // for application/x-www-form-urlencoded
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(methodOverride('_method'));
 
 /* ---------- SEED DB -------------*/
 
