@@ -51,7 +51,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true })); // // for application/x-www-form-urlencoded
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(methodOverride('_method'));
-app.use(flash());
+app.use(flash()); // before password config
 
 /* ---------- SEED DB -------------*/
 
@@ -73,9 +73,13 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+/* ---------- ADD VARS TO EACH REQUEST -------------*/
+
 app.use(function(req, res, next) {
   // whatever available in locals is available in each template
   res.locals.currentUser = req.user;
+  res.locals.error = req.flash('error');
+  res.locals.success = req.flash('success');
   next(); // will stop without it!
 });
 

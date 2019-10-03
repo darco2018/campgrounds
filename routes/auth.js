@@ -36,7 +36,7 @@ router.post('/register', (req, res) => {
 // show login form
 // /auth/login
 router.get('/login', (req, res) => {
-  res.render('auth/login', { message: req.flash('error') });
+  res.render('auth/login' /*,  { message: req.flash('error')} */);
 });
 
 // process login data
@@ -53,6 +53,7 @@ router.post(
 
 router.get('/logout', (req, res) => {
   req.logout();
+  req.flash('success', 'You have been logged out successfully');
   res.redirect('/campgrounds');
 });
 
