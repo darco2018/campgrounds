@@ -6,27 +6,34 @@
     <p>View our handpicked campgrounds from the whole world</p>
     <p>
       <!-- Remember about root slash in href -->
-      <a class="btn btn-primary btn-sm" href="/campgrounds/new"
+      <a class="btn btn-info btn-sm" href="/campgrounds/new"
         >Add new campground</a
       >
     </p>
   </header>
-
   <div class="row">
-    <% campgrounds.forEach((camp) =>{ %>
-    <figure class="figure col-sm-6 col-md-3">
-      <img class="img-thumbnail img-fluid" src="<%= camp.image %>" />
-      <figcaption class="figure-caption text-center">
-        <h4><%= camp.name %></h4>
-      </figcaption>
-      <div class="text-center">
-        <a class="btn btn-primary btn-sm" href="/campgrounds/<%= camp.id %>"
-          >Details</a
-        >
+    <div class="card-deck">
+      <% campgrounds.forEach((camp) =>{ %>
+      <div class="col-md-6 col-xl-4 mb-3">
+        <div class="card p-1">
+          <img src="<%= camp.image %>" class="card-img-top" alt="..." />
+          <div class="card-body">
+            <h5 class="card-title"><%= camp.name %></h5>
+            <a
+              class="btn btn-outline-info btn-sm"
+              href="/campgrounds/<%= camp.id %>"
+              >Details</a
+            >
+          </div>
+          <div class="card-footer">
+            <small class="text-muted">Last updated 3 mins ago</small>
+          </div>
+        </div>
       </div>
-    </figure>
-    <% }) %>
+      <% }) %>
+    </div>
   </div>
-</div>
 
-<% include ../partials/footer.ejs %>
+  <% include ../partials/footer.ejs %>
+</div>
+<!-- end page container -->

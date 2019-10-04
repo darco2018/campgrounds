@@ -1,3 +1,9 @@
 body {
-  background: #eee8a9;
+  /* background: #eee8a9; */
+}
+
+img {
+  width: 200px; /* You can set the dimensions to whatever you want */
+  height: 200px;
+  object-fit: cover;
 }

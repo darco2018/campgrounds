@@ -28,7 +28,7 @@ middlewareObj.isLoggedIn = function(req, res, next) {
     return next();
   }
   // put this line before redirect, to pass it to hext route
-  req.flash('error', 'Please have to be logged in to do that.'); // error is the key
+  req.flash('error', 'You have to be logged in to do that.'); // error is the key
   res.redirect('/auth/login');
 };
 
