@@ -32,6 +32,7 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
   };
   const newCampground = {
     name: req.body.name,
+    price: req.body.price,
     image: req.body.image,
     description: req.body.desc,
     author: author
@@ -61,11 +62,14 @@ router.get('/new', middleware.isLoggedIn, (req, res) => {
 router.get('/:id', (req, res) => {
   Campground.findById(req.params.id)
     .populate('comments') // populate the comments array in a campground !!!
-    .exec((err, foundCamp) => {
-      if (err) {
+    .exec((err, foundCampground) => {
+      if (err || !foundCampground) {
+        // !null -> true
         console.log(err);
+        req.flash('error', 'Campground not found');
+        res.redirect('/campgrounds'); // breaks for 'back'
       }
-      res.render('campground/show', { campground: foundCamp });
+      res.render('campground/show', { campground: foundCampground });
     });
 });
 
@@ -92,15 +96,16 @@ router.put('/:id/update', middleware.checkCampgroundOwnership, (req, res) => {
     campgroundId,
     req.body.campground, // thanks to campground[name]/[url]/[description] in view
     (err, updatedCampground) => {
-      if (err) {
-        return console
-          .log()
-          .call(
-            console,
-            `Error when retrieving campground ${updatedCampground}; ${err}`
-          );
+      if (err || !updatedCampground) {
+        // !null -> true
+        console.log(
+          `Error when retrieving campground ${updatedCampground}; ${err}`
+        );
+        req.flash('error', 'Campground not found');
+        res.redirect('/campgrounds'); // breaks for 'back'
+      } else {
+        res.redirect(`/campgrounds/${campgroundId}`);
       }
-      res.redirect(`/campgrounds/${campgroundId}`);
     }
   );
 });

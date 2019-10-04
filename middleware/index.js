@@ -35,20 +35,23 @@ middlewareObj.isLoggedIn = function(req, res, next) {
 middlewareObj.checkCommentOwnership = function(req, res, next) {
   // replaces isLoggedIn
   if (req.isAuthenticated()) {
-    //find campground & check permissions to edit/upadte/delete cmapground
+    //find campground & check permissions to edit/upadte/delete campground
     Comment.findById(req.params.comment_id, (err, foundComment) => {
-      if (err) {
+      if (err || !foundComment) {
+        // !null -> true
         console.log(err);
-      }
-
-      // equals is a mongoose method as foundCampground.author.id isa mongoose object, not string
-      if (foundComment.author.id.equals(req.user.id)) {
-        // User is campground's owner
-        next();
+        req.flash('error', 'Comment not found');
+        res.redirect('/campgrounds'); // breaks for 'back'
       } else {
-        // User is not authorized to do this operation
-        req.flash('error', "You don't have permission to do that");
-        res.redirect('back');
+        // equals is a mongoose method as foundCampground.author.id isa mongoose object, not string
+        if (foundComment.author.id.equals(req.user.id)) {
+          // User is campground's owner
+          next();
+        } else {
+          // User is not authorized to do this operation
+          req.flash('error', "You don't have permission to do that");
+          res.redirect('back');
+        }
       }
     });
   } else {
@@ -63,20 +66,21 @@ middlewareObj.checkCampgroundOwnership = function(req, res, next) {
   if (req.isAuthenticated()) {
     //find campground & check permissions to edit/upadte/delete cmapground
     Campground.findById(req.params.id, (err, foundCampground) => {
-      if (err) {
+      if (err || !foundCampground) {
+        // !null -> true
         console.log(err);
         req.flash('error', 'Campground not found');
-        req.redirect('back');
-      }
-
-      // equals is a mongoose method as foundCampground.author.id isa mongoose object, not string
-      if (foundCampground.author.id.equals(req.user.id)) {
-        // User is campground's owner
-        next();
+        res.redirect('/campgrounds'); // breaks for 'back'
       } else {
-        // User is not authorized to do this operation
-        req.flash('error', "You don't have permission to do that");
-        res.redirect('back');
+        // equals is a mongoose method as foundCampground.author.id isa mongoose object, not string
+        if (foundCampground.author.id.equals(req.user.id)) {
+          // User is campground's owner
+          next();
+        } else {
+          // User is not authorized to do this operation
+          req.flash('error', "You don't have permission to do that");
+          res.redirect('back');
+        }
       }
     });
   } else {
@@ -84,6 +88,21 @@ middlewareObj.checkCampgroundOwnership = function(req, res, next) {
     req.flash('error', 'You have to be logged in to do that.'); // error is the key
     res.redirect('back');
   }
+};
+
+middlewareObj.checkCampgroundId = function(req, res, next) {
+  Campground.findById(req.params.id, function(err, campground) {
+    if (err || !campground) {
+      req.flash('error', 'Error: Campground not found.');
+      res.redirect('back');
+    } else {
+      // it's for not doing another Campground.findById() after the middleware.
+      // Since we do it in most of our comments routes. Now we only need to access
+      //it with res.locals.foundCampground and we don't need to send it back to the template either.
+      res.locals.foundCampground = campground;
+      next();
+    }
+  });
 };
 
 module.exports = middlewareObj;
