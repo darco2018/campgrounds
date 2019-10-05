@@ -8,7 +8,7 @@ const User = require('../models/user');
 // show register form
 // /auth/register
 router.get('/register', (req, res) => {
-  res.render('auth/register');
+  res.render('auth/register', { page: 'register' });
 });
 
 // process register data
@@ -23,9 +23,8 @@ router.post('/register', (req, res) => {
 
     if (err) {
       console.log(err);
-      req.flash('error', err.message);
-      //absolute url when redirect
-      return res.redirect('/auth/register'); // redirect rather than register to prevent double-click button to see flash message
+      //absolute url when redirect but no / when render
+      return res.render('auth/register', { error: err.message });
     }
 
     passport.authenticate('local')(req, res, function() {
@@ -39,7 +38,10 @@ router.post('/register', (req, res) => {
 // show login form
 // /auth/login
 router.get('/login', (req, res) => {
-  res.render('auth/login' /*,  { message: req.flash('error')} */);
+  res.render(
+    'auth/login',
+    { page: 'login' } /*,  { message: req.flash('error')} */
+  );
 });
 
 // process login data
