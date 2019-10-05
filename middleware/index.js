@@ -62,27 +62,32 @@ middlewareObj.checkCommentOwnership = function(req, res, next) {
 };
 
 middlewareObj.checkCampgroundOwnership = function(req, res, next) {
-  // replaces isLoggedIn
+  middlewareObj.checkCampgroundId;
+
   if (req.isAuthenticated()) {
     //find campground & check permissions to edit/upadte/delete cmapground
-    Campground.findById(req.params.id, (err, foundCampground) => {
-      if (err || !foundCampground) {
-        // !null -> true
-        console.log(err);
-        req.flash('error', 'Campground not found');
-        res.redirect('/campgrounds'); // breaks for 'back'
-      } else {
-        // equals is a mongoose method as foundCampground.author.id isa mongoose object, not string
-        if (foundCampground.author.id.equals(req.user.id)) {
-          // User is campground's owner
-          next();
+    Campground.findById(
+      req.params.id,
+
+      (err, foundCampground) => {
+        if (err || !foundCampground) {
+          // !null -> true
+          console.log(err);
+          req.flash('error', 'Campground not found');
+          res.redirect('/campgrounds'); // breaks for 'back'
         } else {
-          // User is not authorized to do this operation
-          req.flash('error', "You don't have permission to do that");
-          res.redirect('back');
+          // equals is a mongoose method as foundCampground.author.id isa mongoose object, not string
+          if (foundCampground.author.id.equals(req.user.id)) {
+            // User is campground's owner
+            next();
+          } else {
+            // User is not authorized to do this operation
+            req.flash('error', "You don't have permission to do that");
+            res.redirect('back');
+          }
         }
       }
-    });
+    );
   } else {
     // User is NOT authenticated'
     req.flash('error', 'You have to be logged in to do that.'); // error is the key
@@ -90,16 +95,41 @@ middlewareObj.checkCampgroundOwnership = function(req, res, next) {
   }
 };
 
-middlewareObj.checkCampgroundId = function(req, res, next) {
+middlewareObj.checkCampgroundExists = function(req, res, next) {
   Campground.findById(req.params.id, function(err, campground) {
+    console.log(
+      '>>>>>>>>>>>>>> TESTING... CAMPGROUND CHECK >>>>>>>>>>>>>>>>>>'
+    );
     if (err || !campground) {
+      console.log('>>>>>>>>>>>>>> FAILED CAMPGROUND CHECK >>>>>>>>>>>>>>>>>>');
+
       req.flash('error', 'Error: Campground not found.');
-      res.redirect('back');
+      res.redirect('/campgrounds');
     } else {
+      console.log('>>>>>>>>>>>>>> PASSED CAMPGROUND CHECK >>>>>>>>>>>>>>>>>>');
       // it's for not doing another Campground.findById() after the middleware.
       // Since we do it in most of our comments routes. Now we only need to access
       //it with res.locals.foundCampground and we don't need to send it back to the template either.
       res.locals.foundCampground = campground;
+      next();
+    }
+  });
+};
+
+middlewareObj.checkCommentExists = function(req, res, next) {
+  Comment.findById(req.params.comment_id, function(err, comment) {
+    console.log('>>>>>>>>>>>>>> TESTING... COMMENT CHECK >>>>>>>>>>>>>>>>>>');
+    if (err || !comment) {
+      console.log('>>>>>>>>>>>>>> FAILED COMMENT CHECK >>>>>>>>>>>>>>>>>>');
+
+      req.flash('error', 'Error: Comment not found.');
+      res.redirect('/campgrounds');
+    } else {
+      console.log('>>>>>>>>>>>>>> PASSED COMMENT CHECK >>>>>>>>>>>>>>>>>>');
+      // it's for not doing another Campground.findById() after the middleware.
+      // Since we do it in most of our comments routes. Now we only need to access
+      //it with res.locals.foundCampground and we don't need to send it back to the template either.
+      res.locals.foundComment = comment;
       next();
     }
   });
