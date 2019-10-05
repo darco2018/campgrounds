@@ -16,7 +16,10 @@ router.get('/', (req, res) => {
     if (err) {
       console.log(`Error when finding campground ${err}`);
     } else {
-      res.render('campground/index', { campgrounds: allCampgrounds });
+      res.render('campground/index', {
+        campgrounds: allCampgrounds,
+        page: 'campgrounds'
+      });
     }
   });
 });
