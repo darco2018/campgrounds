@@ -2,13 +2,14 @@
 
 <div class="container">
   <header class="jumbotron">
-    <h1>Welcome to Expressdish!</h1>
-    <p>View our handpicked dishes from the whole world</p>
+    <h1>Dish Log - Cracow's dish library</h1>
+    <p>
+      View dishes from reastaurants and cafes in Cracow. Read reviews, compare
+      prices, add your own meal memory.
+    </p>
     <p>
       <!-- Remember about root slash in href -->
-      <a class="btn btn-info btn-sm" href="/dishes/new"
-        >Add new dish</a
-      >
+      <a class="btn btn-info btn-sm" href="/dishes/new">Add new dish</a>
     </p>
   </header>
   <div class="row">
@@ -19,9 +20,7 @@
           <img src="<%= dish.image %>" class="card-img-top" alt="..." />
           <div class="card-body">
             <h5 class="card-title"><%= dish.name %></h5>
-            <a
-              class="btn btn-outline-info btn-sm"
-              href="/dishes/<%= dish.id %>"
+            <a class="btn btn-outline-info btn-sm" href="/dishes/<%= dish.id %>"
               >Details</a
             >
           </div>

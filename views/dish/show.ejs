@@ -19,19 +19,15 @@
               <a href="#"><%= dish.name %></a>
             </div>
             <div class="float-right text-muted font-weight-bold h4">
-              $<%= dish.price %>/ night
+              $<%= dish.price %>
             </div>
             <br /><br />
             <div class="card-text mb-2"><%= dish.description %></div>
             <div class="card-text mb-3">
               <em>Submitted by <%= dish.author.username %></em>
             </div>
-            <% if (currentUser && dish.author.id.equals(currentUser.id)) {
-            %>
-            <a
-              class="btn btn-warning "
-              href="/dishes/<%= dish.id %>/edit"
-            >
+            <% if (currentUser && dish.author.id.equals(currentUser.id)) { %>
+            <a class="btn btn-warning " href="/dishes/<%= dish.id %>/edit">
               Edit
             </a>
             <form
