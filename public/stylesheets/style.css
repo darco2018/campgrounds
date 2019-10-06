@@ -2,6 +2,19 @@ body {
   /* background: #eee8a9; */
 }
 
+.jumbotron {
+  background-image: url('https://cdn.pixabay.com/photo/2017/03/15/01/40/krakow-2144879_960_720.jpg');
+  background-size: cover;
+}
+
+.jumbotron h1 {
+  color: #ee7353;
+}
+
+.jumbotron h4 {
+  color: #f1962e;
+}
+
 img {
   width: 200px; /* You can set the dimensions to whatever you want */
   height: 200px;
