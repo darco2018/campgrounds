@@ -1,18 +1,7 @@
 <% include ../partials/header.ejs %>
 
 <div class="container">
-  <header class="jumbotron">
-    <h1>Welcome to Dish Log - Cracow's dish library!</h1>
-    <p>View dishes from restaurants and cafes in Cracow. Read reviews, compare prices, add your own.</p>
-    <p>
-      <!-- Remember about root slash in href -->
-      <a class="btn btn-info btn-sm m-1" href="/dishes/new">Add new dish</a
-      ><br />
-      <a class="btn btn-info btn-sm m-1"" href="/foodplaces/new"
-        >Add new food place</a
-      >
-    </p>
-  </header>
+  <% include ../partials/jumbotron.ejs %>
   <div class="row">
     <div class="card-deck">
       <% dishes.forEach((dish) =>{ %>

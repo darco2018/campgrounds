@@ -1,28 +1,22 @@
 <% include ../partials/header.ejs %>
 
 <div class="container">
-  <header class="jumbotron">
-    <h1>Welcome to Foodplace Log - Cracow's foodplace library!</h1>
-    <p>View foodplaces from restaurants and cafes in Cracow. Read reviews, compare prices, add your own.</p>
-    <p>
-      <!-- Remember about root slash in href -->
-      <a class="btn btn-info btn-sm m-1" href="/foodplaces/new">Add new foodplace</a
-      ><br />
-      <a class="btn btn-info btn-sm m-1"" href="/foodplaces/new"
-        >Add new food place</a
-      >
-    </p>
-  </header>
+  <% include ../partials/jumbotron.ejs %>
   <div class="row">
     <div class="card-deck">
       <% foodplaces.forEach((foodplace) =>{ %>
       <div class="col-md-6 col-xl-4 mb-3">
         <div class="card p-1">
-<!--           <img src="<%= foodplace.image %>" class="card-img-top" alt="..." />
- -->          <div class="card-body">
+          <!--           <img src="<%= foodplace.image %>" class="card-img-top" alt="..." />
+ -->
+          <div class="card-body">
             <h5 class="card-text"><%= foodplace.name %></h5>
-            <p class="card-text"><%= foodplace.address %>, <%= foodplace.city %></p>
-            <a class="btn btn-outline-info btn-sm" href="/foodplaces/<%= foodplace.id %>/edit"
+            <p class="card-text">
+              <%= foodplace.address %>, <%= foodplace.city %>
+            </p>
+            <a
+              class="btn btn-outline-info btn-sm"
+              href="/foodplaces/<%= foodplace.id %>/edit"
               >Suggest update</a
             >
           </div>
