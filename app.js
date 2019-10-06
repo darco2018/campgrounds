@@ -21,6 +21,7 @@ const landingRouter = require('./routes/landing');
 const dishesRouter = require('./routes/dishes');
 const authRouter = require('./routes/auth');
 const commentsRouter = require('./routes/comments');
+const foodplacesRouter = require('./routes/foodplaces');
 
 /* ---------- VIEW ENGINE -------------*/
 
@@ -89,6 +90,7 @@ app.use('/', landingRouter);
 app.use('/auth', authRouter);
 app.use('/dishes', dishesRouter);
 app.use('/dishes/:id/comments', commentsRouter);
+app.use('/foodplaces', foodplacesRouter);
 
 /* ---------- ERROR HANDLING -------------*/
 
