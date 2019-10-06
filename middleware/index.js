@@ -62,7 +62,7 @@ middlewareObj.checkCommentOwnership = function(req, res, next) {
 };
 
 middlewareObj.checkCampgroundOwnership = function(req, res, next) {
-  middlewareObj.checkCampgroundId;
+  middlewareObj.checkCampgroundExists;
 
   if (req.isAuthenticated()) {
     //find campground & check permissions to edit/upadte/delete cmapground
@@ -97,19 +97,11 @@ middlewareObj.checkCampgroundOwnership = function(req, res, next) {
 
 middlewareObj.checkCampgroundExists = function(req, res, next) {
   Campground.findById(req.params.id, function(err, campground) {
-    console.log(
-      '>>>>>>>>>>>>>> TESTING... CAMPGROUND CHECK >>>>>>>>>>>>>>>>>>'
-    );
     if (err || !campground) {
-      console.log('>>>>>>>>>>>>>> FAILED CAMPGROUND CHECK >>>>>>>>>>>>>>>>>>');
-
       req.flash('error', 'Error: Campground not found.');
       res.redirect('/campgrounds');
     } else {
-      console.log('>>>>>>>>>>>>>> PASSED CAMPGROUND CHECK >>>>>>>>>>>>>>>>>>');
-      // it's for not doing another Campground.findById() after the middleware.
-      // Since we do it in most of our comments routes. Now we only need to access
-      //it with res.locals.foundCampground and we don't need to send it back to the template either.
+      //res.locals.foundCampground and we don't need to send it back to the template either.
       res.locals.foundCampground = campground;
       next();
     }
@@ -118,17 +110,10 @@ middlewareObj.checkCampgroundExists = function(req, res, next) {
 
 middlewareObj.checkCommentExists = function(req, res, next) {
   Comment.findById(req.params.comment_id, function(err, comment) {
-    console.log('>>>>>>>>>>>>>> TESTING... COMMENT CHECK >>>>>>>>>>>>>>>>>>');
     if (err || !comment) {
-      console.log('>>>>>>>>>>>>>> FAILED COMMENT CHECK >>>>>>>>>>>>>>>>>>');
-
       req.flash('error', 'Error: Comment not found.');
       res.redirect('/campgrounds');
     } else {
-      console.log('>>>>>>>>>>>>>> PASSED COMMENT CHECK >>>>>>>>>>>>>>>>>>');
-      // it's for not doing another Campground.findById() after the middleware.
-      // Since we do it in most of our comments routes. Now we only need to access
-      //it with res.locals.foundCampground and we don't need to send it back to the template either.
       res.locals.foundComment = comment;
       next();
     }
