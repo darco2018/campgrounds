@@ -7,6 +7,14 @@ const middleware = require('../middleware'); //index.js is imported by default f
 
 const router = express.Router();
 
+/* redirect */
+
+function handleError(req, res, error, message, page) {
+  console.log(error);
+  req.flash('error', message ? message : '');
+  res.redirect(page);
+}
+
 /* ------------------------- ROUTES ------------------------------- */
 
 // /campgrounds
@@ -14,7 +22,7 @@ const router = express.Router();
 router.get('/', (req, res) => {
   Campground.find({}, (err, allCampgrounds) => {
     if (err) {
-      console.log(`Error when finding campground ${err}`);
+      handleError(req, res, err, 'Something went wrong...', 'back');
     } else {
       res.render('campground/index', {
         campgrounds: allCampgrounds,
@@ -24,11 +32,15 @@ router.get('/', (req, res) => {
   });
 });
 
+// NEW - show form to create new campground
+// /campgrounds/new
+router.get('/new', middleware.isLoggedIn, (req, res) => {
+  res.render('campground/new');
+});
+
 // CREATE - add new campground
 // /campgrounds
 router.post('/', middleware.isLoggedIn, (req, res) => {
-  console.log('Receiving form data by POST');
-
   const author = {
     id: req.user.id,
     username: req.user.username
@@ -41,36 +53,25 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
     author: author
   };
 
-  console.log(req.user);
-
   Campground.create(newCampground, (err, savedCamp) => {
     if (err) {
-      return console.log(err);
+      handleError(req, res, err, 'Something went wrong...', 'back');
+    } else {
+      res.redirect('/campgrounds');
     }
-
-    console.log(`Campground: ${savedCamp} has been saved`);
-    res.redirect('/campgrounds');
   });
-});
-
-// NEW - show form to create new campground
-// /campgrounds/new
-router.get('/new', middleware.isLoggedIn, (req, res) => {
-  res.render('campground/new');
 });
 
 // SHOW - show details about campground
 // campgrounds/234
 // must be below /new
 router.get('/:id', (req, res) => {
+  // OK
   Campground.findById(req.params.id)
     .populate('comments') // populate the comments array in a campground !!!
     .exec((err, foundCampground) => {
       if (err || !foundCampground) {
-        // !null -> true
-        console.log(err);
-        req.flash('error', 'Campground not found');
-        res.redirect('/campgrounds'); // breaks for 'back'
+        handleError(req, res, err, 'Campground not found', '/campgrounds');
       }
       res.render('campground/show', { campground: foundCampground });
     });
@@ -80,8 +81,8 @@ router.get('/:id', (req, res) => {
 // campgrounds/234/edit
 router.get('/:id/edit', middleware.checkCampgroundOwnership, (req, res) => {
   Campground.findById(req.params.id, (err, foundCampground) => {
-    if (err) {
-      console.log(err);
+    if (err || !foundCampground) {
+      handleError(req, res, err, 'Campground not found', '/campgrounds');
     }
     res.render('campground/edit', { campground: foundCampground });
   });
@@ -91,23 +92,16 @@ router.get('/:id/edit', middleware.checkCampgroundOwnership, (req, res) => {
 // campgrounds/234/update
 // add ?_method=PUT in url  (method-override)
 router.put('/:id/update', middleware.checkCampgroundOwnership, (req, res) => {
-  // PUT uses this part of query string: _method=PUT
-
-  const campgroundId = req.params.id;
+  // checkCampgroundOwnership does checkCampgroundExists first
 
   Campground.findByIdAndUpdate(
-    campgroundId,
+    req.params.id,
     req.body.campground, // thanks to campground[name]/[url]/[description] in view
     (err, updatedCampground) => {
       if (err || !updatedCampground) {
-        // !null -> true
-        console.log(
-          `Error when retrieving campground ${updatedCampground}; ${err}`
-        );
-        req.flash('error', 'Campground not found');
-        res.redirect('/campgrounds'); // breaks for 'back'
+        handleError(req, res, err, 'Something went wrong...', '/campgrounds');
       } else {
-        res.redirect(`/campgrounds/${campgroundId}`);
+        res.redirect(`/campgrounds/${updatedCampground.id}`);
       }
     }
   );
@@ -116,17 +110,18 @@ router.put('/:id/update', middleware.checkCampgroundOwnership, (req, res) => {
 // DESTROY - delete campground
 // campgrounds/:id
 // needs a FORM with post + method_override
-router.delete('/:id', middleware.checkCampgroundOwnership, (req, res) => {
-  console.log('--------deleting-------------');
-
-  Campground.findByIdAndDelete(req.params.id, err => {
-    if (err) {
-      console.log(err);
-      res.redirect('/campgrounds/');
-    }
-    console.log('Deleted campground with id ' + req.params.id);
-    res.redirect('/campgrounds/');
-  });
-});
+router.delete(
+  '/:id',
+  middleware.checkCampgroundOwnership, // does checkCampgroundExists
+  (req, res) => {
+    Campground.findByIdAndDelete(req.params.id, err => {
+      if (err) {
+        handleError(req, res, err, 'Something went wrong...', 'back');
+      } else {
+        res.redirect('/campgrounds/');
+      }
+    });
+  }
+);
 
 module.exports = router;
