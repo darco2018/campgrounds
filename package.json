@@ -5,8 +5,8 @@
   "scripts": {
     "start": "node ./bin/www",
     "devstart": "nodemon ./bin/www",
-    "debugstart": "DEBUG=campgrounds:* npm start",
-    "debug": "DEBUG=campgrounds:* npm run devstart"
+    "debugstart": "DEBUG=dishes:* npm start",
+    "debug": "DEBUG=dishes:* npm run devstart"
   },
   "dependencies": {
     "body-parser": "^1.19.0",

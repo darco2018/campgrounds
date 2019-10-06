@@ -3,7 +3,7 @@ const comment = require('./comment');
 
 const { commentSchema } = comment;
 
-const campgroundSchema = new mongoose.Schema({
+const dishSchema = new mongoose.Schema({
   name: String,
   price: String,
   image: String,
@@ -26,6 +26,6 @@ const campgroundSchema = new mongoose.Schema({
   // comments: [comment.commentSchema],
 });
 
-console.log('Compiling Campground schema');
+console.log('Compiling Dish schema');
 
-module.exports = mongoose.model('Campground', campgroundSchema);
+module.exports = mongoose.model('Dish', dishSchema);

@@ -1,6 +1,6 @@
 /* eslint-disable consistent-return */
 const mongoose = require('mongoose');
-const Campground = require('./models/campground');
+const Dish = require('./models/dish');
 const comment = require('./models/comment');
 
 const Comment = comment.commentModel;
@@ -8,7 +8,7 @@ const Comment = comment.commentModel;
 const mockComments = [
   {
     text:
-      'A great little park ( about 40 spaces ) which is very neat and well-kept. The staff is very friendly and each site was about 80 feet long. There is no cable. We camped at Gold Mountain RV Park in a Motorhome.',
+      'A great little park ( about 40 spaces ) which is very neat and well-kept. The staff is very friendly and each site was about 80 feet long. There is no cable. We dished at Gold Mountain RV Park in a Motorhome.',
     author: 'Mike'
   },
   {
@@ -18,18 +18,18 @@ const mockComments = [
   },
   {
     text:
-      'Excellent WiFi. No cable or over air reception, but WiFi good enough to stream via our Roku. Manager very friendly as was camp host. We camped at Gold Mountain RV Park in a Fifth Wheel.',
+      'Excellent WiFi. No cable or over air reception, but WiFi good enough to stream via our Roku. Manager very friendly as was dish host. We dished at Gold Mountain RV Park in a Fifth Wheel.',
     author: 'Mike'
   }
 ];
 
-const mockCampgrounds = [
+const mockDishes = [
   {
     name: 'Wooden Paradise',
     image:
       'https://images.unsplash.com/photo-1497900304864-273dfb3aae33?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60',
     description:
-      'Our first class campsites are unmatched in proximity to the lake and include water, electric (30/50 amp service), wireless internet and cable hook-ups, fire ring and picnic table. Whether you’re bringing a tent, travel trailer or a luxury motor home, you will find the perfect site.'
+      'Our first class dishsites are unmatched in proximity to the lake and include water, electric (30/50 amp service), wireless internet and cable hook-ups, fire ring and picnic table. Whether you’re bringing a tent, travel trailer or a luxury motor home, you will find the perfect site.'
   },
   {
     name: 'Starry Night',
@@ -48,22 +48,22 @@ const mockCampgrounds = [
 ];
 
 let commentsCounter = 0;
-function createCampground(mockCamp) {
+function createDish(mockDish) {
   //
-  Campground.create(mockCamp, (err, savedCamp) => {
+  Dish.create(mockDish, (err, savedDish) => {
     if (err) {
-      console.log(`Error when saving campground: ${err}`);
+      console.log(`Error when saving dish: ${err}`);
     }
-    console.log(`${savedCamp.name} has been saved`);
+    console.log(`${savedDish.name} has been saved`);
 
     // create comment
     const newComment = mockComments[commentsCounter++];
 
     Comment.create(newComment, (error, savedComment) => {
-      savedCamp.comments.push(savedComment);
+      savedDish.comments.push(savedComment);
 
-      savedCamp.save((er, campground) => {
-        if (er) console.log(`Error when saving campground: ${err}`);
+      savedDish.save((er, dish) => {
+        if (er) console.log(`Error when saving dish: ${err}`);
       });
       console.log('Saved a comment');
     });
@@ -71,9 +71,9 @@ function createCampground(mockCamp) {
 }
 
 function seedDb() {
-  Campground.remove({}, err => {
-    if (err) console.log(`Error when removing campgrounds: ${err}`);
-    console.log('Removed campgrounds');
+  Dish.remove({}, err => {
+    if (err) console.log(`Error when removing dishes: ${err}`);
+    console.log('Removed dishes');
 
     /*  must be commented off when you change in comment model the author to: 
     author: {
@@ -89,9 +89,9 @@ function seedDb() {
       console.log('Removed comments');
       // re-create cmapgrounds
       // placed in callback: guarantee it will run AFTER remove
-      console.log('Saving mock campgrounds..');
-      mockCampgrounds.forEach(camp => {
-        createCampground(camp);
+      console.log('Saving mock dishes..');
+      mockDishes.forEach(dish => {
+        createDish(dish);
       });
     }); */
   });

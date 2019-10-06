@@ -30,7 +30,7 @@ router.post('/register', (req, res) => {
     passport.authenticate('local')(req, res, function() {
       console.log('------------Local-authenticating');
       req.flash('success', 'Welcome ' + savedUser.username + '!');
-      res.redirect('/campgrounds');
+      res.redirect('/dishs');
     });
   });
 });
@@ -50,7 +50,7 @@ router.post(
   '/login',
   // middleware
   passport.authenticate('local', {
-    successRedirect: '/campgrounds',
+    successRedirect: '/dishs',
     failureRedirect: '/auth/login',
     failureFlash: true
   }),
@@ -60,7 +60,7 @@ router.post(
 router.get('/logout', (req, res) => {
   req.logout();
   req.flash('success', 'You have been logged out successfully');
-  res.redirect('/campgrounds');
+  res.redirect('/dishs');
 });
 
 module.exports = router;

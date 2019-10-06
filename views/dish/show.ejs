@@ -2,7 +2,7 @@
 <div class="container">
   <div class="row">
     <div class="col-md-3 bg-light">
-      <p class="lead">Express Camp</p>
+      <p class="lead">Express Dish</p>
       <ul class="list-group">
         <li class="list-group-item active">Morbi leo risus</li>
         <li class="list-group-item">Porta ac consectetur ac</li>
@@ -12,31 +12,31 @@
     <div class="col-md-9 ">
       <div class="card">
         <div class="card-body">
-          <img class="card-img img-fluid mb-3" src="<%= campground.image %>" />
+          <img class="card-img img-fluid mb-3" src="<%= dish.image %>" />
           <div class="px-4">
             <div class="float-none"></div>
             <div class="float-left  font-weight-bold h4">
-              <a href="#"><%= campground.name %></a>
+              <a href="#"><%= dish.name %></a>
             </div>
             <div class="float-right text-muted font-weight-bold h4">
-              $<%= campground.price %>/ night
+              $<%= dish.price %>/ night
             </div>
             <br /><br />
-            <div class="card-text mb-2"><%= campground.description %></div>
+            <div class="card-text mb-2"><%= dish.description %></div>
             <div class="card-text mb-3">
-              <em>Submitted by <%= campground.author.username %></em>
+              <em>Submitted by <%= dish.author.username %></em>
             </div>
-            <% if (currentUser && campground.author.id.equals(currentUser.id)) {
+            <% if (currentUser && dish.author.id.equals(currentUser.id)) {
             %>
             <a
               class="btn btn-warning "
-              href="/campgrounds/<%= campground.id %>/edit"
+              href="/dishes/<%= dish.id %>/edit"
             >
               Edit
             </a>
             <form
               class="d-inline"
-              action="/campgrounds/<%= campground.id %>?_method=delete"
+              action="/dishes/<%= dish.id %>?_method=delete"
               method="post"
             >
               <button class="btn btn-danger">Delete</button>
@@ -49,12 +49,12 @@
         <div class="card-body  pt-3 px-5">
           <div class="mb-5">
             <a
-              href="/campgrounds/<%= campground.id %>/comments/new"
+              href="/dishes/<%= dish.id %>/comments/new"
               class="btn btn-success float-right my-1"
               >Leave a review</a
             >
           </div>
-          <% campground.comments.forEach((comment)=>{ %>
+          <% dish.comments.forEach((comment)=>{ %>
           <div class="row pt-2">
             <div class="col-md-12">
               <strong><%= comment.author.username %></strong>
@@ -64,13 +64,13 @@
             <% if (currentUser && comment.author.id.equals(currentUser.id)) { %>
             <a
               class="btn btn-sm btn-warning "
-              href="/campgrounds/<%= campground.id %>/comments/<%= comment.id%>/edit"
+              href="/dishes/<%= dish.id %>/comments/<%= comment.id%>/edit"
             >
               Edit
             </a>
             <form
               class="d-inline ml-1"
-              action="/campgrounds/<%= campground.id %>/comments/<%= comment.id%>?_method=delete"
+              action="/dishes/<%= dish.id %>/comments/<%= comment.id%>?_method=delete"
               method="post"
             >
               <button class="btn btn-sm btn-danger">Delete</button>

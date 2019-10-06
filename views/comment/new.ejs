@@ -1,11 +1,11 @@
 <% include ../partials/header.ejs %>
 
 <h1 class="mt-3 mb-5 text-center">
-  Add a new comment to <%= campground.name %>
+  Add a new comment to <%= dish.name %>
 </h1>
 
 <div class="container text-center col-9 col-sm-8 col-md-6 col-lg-5 col-xl-4">
-  <form action="/campgrounds/<%= campground._id %>/comments" method="post">
+  <form action="/dishes/<%= dish._id %>/comments" method="post">
     <div class="form-group">
       <input
         class="form-control"

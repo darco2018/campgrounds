@@ -1,26 +1,18 @@
 <% include ../partials/header.ejs %>
 
-<h1 class="mt-3 mb-5 text-center">Edit the campground</h1>
+<h1 class="mt-3 mb-5 text-center">Add a dish</h1>
 
 <div class="container text-center col-9 col-sm-8 col-md-6 col-lg-5 col-xl-4">
-  <form
-    action="/campgrounds/<%= campground.id%>/update?_method=PUT"
-    method="post"
-  >
+  <form action="/dishes" method="post">
     <div class="form-group">
-      <input
-        class="form-control"
-        type="text"
-        name="campground[name]"
-        value="<%= campground.name%>"
-      />
+      <input class="form-control" type="text" name="name" placeholder="name" />
     </div>
     <div class="form-group">
       <input
         class="form-control"
         type="number"
-        name="campground[price]"
-        value="<%= campground.price%>"
+        name="price"
+        placeholder="price"
         min="0.01"
         step="0.01"
       />
@@ -29,21 +21,21 @@
       <input
         class="form-control"
         type="text"
-        name="campground[image]"
-        value="<%= campground.image%>"
+        name="image"
+        placeholder="image url"
       />
     </div>
     <div class="form-group">
       <input
         class="form-control"
         type="text"
-        name="campground[description]"
-        value="<%= campground.description%>"
+        name="desc"
+        placeholder="description"
       />
     </div>
     <div class="form-group">
       <button class="btn btn-primary btn-block w-50 mx-auto" type="submit">
-        Submit changes
+        Add dish
       </button>
     </div>
   </form>

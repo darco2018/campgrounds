@@ -2,7 +2,7 @@
 /* eslint-disable no-use-before-define */
 const express = require('express');
 const mongoose = require('mongoose');
-const Campground = require('../models/campground');
+const Dish = require('../models/dish');
 const comment = require('../models/comment');
 const Comment = comment.commentModel;
 const middleware = require('../middleware'); //index.js is imported by default from middleware folder
@@ -10,23 +10,23 @@ const middleware = require('../middleware'); //index.js is imported by default f
 const router = express.Router({ mergeParams: true });
 
 // NEW - show form to create new comment
-// /campgrounds/:id/comments/new
+// /dishes/:id/comments/new
 router.get(
   '/new',
   middleware.isLoggedIn,
-  middleware.checkCampgroundExists, //adds foundCampground to res.locals
+  middleware.checkDishExists, //adds foundDish to res.locals
   (req, res) => {
-    res.render('comment/new', { campground: res.locals.foundCampground });
+    res.render('comment/new', { dish: res.locals.foundDish });
   }
 );
 
 // CREATE - add new comment
-// /campgrounds/:id/comments
-// /campgrounds/5d9372fa6c3da9223bcb1662/comments
+// /dishes/:id/comments
+// /dishes/5d9372fa6c3da9223bcb1662/comments
 router.post(
   '/',
   middleware.isLoggedIn,
-  middleware.checkCampgroundExists,
+  middleware.checkDishExists,
   (req, res) => {
     Comment.create(req.body.comment, (err, savedComment) => {
       if (err) {
@@ -39,50 +39,50 @@ router.post(
       savedComment.author.username = req.user.username;
       savedComment.save();
 
-      const foundCampground = res.locals.foundCampground;
-      foundCampground.comments.push(savedComment);
-      foundCampground.save();
+      const foundDish = res.locals.foundDish;
+      foundDish.comments.push(savedComment);
+      foundDish.save();
       req.flash('success', 'Successfully added comment...');
-      res.redirect('/campgrounds/' + req.params.id);
+      res.redirect('/dishes/' + req.params.id);
     });
   }
 );
 
 // EDIT - show edit form
-// campgrounds/:id/comments/:comment_id/edit
+// dishes/:id/comments/:comment_id/edit
 router.get(
   '/:comment_id/edit',
   middleware.checkCommentExists,
   middleware.checkCommentOwnership, //includes isAuthenticated()
-  middleware.checkCampgroundExists,
+  middleware.checkDishExists,
   (req, res) => {
     res.render('comment/edit', {
       comment: res.locals.foundComment,
-      campgroundId: res.locals.foundCampground.id
+      dishId: res.locals.foundDish.id
     });
   }
 );
 
 // UPDATE
-// campgrounds/:id/comments/:comment_id/update
+// dishes/:id/comments/:comment_id/update
 // add ?_method=PUT in url  (method-override)
 router.put(
   '/:comment_id/update',
   middleware.checkCommentExists,
   middleware.checkCommentOwnership, //includes isAuthenticated()
-  middleware.checkCampgroundExists,
+  middleware.checkDishExists,
 
   (req, res) => {
     Comment.findByIdAndUpdate(
       req.params.comment_id,
-      req.body.comment, // thanks to campground[name]/[url]/[description] in view
+      req.body.comment, // thanks to dish[name]/[url]/[description] in view
       (err, updatedComment) => {
         if (err) {
           console.log(`Error  updating comment: ${err}`);
           req.flash('error', 'Something went wrong...');
           res.redirect('back');
         } else {
-          res.redirect(`/campgrounds/${res.locals.foundCampground.id}`);
+          res.redirect(`/dishes/${res.locals.foundDish.id}`);
         }
       }
     );
@@ -90,13 +90,13 @@ router.put(
 );
 
 // DESTROY - delete comment
-// campgrounds/:id/comments/:comment_id/
+// dishes/:id/comments/:comment_id/
 // needs a FORM with post + method_override
 router.delete(
   '/:comment_id',
   middleware.checkCommentExists,
   middleware.checkCommentOwnership, //includes isAuthenticated()
-  middleware.checkCampgroundExists,
+  middleware.checkDishExists,
 
   (req, res) => {
     Comment.findByIdAndDelete(req.params.comment_id, err => {
@@ -106,7 +106,7 @@ router.delete(
         res.redirect('back');
       } else {
         req.flash('success', 'Comment deleted');
-        res.redirect('/campgrounds/' + res.locals.foundCampground.id); // or req.params.id
+        res.redirect('/dishes/' + res.locals.foundDish.id); // or req.params.id
       }
     });
   }

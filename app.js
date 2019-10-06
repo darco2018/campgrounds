@@ -18,7 +18,7 @@ const User = require('./models/user');
 const seedDb = require('./seeds');
 // routes
 const landingRouter = require('./routes/landing');
-const campgroundsRouter = require('./routes/campgrounds');
+const dishesRouter = require('./routes/dishes');
 const authRouter = require('./routes/auth');
 const commentsRouter = require('./routes/comments');
 
@@ -29,7 +29,7 @@ app.set('view engine', 'ejs');
 
 /* ---------- CREATE DB CONNECTION -------------*/
 
-const dbName = 'express_camp';
+const dbName = 'express_dish';
 mongoose.connect(`mongodb://localhost:27017/${dbName}`, {
   useNewUrlParser: true,
   useUnifiedTopology: true
@@ -87,8 +87,8 @@ app.use(function(req, res, next) {
 
 app.use('/', landingRouter);
 app.use('/auth', authRouter);
-app.use('/campgrounds', campgroundsRouter);
-app.use('/campgrounds/:id/comments', commentsRouter);
+app.use('/dishes', dishesRouter);
+app.use('/dishes/:id/comments', commentsRouter);
 
 /* ---------- ERROR HANDLING -------------*/
 
