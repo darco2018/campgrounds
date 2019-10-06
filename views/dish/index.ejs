@@ -2,22 +2,26 @@
 
 <div class="container">
   <header class="jumbotron">
-    <h1>Welcome to Expresscamp!</h1>
-    <p>View our handpicked dishes from the whole world</p>
+    <h1>Welcome to Dish Log - Cracow's dish library!</h1>
+    <p>View dishes from restaurants and cafes in Cracow. Read reviews, compare prices, add your own.</p>
     <p>
       <!-- Remember about root slash in href -->
-      <a class="btn btn-info btn-sm" href="/dishes/new">Add new dish</a>
+      <a class="btn btn-info btn-sm m-1" href="/dishes/new">Add new dish</a
+      ><br />
+      <a class="btn btn-info btn-sm m-1"" href="/foodplaces/new"
+        >Add new food place</a
+      >
     </p>
   </header>
   <div class="row">
     <div class="card-deck">
-      <% dishes.forEach((camp) =>{ %>
+      <% dishes.forEach((dish) =>{ %>
       <div class="col-md-6 col-xl-4 mb-3">
         <div class="card p-1">
-          <img src="<%= camp.image %>" class="card-img-top" alt="..." />
+          <img src="<%= dish.image %>" class="card-img-top" alt="..." />
           <div class="card-body">
-            <h5 class="card-title"><%= camp.name %></h5>
-            <a class="btn btn-outline-info btn-sm" href="/dishes/<%= camp.id %>"
+            <h5 class="card-title"><%= dish.name %></h5>
+            <a class="btn btn-outline-info btn-sm" href="/dishes/<%= dish.id %>"
               >Details</a
             >
           </div>

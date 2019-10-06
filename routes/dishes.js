@@ -84,7 +84,7 @@ router.get('/:id/edit', middleware.checkDishOwnership, (req, res) => {
     if (err || !foundDish) {
       handleError(req, res, err, 'Dish not found', '/dishes');
     }
-    res.render('dish/edit', { dish: foundDish });
+    res.render('dish/edit', { dish: foundDish }); //refactor with  res.locals.dish/foundDish
   });
 });
 

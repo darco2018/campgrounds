@@ -2,6 +2,8 @@
 const Dish = require('../models/dish');
 const comment = require('../models/comment');
 const Comment = comment.commentModel;
+const foodplace = require('../models/foodplace');
+const Foodplace = foodplace.foodplaceModel;
 
 const middlewareObj = {};
 
@@ -115,6 +117,18 @@ middlewareObj.checkCommentExists = function(req, res, next) {
       res.redirect('/dishes');
     } else {
       res.locals.foundComment = comment;
+      next();
+    }
+  });
+};
+
+middlewareObj.checkFoodplaceExists = function(req, res, next) {
+  Foodplace.findById(req.params.id, function(err, foundFoodplace) {
+    if (err || !foundFoodplace) {
+      req.flash('error', 'Error: Food place not found.');
+      res.redirect('/foodplaces');
+    } else {
+      res.locals.foodplace = foundFoodplace;
       next();
     }
   });
