@@ -3,14 +3,19 @@
 <h1 class="mt-3 mb-5 text-center">Add a dish</h1>
 
 <div class="container text-center col-9 col-sm-8 col-md-6 col-lg-5 col-xl-4">
+  <h5>THE FOOD PLACE</h5>
   <form action="/dishes" method="post">
-    <h5>THE FOOD PLACE</h5>
-    <label class="text-left" for="foodplaces-select"
-      >If the food place is not on the list below, please first add it
-      <a href="/foodplaces/new">here</a>
-    </label>
-    <div id="foodplaces-select" class="form-group">
-      <select class="form-control" type="text" name="foodplace[id]">
+    <div class="form-group">
+      <label class="text-left" for="foodplaces-select"
+        >If the food place is not on the list below, please first add it
+        <a href="/foodplaces/new">here</a>
+      </label>
+      <select
+        id="foodplaces-select"
+        class="form-control"
+        type="text"
+        name="foodplaceId"
+      >
         <option value="">I bought the dish at ...</option>
         <% foodplaces.forEach((foodplace) =>{ %>
         <option value="<%= foodplace.id %>">

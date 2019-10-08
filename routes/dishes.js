@@ -22,16 +22,18 @@ function handleError(req, res, error, message, page) {
 // /dishes
 // INDEX - show all dishes
 router.get('/', (req, res) => {
-  Dish.find().populate('foodplace').exec((err, allDishes) => {
-    if (err) {
-      handleError(req, res, err, 'Something went wrong...', 'back');
-    } else {
-      res.render('dish/index', {
-        dishes: allDishes,
-        page: 'dishes'
-      });
-    }
-  });
+  Dish.find()
+    .populate('foodplace')
+    .exec((err, allDishes) => {
+      if (err) {
+        handleError(req, res, err, 'Something went wrong...', 'back');
+      } else {
+        res.render('dish/index', {
+          dishes: allDishes,
+          page: 'dishes'
+        });
+      }
+    });
 });
 
 // NEW - show form to create new dish
@@ -50,20 +52,20 @@ router.get('/new', middleware.isLoggedIn, (req, res) => {
 // /dishes
 router.post('/', middleware.isLoggedIn, (req, res) => {
   console.log('>>>>>>>>>>>>>>>>> req.body.foodplace: ' + req.body.foodplace);
-  console.log(
+  /* console.log(
     '>>>>>>>>>>>>>>>>> req.body.foodplace.id: ' + req.body.foodplace.id
-  );
+  ); */
 
-  const foodplace = {
+  /* const foodplace = {
     id: req.body.foodplace.id
     //can be read like this because in form we have select's name=foodplace[id]
-  };
+  }; */
   const author = {
     id: req.user.id,
     username: req.user.username
   };
   const newDish = {
-    foodplace: foodplace,
+    foodplace: req.body.foodplaceId,
     name: req.body.name,
     price: req.body.price,
     image: req.body.image,
