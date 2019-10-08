@@ -8,10 +8,6 @@ const dishSchema = new mongoose.Schema({
   price: String,
   image: String,
   description: String,
-  foodplace: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Foodplace'
-  },
   author: {
     // includes all info about author
     id: {
@@ -19,6 +15,13 @@ const dishSchema = new mongoose.Schema({
       ref: 'User'
     },
     username: String
+  },
+  foodplace: {
+    id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Foodplace'
+    },
+    name: String
   },
   // includes only id - use this
   comments: [
