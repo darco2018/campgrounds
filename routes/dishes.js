@@ -112,22 +112,24 @@ router.get('/:id', (req, res) => {
 router.get('/:id/edit', middleware.checkDishOwnership, (req, res) => {
   // BUGGING HERE CANT SEE <option value="<%= dish[foodplace][id] %>">" in views/dish/edit.ejs:14
 
-  Dish.findById(req.params.id, (err, foundDish) => {
-    if (err || !foundDish) {
-      handleError(req, res, err, 'Dish not found', '/dishes');
-    }
-
-    Foodplace.find({}, (err, foundFoodplaces) => {
-      if (err) {
-        handleError(req, res, err, 'Something went wrong...', 'back');
-      } else {
-        res.render('dish/edit', {
-          dish: foundDish,
-          foodplaces: foundFoodplaces
-        }); //refactor with  res.locals.dish/foundDish
+  Dish.findById(req.params.id)
+    .populate('foodplace')
+    .exec((err, foundDish) => {
+      if (err || !foundDish) {
+        handleError(req, res, err, 'Dish not found', '/dishes');
       }
+
+      Foodplace.find({}, (err, foundFoodplaces) => {
+        if (err) {
+          handleError(req, res, err, 'Something went wrong...', 'back');
+        } else {
+          res.render('dish/edit', {
+            dish: foundDish,
+            foodplaces: foundFoodplaces
+          }); //refactor with  res.locals.dish/foundDish
+        }
+      });
     });
-  });
 });
 
 // UPDATE

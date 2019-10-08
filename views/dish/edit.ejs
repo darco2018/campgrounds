@@ -17,24 +17,29 @@
           type="text"
           name="dish[foodplace]"
         >
-          <option value="">I bought the dish at ...</option>
+          <option value=""
+            ><%= dish.foodplace.name %> - ul. <%= dish.foodplace.address %>,
+            <%=dish.foodplace.city %></option
+          >
           <% foodplaces.forEach((foodplace) =>{ %>
+          <%if(dish.foodplace.id!==foodplace.id){ %>
           <option value="<%= foodplace.id %>">
             <%= foodplace.name %> - ul. <%= foodplace.address %>,
             <%=foodplace.city %>
           </option>
-          <% }) %>
+          <% } %> <% }) %>
         </select>
       </div>
 
       <h5>THE DISH</h5>
-      <input
-        class="form-control"
-        type="text"
-        name="dish[name]"
-        value="<%= dish.name%>"
-      />
-
+      <div class="form-group">
+        <input
+          class="form-control"
+          type="text"
+          name="dish[name]"
+          value="<%= dish.name%>"
+        />
+      </div>
       <div class="form-group">
         <input
           class="form-control"
