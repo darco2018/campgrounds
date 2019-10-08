@@ -2,65 +2,68 @@
 
 <h1 class="mt-3 mb-5 text-center">Edit the dish</h1>
 
-<div class="container text-center col-9 col-sm-8 col-md-6 col-lg-5 col-xl-4">
-  <form action="/dishes/<%= dish.id%>/update?_method=PUT" method="post">
+<div class="row">
+  <div class="container text-center col-9 col-sm-8 col-md-6 col-lg-5 col-xl-4">
     <h5>THE FOOD PLACE</h5>
-    <label class="text-left" for="foodplaces-select"
-      >If the food place is not on the list below, please first add it
-      <a href="/foodplaces/new">here</a></label
-    >
-    <div id="foodplaces-select" class="form-group">
-      <select class="form-control" type="text" name="dish[foodplace]">
-        <option value="<%= dish[foodplace][id] %>">"<%= foodplace.name %>" - ul. <%= foodplace.address %>, <%=
-          foodplace.city %></option>
-        <% foodplaces.forEach((foodplace) =>{ %>
-        <option value="<%= foodplace.id %>"
-          >"<%= foodplace.name %>" - ul. <%= foodplace.address %>, <%=
-          foodplace.city %></option
+    <form action="/dishes/<%= dish.id%>/update?_method=PUT" method="post">
+      <div class="form-group">
+        <label class="text-left" for="foodplaces-select"
+          >If the food place is not on the list below, please first add it
+          <a href="/foodplaces/new">here</a>
+        </label>
+        <select
+          id="foodplaces-select"
+          class="form-control"
+          type="text"
+          name="foodplaceId"
         >
-        <% }) %>
-      </select>
-    </div>
-    <h5>THE DISH</h5>
+          <option value="">I bought the dish at ...</option>
+          <% foodplaces.forEach((foodplace) =>{ %>
+          <option value="<%= foodplace.id %>">
+            <%= foodplace.name %> - ul. <%= foodplace.address %>,
+            <%=foodplace.city %>
+          </option>
+          <% }) %>
+        </select>
+      </div>
+
+      <h5>THE DISH</h5>
       <input
         class="form-control"
         type="text"
         name="dish[name]"
         value="<%= dish.name%>"
       />
-    </div>
-    <div class="form-group">
-      <input
-        class="form-control"
-        type="number"
-        name="dish[price]"
-        value="<%= dish.price%>"
-        min="0.01"
-        step="0.01"
-      />
-    </div>
-    <div class="form-group">
-      <input
-        class="form-control"
-        type="text"
-        name="dish[image]"
-        value="<%= dish.image%>"
-      />
-    </div>
-    <div class="form-group">
-      <textarea
-        class="form-control"
-        type="text"
-        name="dish[description]"
-        value="<%= dish.description%>"
-      ></textarea>
-    </div>
-    <div class="form-group">
-      <button class="btn btn-primary btn-block w-50 mx-auto" type="submit">
-        Submit changes
-      </button>
-    </div>
-  </form>
-</div>
 
+      <div class="form-group">
+        <input
+          class="form-control"
+          type="number"
+          name="dish[price]"
+          value="<%= dish.price%>"
+          min="0.01"
+          step="0.01"
+        />
+      </div>
+      <div class="form-group">
+        <input
+          class="form-control"
+          type="text"
+          name="dish[image]"
+          value="<%= dish.image%>"
+        />
+      </div>
+      <div class="form-group">
+        <textarea class="form-control" name="dish[description]" rows="8">
+<%= dish.description%></textarea
+        >
+      </div>
+      <div class="form-group">
+        <button class="btn btn-primary btn-block w-50 mx-auto" type="submit">
+          Submit changes
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
 <% include ../partials/footer.ejs %>
