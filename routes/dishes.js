@@ -22,7 +22,7 @@ function handleError(req, res, error, message, page) {
 // /dishes
 // INDEX - show all dishes
 router.get('/', (req, res) => {
-  Dish.find({}, (err, allDishes) => {
+  Dish.find().populate('foodplace').exec((err, allDishes) => {
     if (err) {
       handleError(req, res, err, 'Something went wrong...', 'back');
     } else {
@@ -86,11 +86,21 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
 router.get('/:id', (req, res) => {
   // OK
   Dish.findById(req.params.id)
+    .populate('foodplace')
     .populate('comments') // populate the comments array in a dish !!!
     .exec((err, foundDish) => {
       if (err || !foundDish) {
         handleError(req, res, err, 'Dish not found', '/dishes');
       }
+
+      console.log(
+        foundDish.foodplace +
+          '--------> the Foodplace name: ' +
+          foundDish.foodplace.name +
+          ', id: ' +
+          foundDish.foodplace.id
+      );
+
       res.render('dish/show', { dish: foundDish });
     });
 });

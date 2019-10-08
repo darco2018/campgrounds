@@ -17,17 +17,22 @@
             <div class="float-none"></div>
             <div class="float-left  font-weight-bold h4">
               <a href="#"><%= dish.name %></a>
-              <span class="text-muted"
-                ><small>
-                  at id: <%= dish.foodplace.id %> name: <%=
-                  dish.foodplace.name%>
-                </small></span
-              >
             </div>
             <div class="float-right text-muted font-weight-bold h4">
               <%= dish.price %> zł
             </div>
-            <br /><br />
+            <br />
+            <p class="float-none"></p>
+
+            <div class="text-muted">
+              <p>
+                <small>
+                  <b><%=dish.foodplace.name%></b> <%=dish.foodplace.address%>,
+                  <%=dish.foodplace.city%>
+                </small>
+              </p>
+            </div>
+
             <div class="card-text mb-2"><%= dish.description %></div>
             <div class="card-text mb-3">
               <em>Submitted by <%= dish.author.username %></em>

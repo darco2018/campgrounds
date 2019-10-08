@@ -12,6 +12,7 @@
           /></a>
           <div class="card-body">
             <h5 class="card-title"><%= dish.name %></h5>
+            <p><b><%=dish.foodplace.name%></b></p>
             <p><%= (dish.description).substring(0,65) %>...</p>
             <a class="btn btn-outline-info btn-sm" href="/dishes/<%= dish.id %>"
               >Details</a

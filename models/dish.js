@@ -17,11 +17,8 @@ const dishSchema = new mongoose.Schema({
     username: String
   },
   foodplace: {
-    id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Foodplace'
-    },
-    name: String
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Foodplace'
   },
   // includes only id - use this
   comments: [
