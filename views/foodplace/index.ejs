@@ -2,32 +2,33 @@
 
 <div class="container">
   <% include ../partials/jumbotron.ejs %>
-  <div class="row">
-    <div class="card-deck">
-      <% foodplaces.forEach((foodplace) =>{ %>
-      <div class="col-md-6 col-xl-4 mb-3">
-        <div class="card p-1">
-          <!--           <img src="<%= foodplace.image %>" class="card-img-top" alt="..." />
- -->
-          <div class="card-body">
-            <h5 class="card-text"><%= foodplace.name %></h5>
-            <p class="card-text">
-              <%= foodplace.address %>, <%= foodplace.city %>
-            </p>
-            <a
-              class="btn btn-outline-info btn-sm"
-              href="/foodplaces/<%= foodplace.id %>/edit"
-              >Suggest update</a
-            >
-          </div>
-          <div class="card-footer">
-            <small class="text-muted">Last updated 3 mins ago</small>
-          </div>
-        </div>
+
+  <ul class="list-group">
+    <% foodplaces.forEach((foodplace) =>{ %>
+    <li
+      class="list-group-item d-flex justify-content-between align-items-center"
+    >
+      <div class="">
+        <a
+          class="btn btn-outline-info btn-sm mr-3"
+          href="/foodplaces/<%= foodplace.id %>/edit"
+          >Suggest update</a
+        >
+
+        <strong class="text-left"><%= foodplace.name %></strong>
+        <span class="card-text">
+          <%= foodplace.address %>, <%= foodplace.city %>
+        </span>
       </div>
-      <% }) %>
-    </div>
-  </div>
+      <div>
+        <% let num = Math.floor((Math.random() * 20) + 1); let plural = (num ===
+        1) ? " dish" : " dishes" %>
+        <span class="badge badge-info badge-pill"><%= num %></span> <%= plural
+        %>
+      </div>
+    </li>
+    <% }) %>
+  </ul>
 
   <% include ../partials/footer.ejs %>
 </div>

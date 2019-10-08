@@ -4,8 +4,31 @@
 
 <div class="container text-center col-9 col-sm-8 col-md-6 col-lg-5 col-xl-4">
   <form action="/dishes" method="post">
+    <h5>THE FOOD PLACE</h5>
+    <label class="text-left" for="foodplaces-select"
+      >If the food place is not on the list below, please first add it
+      <a href="/foodplaces/new">here</a>
+    </label>
+    <div id="foodplaces-select" class="form-group">
+      <select class="form-control" type="text" name="foodplace[id]">
+        <option value="">I bought the dish at ...</option>
+        <% foodplaces.forEach((foodplace) =>{ %>
+        <option value="<%= foodplace.id %>">
+          "<%= foodplace.name %>" - ul. <%= foodplace.address %>,
+          <%=foodplace.city %>
+        </option>
+        <% }) %>
+      </select>
+    </div>
+    <h5>THE DISH</h5>
+
     <div class="form-group">
-      <input class="form-control" type="text" name="name" placeholder="name" />
+      <input
+        class="form-control"
+        type="text"
+        name="name"
+        placeholder="name of the dish, e.g. spaghetti bolognese"
+      />
     </div>
     <div class="form-group">
       <input
@@ -26,13 +49,15 @@
       />
     </div>
     <div class="form-group">
-      <input
+      <textarea
         class="form-control"
         type="text"
         name="desc"
         placeholder="description"
-      />
+        rows="6"
+      ></textarea>
     </div>
+
     <div class="form-group">
       <button class="btn btn-primary btn-block w-50 mx-auto" type="submit">
         Add dish

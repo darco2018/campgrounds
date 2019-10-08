@@ -17,9 +17,15 @@
             <div class="float-none"></div>
             <div class="float-left  font-weight-bold h4">
               <a href="#"><%= dish.name %></a>
+              <span class="text-muted"
+                ><small>
+                  at id: <%= dish.foodplace.id %> name: <%=
+                  dish.foodplace.name%>
+                </small></span
+              >
             </div>
             <div class="float-right text-muted font-weight-bold h4">
-              $<%= dish.price %>
+              <%= dish.price %> zł
             </div>
             <br /><br />
             <div class="card-text mb-2"><%= dish.description %></div>

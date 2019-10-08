@@ -72,7 +72,16 @@ router.get('/:id/edit', middleware.checkFoodplaceExists, (req, res) => {
 // foodplaces/234/update
 // add ?_method=PUT in url  (method-override)
 router.put('/:id/update', middleware.checkFoodplaceExists, (req, res) => {
-  Foodplace.findByIdAndUpdate(
+
+  ////////////////////////////// TEMPORARY ///////////////////////////////
+  // Remove the two lines bellow and uncomment the next section under them
+  // if you want to update the foodplace immediately. 
+  // Currently the foodplace's update is sent here but not handled, eg by 
+  // showing on admin's dashboard for review, or being stored in db.
+  ////////////////////////////////////////////////////////////////////////
+  req.flash('success', 'Thank you. We will review your changes shortly.');
+  res.redirect(`/foodplaces`);
+  /* Foodplace.findByIdAndUpdate(
     req.params.id,
     req.body.foodplace,
     (err, updatedFoodplace) => {
@@ -83,7 +92,7 @@ router.put('/:id/update', middleware.checkFoodplaceExists, (req, res) => {
         res.redirect(`/foodplaces`);
       }
     }
-  );
+  ); */
 });
 
 module.exports = router;

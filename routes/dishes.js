@@ -3,6 +3,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const Dish = require('../models/dish');
+const foodplace = require('../models/foodplace');
+const Foodplace = foodplace.foodplaceModel;
 const middleware = require('../middleware'); //index.js is imported by default from middleware folder
 
 const router = express.Router();
@@ -35,17 +37,33 @@ router.get('/', (req, res) => {
 // NEW - show form to create new dish
 // /dishes/new
 router.get('/new', middleware.isLoggedIn, (req, res) => {
-  res.render('dish/new');
+  Foodplace.find({}, (err, foundFoodplaces) => {
+    if (err) {
+      handleError(req, res, err, 'Something went wrong...', 'back');
+    } else {
+      res.render('dish/new', { foodplaces: foundFoodplaces });
+    }
+  });
 });
 
 // CREATE - add new dish
 // /dishes
 router.post('/', middleware.isLoggedIn, (req, res) => {
+  console.log('>>>>>>>>>>>>>>>>> req.body.foodplace: ' + req.body.foodplace);
+  console.log(
+    '>>>>>>>>>>>>>>>>> req.body.foodplace.id: ' + req.body.foodplace.id
+  );
+
+  const foodplace = {
+    id: req.body.foodplace.id
+    //can be read like this because in form we have select's name=foodplace[id]
+  };
   const author = {
     id: req.user.id,
     username: req.user.username
   };
   const newDish = {
+    foodplace: foodplace,
     name: req.body.name,
     price: req.body.price,
     image: req.body.image,
@@ -80,11 +98,23 @@ router.get('/:id', (req, res) => {
 // EDIT - show edit form
 // dishes/234/edit
 router.get('/:id/edit', middleware.checkDishOwnership, (req, res) => {
+  // BUGGING HERE CANT SEE <option value="<%= dish[foodplace][id] %>">" in views/dish/edit.ejs:14
+
   Dish.findById(req.params.id, (err, foundDish) => {
     if (err || !foundDish) {
       handleError(req, res, err, 'Dish not found', '/dishes');
     }
-    res.render('dish/edit', { dish: foundDish }); //refactor with  res.locals.dish/foundDish
+
+    Foodplace.find({}, (err, foundFoodplaces) => {
+      if (err) {
+        handleError(req, res, err, 'Something went wrong...', 'back');
+      } else {
+        res.render('dish/edit', {
+          dish: foundDish,
+          foodplaces: foundFoodplaces
+        }); //refactor with  res.locals.dish/foundDish
+      }
+    });
   });
 });
 
@@ -123,5 +153,21 @@ router.delete(
     });
   }
 );
+
+/* HELPERS */
+
+function loadFoodplaces() {
+  Foodplace.find({}, (err, foundFoodplaces) => {
+    if (err) {
+      handleError(req, res, err, 'Something went wrong...', 'back');
+      return null;
+    } else {
+      return foundFoodplaces;
+      //res.render('dish/new', { foodplaces: foundFoodplaces });
+    }
+  });
+
+  return;
+}
 
 module.exports = router;
