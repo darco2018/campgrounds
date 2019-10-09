@@ -39,8 +39,8 @@
             <div class="card-text mb-3">
               <em
                 >Submitted by <%= dish.author.username %>, <%=
-                moment(dish.createdAt).fromNow() %></em
-              >
+                moment(dish.createdAt).format("DD MMM YYYY")%>
+              </em>
             </div>
             <% if (currentUser && dish.author.id.equals(currentUser.id)) { %>
             <a class="btn btn-warning " href="/dishes/<%= dish.id %>/edit">

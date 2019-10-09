@@ -43,6 +43,7 @@ db.once('open', () => {
 });
 
 /* ---------- MIDDLEWARE-------------*/
+app.locals.moment = moment;
 
 app.use(logger('dev'));
 // express.json & express.urlencoded are only needed for POST & PUT
@@ -76,7 +77,6 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 /* ---------- ADD VARS TO EACH REQUEST / APP -------------*/
-app.locals.moment = moment;
 
 app.use(function(req, res, next) {
   // whatever available in locals is available in each template

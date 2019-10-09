@@ -10,7 +10,6 @@ const middleware = require('../middleware'); //index.js is imported by default f
 const router = express.Router();
 const defaultImageUrl = '/images/default.jpg';
 const allowedDishNameLength = 55;
-// 55
 
 /* redirect */
 
@@ -35,10 +34,18 @@ function trimDishName(foundDish) {
 router.get('/', (req, res) => {
   Dish.find()
     .populate('foodplace')
+    .populate('comments')
     .exec((err, allDishes) => {
       if (err) {
         handleError(req, res, err, 'Something went wrong...', 'back');
       } else {
+        allDishes.forEach(function(dish) {
+          let commentIDsInDish = dish.comments;
+          dish.latestCommentAt = commentIDsInDish[0]
+            ? commentIDsInDish[0].createdAt
+            : '';
+        });
+
         res.render('dish/index', {
           dishes: allDishes,
           page: 'dishes',

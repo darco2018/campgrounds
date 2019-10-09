@@ -31,8 +31,15 @@
             </div>
           </div>
           <div class="card-footer">
-            <small class="text-muted"><%=
-              moment(dish.createdAt).fromNow() %></small>
+            <small class="text-muted text-red"
+              ><span class="float-left"
+                >From <%= moment(dish.createdAt).format("DD/MM/YY")%></span
+              >
+              <span class="float-right"
+                >Last comment: <%=
+                moment(dish.latestCommentAt).fromNow()%></span
+              ></small
+            >
           </div>
         </div>
       </div>
