@@ -107,7 +107,7 @@ router.get('/:id', (req, res) => {
     .exec((err, foundDish) => {
       if (err || !foundDish) {
         handleError(req, res, err, 'Dish not found', '/dishes');
-      } else {    
+      } else {
         addDefaultImage(foundDish);
         res.render('dish/show', {
           dish: foundDish,

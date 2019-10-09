@@ -17,7 +17,10 @@
               </h5>
               <p><b><%=dish.foodplace.name%></b></p>
 
-              <p><%= (dish.description).substring(0,65) %>...</p>
+              <p>
+                <% if(dish.description === "") { %> &nbsp <% } else {%> <%=
+                (dish.description).substring(0,65) %> <% } %>
+              </p>
               <div class="xxx">
                 <a
                   class="btn btn-outline-info btn-sm"
