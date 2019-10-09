@@ -8,6 +8,7 @@ const Foodplace = foodplace.foodplaceModel;
 const middleware = require('../middleware'); //index.js is imported by default from middleware folder
 
 const router = express.Router();
+const defaultImageUrl = '/images/default.jpg';
 
 /* redirect */
 
@@ -15,6 +16,10 @@ function handleError(req, res, error, message, page) {
   console.log(error);
   req.flash('error', message ? message : '');
   res.redirect(page);
+}
+
+function addDefaultImage(foundDish) {
+  foundDish.image = !foundDish.image ? defaultImageUrl : foundDish.image;
 }
 
 /* ------------------------- ROUTES ------------------------------- */
@@ -73,6 +78,8 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
     author: author
   };
 
+  addDefaultImage(newDish);
+
   Dish.create(newDish, (err, savedDish) => {
     if (err) {
       handleError(req, res, err, 'Something went wrong...', 'back');
@@ -93,17 +100,23 @@ router.get('/:id', (req, res) => {
     .exec((err, foundDish) => {
       if (err || !foundDish) {
         handleError(req, res, err, 'Dish not found', '/dishes');
+      } else {
+        console.log(
+          '1.>>>>>>>>>>>>>>>>>>>>>>>>>Here is found dish: ' + foundDish
+        );
+
+        addDefaultImage(foundDish);
+
+        /* console.log(
+          foundDish.foodplace +
+            '--------> the Foodplace name: ' +
+            foundDish.foodplace.name +
+            ', id: ' +
+            foundDish.foodplace.id
+        ); */
+
+        res.render('dish/show', { dish: foundDish });
       }
-
-      console.log(
-        foundDish.foodplace +
-          '--------> the Foodplace name: ' +
-          foundDish.foodplace.name +
-          ', id: ' +
-          foundDish.foodplace.id
-      );
-
-      res.render('dish/show', { dish: foundDish });
     });
 });
 
