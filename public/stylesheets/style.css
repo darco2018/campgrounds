@@ -21,3 +21,17 @@ img {
   height: 200px;
   object-fit: cover;
 }
+
+.dish-card {
+  min-height: 480px;
+}
+
+.inner-dish-card {
+  position: relative;
+  min-height: 170px;
+}
+
+.xxx {
+  position: absolute;
+  bottom: 0px;
+}

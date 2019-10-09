@@ -9,6 +9,8 @@ const middleware = require('../middleware'); //index.js is imported by default f
 
 const router = express.Router();
 const defaultImageUrl = '/images/default.jpg';
+const allowedDishNameLength = 55;
+// 55
 
 /* redirect */
 
@@ -20,6 +22,10 @@ function handleError(req, res, error, message, page) {
 
 function addDefaultImage(foundDish) {
   foundDish.image = !foundDish.image ? defaultImageUrl : foundDish.image;
+}
+
+function trimDishName(foundDish) {
+  foundDish.name = !foundDish.image ? defaultImageUrl : foundDish.image;
 }
 
 /* ------------------------- ROUTES ------------------------------- */
@@ -35,7 +41,8 @@ router.get('/', (req, res) => {
       } else {
         res.render('dish/index', {
           dishes: allDishes,
-          page: 'dishes'
+          page: 'dishes',
+          allowedDishNameLength: allowedDishNameLength
         });
       }
     });
@@ -100,22 +107,12 @@ router.get('/:id', (req, res) => {
     .exec((err, foundDish) => {
       if (err || !foundDish) {
         handleError(req, res, err, 'Dish not found', '/dishes');
-      } else {
-        console.log(
-          '1.>>>>>>>>>>>>>>>>>>>>>>>>>Here is found dish: ' + foundDish
-        );
-
+      } else {    
         addDefaultImage(foundDish);
-
-        /* console.log(
-          foundDish.foodplace +
-            '--------> the Foodplace name: ' +
-            foundDish.foodplace.name +
-            ', id: ' +
-            foundDish.foodplace.id
-        ); */
-
-        res.render('dish/show', { dish: foundDish });
+        res.render('dish/show', {
+          dish: foundDish,
+          allowedDishNameLength: allowedDishNameLength
+        });
       }
     });
 });

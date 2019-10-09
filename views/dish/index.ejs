@@ -6,17 +6,26 @@
     <div class="card-deck">
       <% dishes.forEach((dish) =>{ %>
       <div class="col-md-6 col-xl-4 mb-3">
-        <div class="card p-1">
+        <div class="card p-1 dish-card">
           <a class="btn btn-outline-info btn-sm" href="/dishes/<%= dish.id %>">
             <img src="<%= dish.image %>" class="card-img-top" alt="..."
           /></a>
           <div class="card-body">
-            <h5 class="card-title"><%= dish.name %></h5>
-            <p><b><%=dish.foodplace.name%></b></p>
-            <p><%= (dish.description).substring(0,65) %>...</p>
-            <a class="btn btn-outline-info btn-sm" href="/dishes/<%= dish.id %>"
-              >Details</a
-            >
+            <div class="inner-dish-card">
+              <h5 class="card-title">
+                <%= (dish.name).substring(0, allowedDishNameLength) %>
+              </h5>
+              <p><b><%=dish.foodplace.name%></b></p>
+
+              <p><%= (dish.description).substring(0,65) %>...</p>
+              <div class="xxx">
+                <a
+                  class="btn btn-outline-info btn-sm"
+                  href="/dishes/<%= dish.id %>"
+                  >Details</a
+                >
+              </div>
+            </div>
           </div>
           <div class="card-footer">
             <small class="text-muted">Last commented 3 mins ago</small>

@@ -16,7 +16,9 @@
           <div class="px-4">
             <div class="float-none"></div>
             <div class="float-left  font-weight-bold h4">
-              <a href="#"><%= dish.name %></a>
+              <a href="#">
+                <%= (dish.name).substring(0, allowedDishNameLength) %></a
+              >
             </div>
             <div class="float-right text-muted font-weight-bold h4">
               <%= dish.price %> zł
