@@ -8,6 +8,7 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
 const flash = require('connect-flash');
+const moment = require('moment');
 
 // authentication
 const passport = require('passport');
@@ -74,7 +75,8 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-/* ---------- ADD VARS TO EACH REQUEST -------------*/
+/* ---------- ADD VARS TO EACH REQUEST / APP -------------*/
+app.locals.moment = moment;
 
 app.use(function(req, res, next) {
   // whatever available in locals is available in each template

@@ -31,7 +31,8 @@
             </div>
           </div>
           <div class="card-footer">
-            <small class="text-muted">Last commented 3 mins ago</small>
+            <small class="text-muted"><%=
+              moment(dish.createdAt).fromNow() %></small>
           </div>
         </div>
       </div>
