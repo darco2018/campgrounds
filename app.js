@@ -1,3 +1,4 @@
+require('dotenv').config(); // loads environment variables from a .env file into process.env
 const createError = require('http-errors');
 const express = require('express');
 
@@ -23,6 +24,7 @@ const dishesRouter = require('./routes/dishes');
 const authRouter = require('./routes/auth');
 const commentsRouter = require('./routes/comments');
 const foodplacesRouter = require('./routes/foodplaces');
+const googleRouter = require('./routes/google');
 
 /* ---------- VIEW ENGINE -------------*/
 
@@ -35,6 +37,9 @@ const dbName = 'dishes';
 mongoose.connect(`mongodb://localhost:27017/${dbName}`, {
   useNewUrlParser: true,
   useUnifiedTopology: true
+  /*  host: process.env.DB_HOST,
+  username: process.env.DB_USER,
+  password: process.env.DB_PASS */
 });
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error'));
@@ -43,6 +48,7 @@ db.once('open', () => {
 });
 
 /* ---------- MIDDLEWARE-------------*/
+
 app.locals.moment = moment;
 
 app.use(logger('dev'));
@@ -93,6 +99,7 @@ app.use('/auth', authRouter);
 app.use('/dishes', dishesRouter);
 app.use('/dishes/:id/comments', commentsRouter);
 app.use('/foodplaces', foodplacesRouter);
+app.use('/google', googleRouter);
 
 /* ---------- ERROR HANDLING -------------*/
 
