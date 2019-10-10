@@ -8,38 +8,34 @@
       <div class="col-md-6 col-xl-4 mb-3">
         <div class="card p-1 dish-card">
           <a class="btn btn-outline-info btn-sm" href="/dishes/<%= dish.id %>">
-            <img src="<%= dish.image %>" class="card-img-top" alt="..."
-          /></a>
+            <img src="<%= dish.image %>" class="card-img-top" alt="..." /></a>
           <div class="card-body">
             <div class="inner-dish-card">
               <h5 class="card-title">
                 <%= (dish.name).substring(0, allowedDishNameLength) %>
               </h5>
-              <p><b><%=dish.foodplace.name%></b></p>
-
               <p>
-                <% if(dish.description === "") { %> &nbsp <% } else {%> <%=
-                (dish.description).substring(0,65) %> <% } %>
+                <b><%= dish.foodplace.name %></b>
+              </p>
+              <p>
+                <% if(dish.description === "") { %>
+                    &nbsp
+                <% } else {%>
+                    <%=  (dish.description).substring(0,65) %>
+                <% } %>
               </p>
               <div class="xxx">
-                <a
-                  class="btn btn-outline-info btn-sm"
-                  href="/dishes/<%= dish.id %>"
-                  >Details</a
-                >
+                <a class="btn btn-outline-info btn-sm" href="/dishes/<%= dish.id %>">Details</a>
               </div>
             </div>
           </div>
           <div class="card-footer">
-            <small class="text-muted text-red"
-              ><span class="float-left"
-                >From <%= moment(dish.createdAt).format("DD/MM/YY")%></span
-              >
-              <span class="float-right"
-                >Last comment: <%=
-                moment(dish.latestCommentAt).fromNow()%></span
-              ></small
-            >
+            <small class="text-muted text-red"><span class="float-left">From
+                <%= moment(dish.createdAt).format("DD/MM/YY") %></span>
+              <span class="float-right">Last comment:
+                <%= moment(dish.latestCommentAt).fromNow() %>
+              </span>
+            </small>
           </div>
         </div>
       </div>

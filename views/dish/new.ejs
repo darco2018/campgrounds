@@ -7,22 +7,15 @@
     <h5>THE FOOD PLACE</h5>
     <form action="/dishes" method="post">
       <div class="form-group">
-        <label class="text-left" for="foodplaces-select"
-          >If the food place is not on the list below, please first add it
+        <label class="text-left" for="foodplaces-select">If the food place is not on the list below, please first add it
           <a href="/foodplaces/new">here</a>
         </label>
-        <select
-          id="foodplaces-select"
-          class="form-control"
-          type="text"
-          name="foodplaceId"
-          required
-        >
+        <select id="foodplaces-select" class="form-control" type="text" name="foodplaceId" required>
           <option value="">I bought the dish at ...</option>
           <% foodplaces.forEach((foodplace) =>{ %>
           <option value="<%= foodplace.id %>">
             "<%= foodplace.name %>" - ul. <%= foodplace.address %>,
-            <%=foodplace.city %>
+            <%= foodplace.city %>
           </option>
           <% }) %>
         </select>
@@ -30,41 +23,17 @@
       <h5>THE DISH</h5>
 
       <div class="form-group">
-        <input
-          class="form-control"
-          type="text"
-          name="name"
-          placeholder="name of the dish, e.g. spaghetti bolognese"
-          required
-        />
+        <input class="form-control" type="text" name="name" placeholder="name of the dish, e.g. spaghetti bolognese"
+          required />
       </div>
       <div class="form-group">
-        <input
-          class="form-control"
-          type="number"
-          name="price"
-          placeholder="price"
-          min="0.01"
-          step="0.01"
-          required
-        />
+        <input class="form-control" type="number" name="price" placeholder="price" min="0.01" step="0.01" required />
       </div>
       <div class="form-group">
-        <input
-          class="form-control"
-          type="text"
-          name="image"
-          placeholder="image url"
-        />
+        <input class="form-control" type="text" name="image" placeholder="image url" />
       </div>
       <div class="form-group">
-        <textarea
-          class="form-control"
-          type="text"
-          name="desc"
-          placeholder="description"
-          rows="6"
-        ></textarea>
+        <textarea class="form-control" type="text" name="desc" placeholder="description" rows="6"></textarea>
       </div>
 
       <div class="form-group">
