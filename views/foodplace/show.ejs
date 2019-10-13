@@ -1,0 +1,59 @@
+<% include ../partials/header.ejs %>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3 bg-light">
+            <p class="lead">Uncantare</p>
+            <ul class="list-group">
+                <li class="list-group-item active">Morbi leo risus</li>
+                <li class="list-group-item">Porta ac consectetur ac</li>
+                <li class="list-group-item">Vestibulum at eros</li>
+            </ul>
+        </div>
+        <div class="col-md-9 ">
+            <div class="card">
+                <div class="card-body">
+                    <div class="px-4">
+                        <div class="float-none"></div>
+                        <div class="float-left  font-weight-bold h4">
+                            <a href="#">
+                                <%= (foodplace.name).substring(0, 100) %></a>
+                        </div>
+
+                        <br />
+                        <p class="float-none"></p>
+
+                        <div class="text-muted">
+                            <p>
+                                <small>
+                                    <b><%= foodplace.name %></b> <%= foodplace.address %>,
+                                    <%= foodplace.city %>
+                                </small>
+                            </p>
+                        </div>
+
+                        <div class="card-text mb-2">
+                            <%= foodplace.description %>
+                        </div>
+                        <div class="card-text mb-3">
+                            <em>Submitted by <%= foodplace.author.username %>
+                            </em>
+                        </div>
+                        <% if (currentUser && foodplace.author.id.equals(currentUser.id)) { %>
+                        <a class="btn btn-warning " href="/foodplaces/<%= foodplaces.id %>/edit">
+                            Edit
+                        </a>
+                        <form class="d-inline" action="/foodplaces/<%= foodplaces.id %>?_method=delete" method="post">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <% include ../partials/footer.ejs %>
+</div>

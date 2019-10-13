@@ -40,7 +40,7 @@ router.get('/new', middleware.isLoggedIn, (req, res) => {
 router.post('/', middleware.isLoggedIn, (req, res) => {
   Foodplace.create(req.body.foodplace, (err, savedFoodplace) => {
     if (err) {
-      cconsole.log(`Error  creating comment: ${err}`);
+      cconsole.log(`Error  creating foodplace: ${err}`);
       req.flash('error', 'Somethng went wrong...');
       req.redirect('back');
     }
@@ -53,14 +53,25 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
       foundDish.comments.push(savedComment);
       foundDish.save(); */
     req.flash('success', 'Successfully added foodplace...');
-    res.redirect('/foodplaces');
+    res.redirect('/foodplaces/' + savedFoodplace.id);
   });
 });
 
 // SHOW - show details about dish
 // foodplaces/234
 // must be below /new
-// SKIPPED
+router.get('/:id', (req, res) => {
+  Foodplace.findById(req.params.id).exec((err, foundFoodplace) => {
+    if (err || !foundFoodplace) {
+      handleError(req, res, err, 'Foodplace not found', '/foodplaces');
+    } else {
+      //addDefaultImage(foundFoodplace);
+      res.render('foodplace/show', {
+        foodplace: foundFoodplace
+      });
+    }
+  });
+});
 
 // EDIT - show edit form
 // foodplaces/234/edit
@@ -72,11 +83,10 @@ router.get('/:id/edit', middleware.checkFoodplaceExists, (req, res) => {
 // foodplaces/234/update
 // add ?_method=PUT in url  (method-override)
 router.put('/:id/update', middleware.checkFoodplaceExists, (req, res) => {
-
   ////////////////////////////// TEMPORARY ///////////////////////////////
   // Remove the two lines bellow and uncomment the next section under them
-  // if you want to update the foodplace immediately. 
-  // Currently the foodplace's update is sent here but not handled, eg by 
+  // if you want to update the foodplace immediately.
+  // Currently the foodplace's update is sent here but not handled, eg by
   // showing on admin's dashboard for review, or being stored in db.
   ////////////////////////////////////////////////////////////////////////
   req.flash('success', 'Thank you. We will review your changes shortly.');

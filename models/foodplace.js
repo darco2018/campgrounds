@@ -4,7 +4,7 @@ const foodplaceSchema = new mongoose.Schema({
   name: String,
   address: String,
   city: String,
-  location: String,
+  description: String,
   lat: Number,
   lng: Number,
   author: {
