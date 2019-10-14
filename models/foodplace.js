@@ -4,9 +4,10 @@ const foodplaceSchema = new mongoose.Schema({
   name: String,
   address: String,
   city: String,
-  description: String,
   lat: Number,
   lng: Number,
+  description: String,
+  image: String,
   author: {
     id: {
       type: mongoose.Schema.Types.ObjectId,
