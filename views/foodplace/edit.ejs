@@ -3,39 +3,27 @@
 <h1 class="mt-3 mb-5 text-center">Edit the food place</h1>
 
 <div class="container text-center col-9 col-sm-8 col-md-6 col-lg-5 col-xl-4">
-  <form
-    action="/foodplaces/<%= foodplace.id%>/update?_method=PUT"
-    method="post"
-  >
+  <form action="/foodplaces/<%= foodplace.id%>/update?_method=PUT" method="post">
     <div class="form-group">
-      <input
-        class="form-control"
-        type="text"
-        name="foodplace[name]"
-        value="<%= foodplace.name %>"
-        required
-      />
+      <input class="form-control" type="text" name="name" value="<%= foodplace.name %>" required />
     </div>
     <div class="form-group">
-      <input
-        class="form-control"
-        type="text"
-        name="foodplace[address]"
-        value="<%= foodplace.address %>"
-      />
+      <input class="form-control" type="text" name="address" value="<%= foodplace.address %>" required />
     </div>
     <div class="form-group">
-      <select id="city" class="form-control" type="text" name="foodplace[city]">
+      <select id="city" class="form-control" type="text" name="city" required>
         <option selected value="Kraków">Kraków</option>
       </select>
     </div>
     <div class="form-group">
-      <textarea
-        class="form-control"
-        name="foodplace[note]"
-        placeholder="Want to comment upon this update?"
-        rows="10"
-      ></textarea>
+      <input class="form-control" type="text" value="<%= foodplace.image %>" name="image" />
+    </div>
+    <label for="description">Description:</label>
+    <div class="form-group">
+      <textarea class="form-control" type="text" name="description" cols="7"><%= foodplace.description %></textarea>
+    </div>
+    <div class="form-group">
+      <textarea class="form-control" name="notes" placeholder="Want to comment upon this update?" rows="7"></textarea>
     </div>
     <div class="form-group">
       <button class="btn btn-primary btn-block w-50 mx-auto" type="submit">

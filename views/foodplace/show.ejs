@@ -14,6 +14,7 @@
 
             <div class="card">
                 <div class="card-body">
+                    <img class="card-img img-fluid mb-3" src="<%= foodplace.image %>" />
                     <div class="px-4">
                         <div class="float-none"></div>
                         <div class="float-left  font-weight-bold h4">
@@ -56,14 +57,17 @@
 <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
 <script>
     const marketsqCracow = { lat: 50.061721, lng: 19.938050 }
+    const foodplaceLocation = { lat: '<%= foodplace.lat %>', lng: '<%= foodplace.lng %>' };
+    const bubbleText = '<%= foodplace.address %>'
+
     function addMarkersToMap(map) {
-        var studenckaMarker = new H.map.Marker({ lat: 50.062485, lng: 19.929260 });
-        map.addObject(studenckaMarker);
+        var foodplaceMarker = new H.map.Marker(foodplaceLocation);
+        map.addObject(foodplaceMarker);
     }
 
     function addInfoBubble(map) {
-        var bubble = new H.ui.InfoBubble(marketsqCracow, {
-            content: "Market Square is here"
+        var bubble = new H.ui.InfoBubble(foodplaceLocation, {
+            content: bubbleText
         });
         ui.addBubble(bubble);
     }
@@ -75,7 +79,7 @@
     var map = new H.Map(document.getElementById('map'),
         maptypes.vector.normal.map,
         {
-            center: marketsqCracow,
+            center: foodplaceLocation,
             zoom: 15,
             pixelRatio: window.devicePixelRatio || 1
         }
@@ -84,7 +88,7 @@
     var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
     var ui = H.ui.UI.createDefault(map, maptypes);
     window.onload = function () {
-        addInfoBubble(map);
+        //addInfoBubble(map);
         addMarkersToMap(map);
     }
 </script>

@@ -5,26 +5,24 @@
 <div class="container text-center col-9 col-sm-8 col-md-6 col-lg-5 col-xl-4">
   <form action="/foodplaces" method="post">
     <div class="form-group">
-      <input
-        class="form-control"
-        type="text"
-        name="foodplace[name]"
-        placeholder="name e.g. Pizzahut"
-        required
-      />
+      <input class="form-control" type="text" name="name" placeholder="name e.g. 
+      Pizzahut" required />
     </div>
     <div class="form-group">
-      <input
-        class="form-control"
-        type="text"
-        name="foodplace[address]"
-        placeholder="address, e.g. ul. Florianska 15"
-      />
+      <input class="form-control" type="text" name="address" placeholder="address, 
+      e.g. ul. Florianska 15" required />
     </div>
     <div class="form-group">
-      <select id="city" class="form-control" type="text" name="foodplace[city]">
+      <select id="city" class="form-control" type="text" name="city">
         <option selected value="Kraków">Kraków</option>
       </select>
+    </div>
+    <div class="form-group">
+      <input class="form-control" type="text" name="image" placeholder="image url" />
+    </div>
+    <label for="description">Description:</label>
+    <div class="form-group">
+      <textarea class="form-control" type="text" name="description" cols="7"></textarea>
     </div>
     <div class="form-group">
       <button class="btn btn-primary btn-block w-50 mx-auto" type="submit">
