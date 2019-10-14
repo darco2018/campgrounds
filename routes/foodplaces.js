@@ -6,7 +6,7 @@ const Foodplace = foodplace.foodplaceModel;
 const NodeGeocoder = require('node-geocoder');
 //--------------------- custom deps ------------------
 
-utils = require('../public/javascripts/utilities/utils');
+const utils = require('../public/javascripts/utilities/utils');
 
 // -------------------- VARS -----------------------
 
@@ -22,12 +22,6 @@ const geocoder = NodeGeocoder({
   formatter: null
   // Set options.production to true (default false) to use HERE's production server environment.
 });
-
-function handleError(req, res, error, message, page) {
-  console.log(error);
-  req.flash('error', message ? message : '');
-  res.redirect(page);
-}
 
 /* ------------------------- ROUTES ------------------------------- */
 
@@ -54,61 +48,12 @@ router.get('/new', middleware.isLoggedIn, (req, res) => {
 
 // CREATE - persists new
 // /foodplaces
-
 router.post('/', middleware.isLoggedIn, async (req, res) => {
   var location = req.body.address + cityCountry;
   var locationData = await geocode(location);
   var foodplace = assembleFoodplace(locationData, req);
   persistFoodplace(foodplace, req, res);
 });
-
-/* 
-router.post('/', middleware.isLoggedIn, (req, res) => {
-  var location = req.body.address + cityCountry;
-
-  geocoder.geocode(location, function(err, data) {
-    console.log(data);
-    // handle invalid address error
-    if (err || !data.length) {
-      req.flash('error', 'Invalid address: ' + location);
-      return res.redirect('back');
-    } else {
-      // clean up request data( street name, image)
-      const cleanedAddress = utils.processStreetName(req.body.address);
-      const nonEmptyimage = !req.body.image ? defaultImageUrl : req.body.image;
-      // create foodplace
-      const author = {
-        id: req.user.id,
-        username: req.user.username
-      };
-
-      var foodplace = {
-        name: req.body.name,
-        address: cleanedAddress,
-        city: req.body.city,
-        lat: data[0].latitude, // provided by geocoder
-        lng: data[0].longitude, // provided by geocoder
-        image: nonEmptyimage,
-        description: req.body.description,
-        author: author
-      };
-
-      // persist foodplace
-      Foodplace.create(foodplace, (err, savedFoodplace) => {
-        // handle error while creating
-        if (err) {
-          console.log(`Error  creating foodplace: ${err}`);
-          req.flash('error', 'Somethng went wrong...');
-          req.redirect('back');
-        }
-        // rredirect
-        req.flash('success', 'Successfully added foodplace...');
-        res.redirect('/foodplaces/' + savedFoodplace.id);
-      });
-    }
-  });
-});
- */
 
 // must be below /new
 // SHOW - shows one
@@ -140,63 +85,16 @@ router.put('/:id/update', middleware.checkFoodplaceExists, async (req, res) => {
   updateFoodplace(foodplace, req, res);
 });
 
-/* 
-// UPDATE
-// foodplaces/234/update ?_method=PUT in url  (method-override)
-router.put('/:id/update', middleware.checkFoodplaceExists, (req, res) => {
- 
-  var location = req.body.address + cityCountry;
-
-  geocoder.geocode(location, function(err, data) {
-    console.log(data);
-    if (err || !data.length) {
-      req.flash('error', 'Invalid address: ' + location);
-      return res.redirect('back');
-    } else {
-      const cleanedAddress = utils.processStreetName(req.body.address);
-      const nonEmptyimage = !req.body.image ? defaultImageUrl : req.body.image;
-      const author = {
-        id: req.user.id,
-        username: req.user.username
-      };
-
-      var foodplace = {
-        name: req.body.name,
-        address: cleanedAddress,
-        city: req.body.city,
-        lat: data[0].latitude, // provided by geocoder
-        lng: data[0].longitude, // provided by geocoder
-        image: nonEmptyimage,
-        description: req.body.description,
-        author: author
-      };
-
-      // ------------------------------------------------
-      Foodplace.create(foodplace, (err, savedFoodplace) => {
-        if (err) {
-          console.log(`Error  creating foodplace: ${err}`);
-          req.flash('error', 'Somethng went wrong...');
-          req.redirect('back');
-        } else {
-          req.flash('success', 'Successfully added foodplace...');
-          res.redirect('/foodplaces/' + savedFoodplace.id);
-        }
-      });
-    }
-  });
-  
-});
- */
+/* ------------------------- HELPERS ------------------------------- */
 
 async function geocode(location) {
-  return geocoder.geocode(location, function(err, data) {
+  return geocoder.geocode(location, function(err, data) { // returns Promise and data
     console.log(data);
     if (err || !data.length) {
       req.flash('error', 'Invalid address: ' + location);
       return res.redirect('back');
     }
   });
-  // returns Promise and data
 }
 
 function assembleFoodplace(data, req) {
@@ -223,15 +121,12 @@ function assembleFoodplace(data, req) {
 
 function persistFoodplace(foodplace, req, res) {
   Foodplace.create(foodplace, (err, savedFoodplace) => {
-    // handle error while creating
-    if (err) {
-      console.log(`Error  creating foodplace: ${err}`);
-      req.flash('error', 'Somethng went wrong...');
-      req.redirect('back');
-    }
-    // redirect
-    req.flash('success', 'Successfully added foodplace...');
-    res.redirect('/foodplaces/' + savedFoodplace.id);
+    if (err || savedFoodplace) {
+      handleError(req, res, err, 'Something went wrong...', 'back');
+    } else {
+      req.flash('success', 'Successfully added foodplace...');
+      res.redirect('/foodplaces/' + savedFoodplace.id);
+    }    
   });
 }
 
@@ -248,6 +143,12 @@ function updateFoodplace(foodplace, req, res) {
       }
     }
   );
+}
+
+function handleError(req, res, error, message, page) {
+  console.log(error);
+  req.flash('error', message ? message : '');
+  res.redirect(page);
 }
 
 module.exports = router;
