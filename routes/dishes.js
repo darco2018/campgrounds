@@ -160,9 +160,9 @@ router.put('/:id/update', middleware.checkDishOwnership, (req, res) => {
     req.body.dish, // thanks to dish[name]/[url]/[description] in view
     (err, updatedDish) => {
       if (err || !updatedDish) {
-        console.log('ERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRROOOOOOOORRR.......');
-        handleError(req, res, err, 'Something went wrong...', '/dishes');
+        handleError(req, res, err, 'Something went wrong...', 'back');
       } else {
+        req.flash('success', 'Successfully updated the dish...');
         res.redirect(`/dishes/${updatedDish.id}`);
       }
     }
