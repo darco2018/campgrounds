@@ -7,9 +7,11 @@
                 <li class="list-group-item active">Morbi leo risus</li>
                 <li class="list-group-item">Porta ac consectetur ac</li>
                 <li class="list-group-item">Vestibulum at eros</li>
+                <div id="map"></div>
             </ul>
         </div>
         <div class="col-md-9 ">
+
             <div class="card">
                 <div class="card-body">
                     <div class="px-4">
@@ -38,14 +40,7 @@
                             <em>Submitted by <%= foodplace.author.username %>
                             </em>
                         </div>
-                        <% if (currentUser && foodplace.author.id.equals(currentUser.id)) { %>
-                        <a class="btn btn-warning " href="/foodplaces/<%= foodplaces.id %>/edit">
-                            Edit
-                        </a>
-                        <form class="d-inline" action="/foodplaces/<%= foodplaces.id %>?_method=delete" method="post">
-                            <button class="btn btn-danger">Delete</button>
-                        </form>
-                        <% } %>
+
                     </div>
                 </div>
             </div>
@@ -53,6 +48,46 @@
         </div>
     </div>
 </div>
+<link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
+
+<script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
+<script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
+<script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
+<script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
+<script>
+    const marketsqCracow = { lat: 50.061721, lng: 19.938050 }
+    function addMarkersToMap(map) {
+        var studenckaMarker = new H.map.Marker({ lat: 50.062485, lng: 19.929260 });
+        map.addObject(studenckaMarker);
+    }
+
+    function addInfoBubble(map) {
+        var bubble = new H.ui.InfoBubble(marketsqCracow, {
+            content: "Market Square is here"
+        });
+        ui.addBubble(bubble);
+    }
+
+    var platform = new H.service.Platform({
+        'apikey': '<%= process.env.GOOGLE_MAPS_APIKEY %>'
+    });
+    var maptypes = platform.createDefaultLayers();
+    var map = new H.Map(document.getElementById('map'),
+        maptypes.vector.normal.map,
+        {
+            center: marketsqCracow,
+            zoom: 15,
+            pixelRatio: window.devicePixelRatio || 1
+        }
+    );
+    window.addEventListener('resize', () => map.getViewPort().resize());
+    var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+    var ui = H.ui.UI.createDefault(map, maptypes);
+    window.onload = function () {
+        addInfoBubble(map);
+        addMarkersToMap(map);
+    }
+</script>
 
 <div class="container">
     <% include ../partials/footer.ejs %>
