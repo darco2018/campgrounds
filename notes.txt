@@ -92,3 +92,13 @@ npm i passport passport-local passport-local-mongoose express-session
 // Ctrl + click -> manual muticursor
 // Ctrl + Shift + R -> refactor to new method
 
+-----------------------------
+
+SIMPLE GEOCODING with HERE:
+geocoder.geocode(
+    { address: req.body.address, country: 'Poland' },
+    (err, res) => {
+      console.log(res);
+    }
+  ); 
+
