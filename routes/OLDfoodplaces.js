@@ -78,49 +78,37 @@ router.get('/:id/edit', middleware.checkFoodplaceExists, (req, res) => {
 
 // UPDATE - updates
 // foodplaces/234/update ?_method=PUT in url  (method-override)
-router.put('/:id/update', middleware.checkFoodplaceExists, (req, res) => {
-  
-  var id = req.params.id;
-  var address = req.body.address + cityCountry;
-  geocode(address, req, res)
-    .then(foodplaceLocation => {
-      if (!foodplaceLocation.length || !foodplaceLocation[0].streetName) {
-        throw new Error('Invalid address!');
-      }
-      return foodplaceLocation;
-    })
-    .then(foodplaceLocation => assembleFoodplace(foodplaceLocation, req))
-    .then(foodplace => findByIdAndUpdatePromise(id, foodplace))
-    .then(updatedFoodplace => {
-      req.flash('success', 'Successfully updated foodplace...');
-      res.redirect(`/foodplaces/${updatedFoodplace.id}`);
-    })
-    .catch(err => {
-      console.log('CATCHIN ERROR ' + err);
-      req.flash('error', err.message);
-      res.redirect(`back`);
-    });
+router.put('/:id/update', middleware.checkFoodplaceExists, async (req, res) => {
+  try {
+    //req.body = null;
+    var location = req.body.address + cityCountry;
+    var locationData = await geocode(location, req, res); //  goes to handler, redirect in handler doesnt work
+    if (!locationData.length || !locationData[0].streetName) {
+      throw new Error('THROWN HERE: Invalid address...');
+      //handleError(req, res, null, 'Invalid address...', 'back');
+    } else {
+      var foodplace = assembleFoodplace(locationData, req); // returns here to complete assembling & updating
+      updateFoodplace(foodplace, req, res);
+    }
+  } catch (err) {
+    handleError(req, res, err, 'CATCH: Somenthing went wrong...', 'back');
+  }
 });
 
 /* ------------------------- HELPERS ------------------------------- */
 
-function geocode(location, req, res) {
+async function geocode(location, req, res) {
   // returns Promise and data
   return geocoder.geocode(location, function(err, locationData) {
-    console.log('>>>>>>>>>> Location passed to geocode: ' + location);
-
     if (err) {
       handleError(req, res, err, 'Something went wrong...', 'back');
-    } else {
-      console.log(
-        '>>>>>>>>>> Returning location data in geocode: ' + locationData
-      );
-      console.dir(locationData);
     }
   });
 }
 
 function assembleFoodplace(data, req) {
+  console.log('--------------- entering assemble ------------------');
+
   const cleanedAddress = utils.processStreetName(req.body.address);
   const nonEmptyimage = !req.body.image ? defaultImageUrl : req.body.image;
   const author = {
@@ -153,16 +141,23 @@ function persistFoodplace(foodplace, req, res) {
   });
 }
 
-function findByIdAndUpdatePromise(id, foodplace) {
-  return new Promise((resolve, reject) => {
-    Foodplace.findByIdAndUpdate(id, foodplace, (err, updatedFoodplace) => {
+function updateFoodplace(foodplace, req, res) {
+  console.log(
+    '--------------------------- UPDATING ------------------------------'
+  );
+
+  Foodplace.findByIdAndUpdate(
+    req.params.id,
+    foodplace,
+    (err, updatedFoodplace) => {
       if (err || !updatedFoodplace) {
-        reject('Something went wrong...');
+        handleError(req, res, err, 'Something went wrong...', 'back');
       } else {
-        resolve(updatedFoodplace);
+        req.flash('success', 'Successfully updated foodplace...');
+        res.redirect(`/foodplaces/${updatedFoodplace.id}`); // gets here & throws
       }
-    });
-  });
+    }
+  );
 }
 
 function handleError(req, res, error, message, page) {
