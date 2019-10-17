@@ -19,7 +19,24 @@ const cityCountry = ', Cracow, Poland';
 // INDEX - shows all
 // /foodplaces
 router.get('/', (req, res) => {
-  Foodplace.find({}, (err, foundFoodplaces) => {
+  Foodplace.find()
+    .then(foundFoodplaces => {
+      res.render('foodplace/index', {
+        foodplaces: foundFoodplaces,
+        page: 'foodplaces'
+      });
+    })
+    .catch(err => {
+      return flashAndRedirect(
+        req,
+        res,
+        'error',
+        `Error: cannot load the food places (${err.message})`,
+        `back`
+      );
+    });
+
+  /* Foodplace.find({}, (err, foundFoodplaces) => {
     if (err) {
       handleError(req, res, err, 'Something went wrong...', 'back');
     } else {
@@ -28,7 +45,7 @@ router.get('/', (req, res) => {
         page: 'foodplaces'
       });
     }
-  });
+  }); */
 });
 
 // NEW - shows add form
@@ -39,7 +56,7 @@ router.get('/new', middleware.isLoggedIn, (req, res) => {
 
 // CREATE - persists new
 // /foodplaces
-router.post('/', middleware.isLoggedIn, async (req, res) => {
+router.post('/', middleware.isLoggedIn, (req, res) => {
   if (req.body.address) {
     var address = req.body.address + cityCountry;
   } else {
@@ -69,6 +86,20 @@ router.post('/', middleware.isLoggedIn, async (req, res) => {
 // SHOW - shows one
 // foodplaces/234
 router.get('/:id', (req, res) => {
+  Foodplace.findById(req.params.id)
+    .then(foundFoodplace => {
+      res.render('foodplace/show', { foodplace: foundFoodplace });
+    })
+    .catch(err => {
+      return flashAndRedirect(
+        req,
+        res,
+        'error',
+        `Foodplace not found (${err.message})`,
+        '/foodplaces'
+      );
+    });
+  /* 
   Foodplace.findById(req.params.id).exec((err, foundFoodplace) => {
     if (err || !foundFoodplace) {
       handleError(req, res, err, 'Foodplace not found', '/foodplaces');
@@ -77,7 +108,7 @@ router.get('/:id', (req, res) => {
         foodplace: foundFoodplace
       });
     }
-  });
+  }); */
 });
 
 // EDIT - shows edit form
@@ -115,12 +146,12 @@ router.put('/:id/update', middleware.checkFoodplaceExists, (req, res) => {
     });
 });
 
+/* ------------------------- HELPERS ------------------------------- */
+
 function flashAndRedirect(req, res, flashStatus, flashMsg, url) {
   req.flash(flashStatus, flashMsg);
   res.redirect(url);
 }
-
-/* ------------------------- HELPERS ------------------------------- */
 
 function extractRelevantGeoData(geodata) {
   const coords = geocoding.getCoordinates(geodata);
@@ -181,10 +212,10 @@ function findByIdAndUpdatePromise(id, foodplace) {
   });
 }
 
-function handleError(req, res, error, message, page) {
+/* function handleError(req, res, error, message, page) {
   req.flash('error', message ? message + error.message : '');
   res.redirect(page);
   return;
-}
+} */
 
 module.exports = router;
