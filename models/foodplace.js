@@ -6,6 +6,7 @@ const foodplaceSchema = new mongoose.Schema({
   city: String,
   lat: Number,
   lng: Number,
+  formattedAddress: String,
   description: String,
   image: String,
   author: {
