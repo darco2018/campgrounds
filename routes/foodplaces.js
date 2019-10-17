@@ -79,48 +79,52 @@ router.get('/:id/edit', middleware.checkFoodplaceExists, (req, res) => {
 // UPDATE - updates
 // foodplaces/234/update ?_method=PUT in url  (method-override)
 router.put('/:id/update', middleware.checkFoodplaceExists, (req, res) => {
-  
-  var id = req.params.id;
-  var address = req.body.address + cityCountry;
-  geocode(address, req, res)
-    .then(foodplaceLocation => {
-      if (!foodplaceLocation.length || !foodplaceLocation[0].streetName) {
-        throw new Error('Invalid address!');
-      }
-      return foodplaceLocation;
-    })
-    .then(foodplaceLocation => assembleFoodplace(foodplaceLocation, req))
+  if (req.params.id && req.body.address) {
+    var id = req.params.id;
+    var address = req.body.address + cityCountry;
+  } else {
+    throw new Error('Invalid id and/or address in the request');
+  }
+
+  getFoodplaceGeocodingData(address)
+    .then(geodata => extractRelevantGeoData(geodata))
+    .then(extracted => assembleFoodplace(extracted, req))
     .then(foodplace => findByIdAndUpdatePromise(id, foodplace))
     .then(updatedFoodplace => {
-      req.flash('success', 'Successfully updated foodplace...');
-      res.redirect(`/foodplaces/${updatedFoodplace.id}`);
+      return flashAndRedirect(
+        req,
+        res,
+        'success',
+        'Successfully updated foodplace...',
+        `/foodplaces/${updatedFoodplace.id}`
+      );
     })
     .catch(err => {
-      console.log('CATCHIN ERROR ' + err);
-      req.flash('error', err.message);
-      res.redirect(`back`);
+      return flashAndRedirect(req, res, 'error', err.message, `back`);
     });
 });
 
-/* ------------------------- HELPERS ------------------------------- */
-
-function geocode(location, req, res) {
-  // returns Promise and data
-  return geocoder.geocode(location, function(err, locationData) {
-    console.log('>>>>>>>>>> Location passed to geocode: ' + location);
-
-    if (err) {
-      handleError(req, res, err, 'Something went wrong...', 'back');
-    } else {
-      console.log(
-        '>>>>>>>>>> Returning location data in geocode: ' + locationData
-      );
-      console.dir(locationData);
-    }
-  });
+function flashAndRedirect(req, res, flashStatus, flashMsg, url) {
+  req.flash(flashStatus, flashMsg);
+  res.redirect(url);
 }
 
-function assembleFoodplace(data, req) {
+/* ------------------------- HELPERS ------------------------------- */
+
+function extractRelevantGeoData(geodata) {
+  console.log('----------> extractRelevantGeoData');
+
+  const latitude = geodata[0].latitude;
+  const longitude = geodata[0].longitude;
+  const formattedAddress = geodata[0].formattedAddress;
+  const extracted = { latitude, longitude, formattedAddress };
+  return extracted;
+}
+
+function assembleFoodplace(geodata, req) {
+  console.log('----------> assembleFoodplace');
+  console.log('----------> assembleFoodplace geodata: ' + geodata);
+  console.dir(geodata);
   const cleanedAddress = utils.processStreetName(req.body.address);
   const nonEmptyimage = !req.body.image ? defaultImageUrl : req.body.image;
   const author = {
@@ -132,8 +136,9 @@ function assembleFoodplace(data, req) {
     name: req.body.name,
     address: cleanedAddress,
     city: req.body.city,
-    lat: data[0].latitude, // provided by geocoder
-    lng: data[0].longitude, // provided by geocoder
+    lat: geodata.latitude, // provided by geocoder
+    lng: geodata.longitude, // provided by geocoder
+    //formattedAddress: geodata.formattedAddress
     image: nonEmptyimage,
     description: req.body.description,
     author: author
@@ -143,6 +148,7 @@ function assembleFoodplace(data, req) {
 }
 
 function persistFoodplace(foodplace, req, res) {
+  console.log('----------> persistFoodplace');
   Foodplace.create(foodplace, (err, savedFoodplace) => {
     if (err || !savedFoodplace) {
       handleError(req, res, err, 'Something went wrong...', 'back');
@@ -154,6 +160,8 @@ function persistFoodplace(foodplace, req, res) {
 }
 
 function findByIdAndUpdatePromise(id, foodplace) {
+  console.log('----------> findByIdAndUpdatePromise');
+
   return new Promise((resolve, reject) => {
     Foodplace.findByIdAndUpdate(id, foodplace, (err, updatedFoodplace) => {
       if (err || !updatedFoodplace) {
@@ -170,6 +178,40 @@ function handleError(req, res, error, message, page) {
   req.flash('error', message ? message + error.message : '');
   res.redirect(page);
   return;
+}
+
+function getFoodplaceGeocodingData(address) {
+  const promise = geocoder
+    .geocode(address) // these errors go to catch, skipping then's
+    .then(geocodingData => {
+      if (!geocodingData) {
+        throw new Error('geocodingData is null or undefined');
+      }
+      if (!isValidSAddress(geocodingData)) {
+        throw new Error('Invalid address');
+      }
+      return geocodingData;
+    })
+    .catch(err => {
+      if (err.message === 'Invalid address') {
+        throw err;
+      }
+
+      throw new Error(
+        `Geocoding error. 
+        Cannot establish the location of the foodplace on the map. 
+        (${err.message})`
+      );
+    });
+
+  return promise;
+}
+
+function isValidSAddress(locationData) {
+  if (!locationData) {
+    return false;
+  }
+  return Boolean(locationData.length > 0 && locationData[0].streetName);
 }
 
 module.exports = router;
