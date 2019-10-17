@@ -49,10 +49,28 @@ router.get('/new', middleware.isLoggedIn, (req, res) => {
 // CREATE - persists new
 // /foodplaces
 router.post('/', middleware.isLoggedIn, async (req, res) => {
-  var location = req.body.address + cityCountry;
-  var locationData = await geocode(location, req, res);
-  var foodplace = await assembleFoodplace(locationData, req);
-  persistFoodplace(foodplace, req, res);
+  if (req.body.address) {
+    var address = req.body.address + cityCountry;
+  } else {
+    throw new Error('Error: no address field in the request body');
+  }
+
+  getFoodplaceGeocodingData(address)
+    .then(geodata => extractRelevantGeoData(geodata))
+    .then(extracted => assembleFoodplace(extracted, req))
+    .then(foodplace => createFoodplacePromise(foodplace, req, res)) // must return promise
+    .then(savedFoodplace => {
+      return flashAndRedirect(
+        req,
+        res,
+        'success',
+        'Successfully created a new foodplace...',
+        `/foodplaces/${savedFoodplace.id}`
+      );
+    })
+    .catch(err => {
+      return flashAndRedirect(req, res, 'error', err.message, `back`);
+    });
 });
 
 // must be below /new
@@ -147,25 +165,23 @@ function assembleFoodplace(geodata, req) {
   return foodplace;
 }
 
-function persistFoodplace(foodplace, req, res) {
-  console.log('----------> persistFoodplace');
-  Foodplace.create(foodplace, (err, savedFoodplace) => {
-    if (err || !savedFoodplace) {
-      handleError(req, res, err, 'Something went wrong...', 'back');
-    } else {
-      req.flash('success', 'Successfully added foodplace...');
-      res.redirect('/foodplaces/' + savedFoodplace.id);
-    }
+function createFoodplacePromise(foodplace) {
+  return new Promise((resolve, reject) => {
+    Foodplace.create(foodplace, (err, updatedFoodplace) => {
+      if (err || !updatedFoodplace) {
+        reject('Error: Cannot save the foodplace...');
+      } else {
+        resolve(updatedFoodplace);
+      }
+    });
   });
 }
 
 function findByIdAndUpdatePromise(id, foodplace) {
-  console.log('----------> findByIdAndUpdatePromise');
-
   return new Promise((resolve, reject) => {
     Foodplace.findByIdAndUpdate(id, foodplace, (err, updatedFoodplace) => {
       if (err || !updatedFoodplace) {
-        reject('Something went wrong...');
+        reject('Error: Cannot update the foodplace...');
       } else {
         resolve(updatedFoodplace);
       }
@@ -174,7 +190,6 @@ function findByIdAndUpdatePromise(id, foodplace) {
 }
 
 function handleError(req, res, error, message, page) {
-  console.log('------------------------ ERROR HANDLER: ' + error.message);
   req.flash('error', message ? message + error.message : '');
   res.redirect(page);
   return;
@@ -187,9 +202,11 @@ function getFoodplaceGeocodingData(address) {
       if (!geocodingData) {
         throw new Error('geocodingData is null or undefined');
       }
+
       if (!isValidSAddress(geocodingData)) {
         throw new Error('Invalid address');
       }
+
       return geocodingData;
     })
     .catch(err => {
