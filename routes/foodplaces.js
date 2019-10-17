@@ -35,17 +35,6 @@ router.get('/', (req, res) => {
         `back`
       );
     });
-
-  /* Foodplace.find({}, (err, foundFoodplaces) => {
-    if (err) {
-      handleError(req, res, err, 'Something went wrong...', 'back');
-    } else {
-      res.render('foodplace/index', {
-        foodplaces: foundFoodplaces,
-        page: 'foodplaces'
-      });
-    }
-  }); */
 });
 
 // NEW - shows add form
@@ -99,16 +88,6 @@ router.get('/:id', (req, res) => {
         '/foodplaces'
       );
     });
-  /* 
-  Foodplace.findById(req.params.id).exec((err, foundFoodplace) => {
-    if (err || !foundFoodplace) {
-      handleError(req, res, err, 'Foodplace not found', '/foodplaces');
-    } else {
-      res.render('foodplace/show', {
-        foodplace: foundFoodplace
-      });
-    }
-  }); */
 });
 
 // EDIT - shows edit form
@@ -211,11 +190,5 @@ function findByIdAndUpdatePromise(id, foodplace) {
     });
   });
 }
-
-/* function handleError(req, res, error, message, page) {
-  req.flash('error', message ? message + error.message : '');
-  res.redirect(page);
-  return;
-} */
 
 module.exports = router;
