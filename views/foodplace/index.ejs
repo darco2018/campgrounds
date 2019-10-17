@@ -7,8 +7,10 @@
     <% foodplaces.forEach((foodplace) =>{ %>
     <li class="list-group-item d-flex justify-content-between align-items-center">
       <div class="">
-        <a class="btn btn-outline-info btn-sm mr-3" href="/foodplaces/<%= foodplace.id %>/edit">Suggest update</a>
-
+        <a class="btn btn-sm btn-warning mr-3" href="/foodplaces/<%= foodplace.id %>/edit">Suggest update</a>
+        <form class="d-inline mr-3" action="/foodplaces/<%= foodplace.id %>?_method=delete" method="post">
+          <button class="btn btn-sm btn-danger">Delete</button>
+        </form>
         <strong class="text-left"><%= foodplace.name %></strong>
         <span class="card-text">
           <%= foodplace.address %>, <%= foodplace.city %>

@@ -125,6 +125,31 @@ router.put('/:id/update', middleware.checkFoodplaceExists, (req, res) => {
     });
 });
 
+// DESTROY - delete foodplace
+// foodplaces/:id
+// needs a FORM with post + method_override
+router.delete('/:id', middleware.checkFoodplaceExists, (req, res) => {
+  Foodplace.findByIdAndDelete(req.params.id)
+    .then(() => {
+      return flashAndRedirect(
+        req,
+        res,
+        'success',
+        'Successfully deleted the food place...',
+        `/foodplaces/`
+      );
+    })
+    .catch(err => {
+      return flashAndRedirect(
+        req,
+        res,
+        'error',
+        `Error: cannot delete the food place (${err.message})`,
+        `back`
+      );
+    });
+});
+
 /* ------------------------- HELPERS ------------------------------- */
 
 function flashAndRedirect(req, res, flashStatus, flashMsg, url) {
