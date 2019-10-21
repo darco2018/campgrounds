@@ -1,9 +1,11 @@
 /* eslint-disable consistent-return */
 const mongoose = require('mongoose');
 const Dish = require('./models/dish');
+const Foodplace = require('./models/foodplace');
 const comment = require('./models/comment');
 
 const Comment = comment.commentModel;
+
 
 const mockComments = [
   {
@@ -47,6 +49,40 @@ const mockDishes = [
   }
 ];
 
+async function seedDb(){
+
+  try {
+    await Dish.remove({});
+    await Comment.remove({});
+    await Foodplace.remove({})
+    console.log("Removed dishes, comments, foodplaces.");
+  
+    for( const seed of mockDishes){
+      let savedDish = await Dish.create(seed);
+      console.log("Dish created");
+  
+      let savedComment = await Comment.create(
+        {
+          text: 'This place is great, but I wish there were more choices',
+          author: 'q'
+        }
+      )    
+      console.log("Comment created");
+      
+      savedDish.comments.push(savedComment);
+      savedDish.save();
+      console.log("Comment added to dish");    
+    }
+    
+  } catch (error) {
+    console.log(error);
+  }
+  
+}
+/* 
+
+PREVIOUS VERSION
+
 let commentsCounter = 0;
 function createDish(mockDish) {
   //
@@ -75,26 +111,7 @@ function seedDb() {
     if (err) console.log(`Error when removing dishes: ${err}`);
     console.log('Removed dishes');
 
-    /*  must be commented off when you change in comment model the author to: 
-    author: {
-    id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
-    },
-    username: String
-  }
-    
-    Comment.remove({}, error => {
-      if (err) console.log(`Error when removing comments: ${err}`);
-      console.log('Removed comments');
-      // re-create cmapgrounds
-      // placed in callback: guarantee it will run AFTER remove
-      console.log('Saving mock dishes..');
-      mockDishes.forEach(dish => {
-        createDish(dish);
-      });
-    }); */
   });
 }
-
+ */
 module.exports = seedDb;
