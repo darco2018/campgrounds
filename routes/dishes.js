@@ -9,7 +9,9 @@ const middleware = require('../middleware'); //index.js is imported by default f
 
 const router = express.Router();
 const defaultImageUrl = '/images/default.jpg';
-const allowedDishNameLength = 55;
+const allowedDishNameLength = 49;
+const allowedIntroLength = 66;
+const allowedDescriptionLength = 2000;
 
 /* redirect */
 
@@ -49,7 +51,8 @@ router.get('/', (req, res) => {
         res.render('dish/index', {
           dishes: allDishes,
           page: 'dishes',
-          allowedDishNameLength: allowedDishNameLength
+          allowedDishNameLength: allowedDishNameLength,
+          allowedIntroLength: allowedIntroLength
         });
       }
     });
@@ -88,7 +91,7 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
     name: req.body.name,
     price: req.body.price,
     image: req.body.image,
-    description: req.body.desc,
+    description: req.body.desc.substring(0, allowedDescriptionLength),
     author: author
   };
 
@@ -157,6 +160,7 @@ router.put('/:id/update', middleware.checkDishOwnership, (req, res) => {
 
   Dish.findByIdAndUpdate(
     req.params.id,
+    // limit description length to (req.body.desc).substring(0, allowedDescriptionLength),
     req.body.dish, // thanks to dish[name]/[url]/[description] in view
     (err, updatedDish) => {
       if (err || !updatedDish) {

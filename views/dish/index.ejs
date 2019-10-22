@@ -10,22 +10,28 @@
           <a class="btn btn-outline-info btn-sm" href="/dishes/<%= dish.id %>">
             <img src="<%= dish.image %>" class="card-img-top" alt="..." /></a>
           <div class="card-body">
-            <div class="inner-dish-card">
-              <h5 class="card-title">
-                <%= (dish.name).substring(0, allowedDishNameLength) %>
-              </h5>
-              <p>
-                <b><%= dish.foodplace.name %></b>
-              </p>
-              <p>
-                <% if(dish.description === "") { %>
+            <div class="inner-dish-card d-flex flex-column justify-content-between">
+              <div>
+                <h5 class="card-title font-weight-bold">
+                  <%= (dish.name).substring(0, allowedDishNameLength) %>
+                </h5>
+                <p class="text-muted text-uppercase small mb-1">
+                  <b><%= dish.foodplace ? dish.foodplace.name : "" %></b>
+                </p>
+              </div>
+              <div class="dish-description-button d-flex flex-column justify-content-between">
+                <div>
+                  <p style="overflow: hidden; text-overflow: ellipsis; word-wrap: break-word;">
+                    <% if(dish.description.trim() === "") { %>
                     &nbsp
-                <% } else {%>
-                    <%=  (dish.description).substring(0,65) %>
-                <% } %>
-              </p>
-              <div >
-                <a class="btn btn-outline-info btn-sm" href="/dishes/<%= dish.id %>">Details</a>
+                    <% } else {%>
+                    <%=  (dish.description.trim()).substring(0, allowedIntroLength) %>...
+                    <% } %>
+                  </p>
+                </div>
+                <div class="btn-details">
+                  <a class="btn btn-outline-info btn-sm" href="/dishes/<%= dish.id %>">Details</a>
+                </div>
               </div>
             </div>
           </div>
