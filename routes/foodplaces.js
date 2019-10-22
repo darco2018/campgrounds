@@ -172,6 +172,8 @@ function extractRelevantGeoData(geodata) {
 function assembleFoodplace(geodata, req) {
   const cleanedAddress = utils.processStreetName(req.body.address);
   const nonEmptyimage = !req.body.image ? defaultImageUrl : req.body.image;
+  if (!req.user) throw new Error('You have to be logged in to do that!');
+
   const author = {
     id: req.user.id,
     username: req.user.username
