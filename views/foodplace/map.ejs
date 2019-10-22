@@ -1,0 +1,17 @@
+<% include ../partials/header.ejs %>
+
+<div class="container">
+    <% include ../partials/jumbotron.ejs %>
+
+
+    <% foodplaces.forEach((foodplace) =>{ %>
+
+    <span class="card-text">
+        <%= foodplace.lat %>, <%= foodplace.lng %>
+    </span>
+
+    <% }) %>
+
+    <% include ../partials/footer.ejs %>
+</div>
+<!-- end page container -->

@@ -79,6 +79,28 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
     });
 });
 
+// must be above /:id
+// MAP INDEX - shows all on the map
+// /foodplaces/map
+router.get('/map', (req, res) => {
+  Foodplace.find()
+    .then(foundFoodplaces => {
+      res.render('foodplace/map', {
+        foodplaces: foundFoodplaces,
+        page: 'foodplaces'
+      });
+    })
+    .catch(err => {
+      return flashAndRedirect(
+        req,
+        res,
+        'error',
+        `Error: cannot load the food places (${err.message})`,
+        `back`
+      );
+    });
+});
+
 // must be below /new
 // SHOW - shows one
 // foodplaces/234
@@ -225,5 +247,7 @@ function findByIdAndUpdatePromise(id, foodplace) {
     });
   });
 }
+
+
 
 module.exports = router;
