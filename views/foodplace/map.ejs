@@ -1,17 +1,68 @@
 <% include ../partials/header.ejs %>
 
 <div class="container">
-    <% include ../partials/jumbotron.ejs %>
+    <div id="map"></div>
+</div>
+
+<!-- end page container -->
+<link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
+
+<script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
+<script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
+<script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
+<script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
+<script>
+    const marketsqCracow = { lat: 50.061721, lng: 19.938050 }
+
+    function addMarkerToMap(map, location) {
+        var icon = new H.map.Icon('/images/redfood.svg');
+        var marker = new H.map.Marker(location, { icon: icon });
+        map.addObject(marker);
+    }
+
+    function addInfoBubble(map, location, bubbleText) {
+        var bubble = new H.ui.InfoBubble(location, {
+            content: bubbleText
+        });
+        ui.addBubble(bubble);
+    }
+
+    var platform = new H.service.Platform({
+        'apikey': '<%= process.env.GOOGLE_MAPS_APIKEY %>'
+    });
+    var maptypes = platform.createDefaultLayers();
+    var map = new H.Map(document.getElementById('map'),
+        maptypes.vector.normal.map,
+        {
+            center: marketsqCracow,
+            zoom: 13,
+            pixelRatio: window.devicePixelRatio || 1
+        }
+    );
+    window.addEventListener('resize', () => map.getViewPort().resize());
+    var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+    var ui = H.ui.UI.createDefault(map, maptypes);
+    window.onload = function () {
+        // IMPORTANT: VS Code on save reformats %- to % - in the next line; %- Outputs the unescaped value into the template
+        var places = <%-JSON.stringify(foodplaces) %>; // places is an array
+
+        for (var place of places) {
+            const text = place.address;
+            const location = { lat: place.lat, lng: place.lng };
+            //addInfoBubble(map, location, text);
+            addMarkerToMap(map, location);
+        }
+
+        /* It works too. Add ostry nawias na poczatku 1-ej i 3-ej linijki
+         nawias% foodplaces.forEach(function (place) { %>
+            console.log( "nawias%-place.name %nawias");
+        nawias% }); %>  */
 
 
-    <% foodplaces.forEach((foodplace) =>{ %>
 
-    <span class="card-text">
-        <%= foodplace.lat %>, <%= foodplace.lng %>
-    </span>
+    }
+</script>
 
-    <% }) %>
-
+<div class="container">
     <% include ../partials/footer.ejs %>
 </div>
-<!-- end page container -->
