@@ -63,7 +63,7 @@ app.use(flash()); // before password config
 
 /* ---------- SEED DB -------------*/
 
-// seedDb();
+seedDb();
 
 /* ---------- PASSWORD CONFIG -------------*/
 

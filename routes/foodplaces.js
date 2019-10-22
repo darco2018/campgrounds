@@ -3,6 +3,10 @@ const router = express.Router();
 const middleware = require('../middleware'); //index.js is imported by default from middleware folder
 const foodplace = require('../models/foodplace');
 const Foodplace = foodplace.foodplaceModel;
+//---------- debug
+const debug = require('debug');
+debugWarn = debug('warn');
+debugError = debug('error');
 
 //--------------------- custom deps ------------------
 
@@ -19,6 +23,10 @@ const cityCountry = ', Cracow, Poland';
 // INDEX - shows all
 // /foodplaces
 router.get('/', (req, res) => {
+  debug('>>>>>>>>> Just debug'); // shows when : node inspect  ./bin/www
+  debugWarn('>>>>>>>>>> warning in debug');
+  debugError('>>>>>>>>>> error in debug');
+
   Foodplace.find()
     .then(foundFoodplaces => {
       res.render('foodplace/index', {

@@ -1,0 +1,239 @@
+{ 
+    "_id" : ObjectId("5d999dbd4029930fa9e8ebd3"), 
+    "foodplace" : ObjectId("5d9a35b6711f957454e97906"), 
+    "comments" : [
+        ObjectId("5d99a2804029930fa9e8ebdb"), 
+        ObjectId("5d99a3194029930fa9e8ebe3"), 
+        ObjectId("5d99a3764029930fa9e8ebe6"), 
+        ObjectId("5d9df4bb7727062738ef4abb")
+    ], 
+    "name" : "Spaghetti Bolognese", 
+    "price" : "32", 
+    "image" : "https://images.unsplash.com/photo-1553842305-95ade71145ff?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80", 
+    "description" : "Bardzo świeże drożdże ocieplić w temperaturze pokojowej. Przygotować rozczyn: drożdże rozpuścić w ciepłej wodzie, dodać 2 łyżki mąki oraz cukier, dokładnie wymieszać i odstawić na ok. 10 minut do wyrośnięcia (rozczyn ze świeżych drożdży zwiększa objętość o ok. 3 razy - jeśli tak się nie stanie proces przygotowania rozczynu trzeba powtórzyć od nowa, natomiast rozczyn z drożdży instant może się tylko trochę spienić).", 
+    "author" : {
+        "id" : ObjectId("5d999c195040be0ad32d5c38"), 
+        "username" : "q"
+    }, 
+    "createdAt" : ISODate("2019-08-09T10:40:31.418+0000"), 
+    "__v" : NumberInt(4)
+}
+{ 
+    "_id" : ObjectId("5d999ede4029930fa9e8ebd4"), 
+    "foodplace" : ObjectId("5d9a121e98605561e139e858"), 
+    "comments" : [
+        ObjectId("5d99a2ab4029930fa9e8ebdd"), 
+        ObjectId("5d99a3324029930fa9e8ebe4"), 
+        ObjectId("5d99a3964029930fa9e8ebe7"), 
+        ObjectId("5d9cf2155ce3ed3c6f78261c")
+    ], 
+    "name" : "Pizza", 
+    "price" : "15", 
+    "image" : "https://images.unsplash.com/photo-1528137871618-79d2761e3fd5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80", 
+    "description" : "Sed dolores appetere platonem cu, assueverit dissentiunt no quo, mei te eros ridens eirmod. Nam vero dissentiunt eu. Ad nam tollit appareat, vim ex numquam omnesque. Nam amet saepe at, impedit propriae delectus te nam, in sea veri utinam repudiare. Duo nihil melius cu, movet hendrerit voluptatum nec eu. Duo adhuc dissentiunt vituperatoribus in. His cu malis nonumy aliquando, falli sensibus eos ea.  <p>Vis mazim option epicuri ad. Augue moderatius vis at. Id fastidii ocurreret assentior eos, adversarium neglegentur et nec. Vix quas dissentiet ad. His te congue aperiri eripuit, modus admodum et ius, sed nonumes senserit et. Nisl mucius mei no.</p>  <p>Sonet tacimates his in, sit legere consulatu intellegebat an, dicam consetetur moderatius nec ut. Vis eius utinam moderatius.</p>", 
+    "author" : {
+        "id" : ObjectId("5d999c195040be0ad32d5c38"), 
+        "username" : "q"
+    }, 
+    "createdAt" : ISODate("2019-09-09T19:40:31.418+0000"), 
+    "__v" : NumberInt(4)
+}
+{ 
+    "_id" : ObjectId("5d9cf0115ce3ed3c6f782618"), 
+    "comments" : [
+
+    ], 
+    "foodplace" : ObjectId("5d99f7e8b52e244adecf548b"), 
+    "name" : "Chips", 
+    "price" : "8", 
+    "image" : "https://images.unsplash.com/photo-1518013431117-eb1465fa5752?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80", 
+    "description" : "Vis mazim option epicuri ad. Augue moderatius vis at. Id fastidii ocurreret assentior eos, adversarium neglegentur et nec. Vix quas dissentiet ad. His te congue aperiri eripuit, modus admodum et ius, sed nonumes senserit et. Nisl mucius mei no.", 
+    "author" : {
+        "id" : ObjectId("5d99a0c94029930fa9e8ebd8"), 
+        "username" : "z"
+    }, 
+    "createdAt" : ISODate("2019-10-05T20:40:31.418+0000"), 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5d999fc24029930fa9e8ebd6"), 
+    "foodplace" : ObjectId("5d99f7e8b52e244adecf548b"), 
+    "comments" : [
+        ObjectId("5d99a2d14029930fa9e8ebdf"), 
+        ObjectId("5d99a34e4029930fa9e8ebe5")
+    ], 
+    "name" : "Hamburger", 
+    "price" : "5.50", 
+    "image" : "https://images.unsplash.com/photo-1561758033-d89a9ad46330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80", 
+    "description" : "Sed dolores appetere platonem cu, assueverit dissentiunt no quo, mei te eros ridens eirmod. Nam vero dissentiunt eu. Ad nam tollit appareat, vim ex numquam omnesque. Nam amet saepe at, impedit propriae delectus te nam, in sea veri utinam repudiare. Duo nihil melius cu, movet hendrerit voluptatum nec eu. Duo adhuc dissentiunt vituperatoribus in. His cu malis nonumy aliquando, falli sensibus eos ea.  <p>Vis mazim option epicuri ad. Augue moderatius vis at. Id fastidii ocurreret assentior eos, adversarium neglegentur et nec. Vix quas dissentiet ad. His te congue aperiri eripuit, modus admodum et ius, sed nonumes senserit et. Nisl mucius mei no.</p>  <p>Sonet tacimates his in, sit legere consulatu intellegebat an, dicam consetetur moderatius nec ut. Vis eius utinam moderatius.</p>", 
+    "author" : {
+        "id" : ObjectId("5d999f8a4029930fa9e8ebd5"), 
+        "username" : "a"
+    }, 
+    "__v" : NumberInt(2)
+}
+{ 
+    "_id" : ObjectId("5d99a0b04029930fa9e8ebd7"), 
+    "foodplace" : ObjectId("5d9a121e98605561e139e858"), 
+    "comments" : [
+        ObjectId("5d99a2ee4029930fa9e8ebe1"), 
+        ObjectId("5d99a3b24029930fa9e8ebe8")
+    ], 
+    "name" : "Umba-umba Salad", 
+    "price" : "8.25", 
+    "image" : "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80", 
+    "description" : "Vis mazim option epicuri ad. Augue moderatius vis at. Id fastidii ocurreret assentior eos, adversarium neglegentur et nec. Vix quas dissentiet ad. His te congue aperiri eripuit, modus admodum et ius, sed nonumes senserit et. Nisl mucius mei no.", 
+    "author" : {
+        "id" : ObjectId("5d999f8a4029930fa9e8ebd5"), 
+        "username" : "a"
+    }, 
+    "__v" : NumberInt(2)
+}
+{ 
+    "_id" : ObjectId("5d9a37b098558d76286dab3e"), 
+    "foodplace" : ObjectId("5d9b6c0fa8959c67e3e41bcf"), 
+    "comments" : [
+
+    ], 
+    "name" : "Jajecznica", 
+    "price" : "12.5", 
+    "image" : "https://i.imgur.com/vBrPppx.jpg", 
+    "description" : "Cudowne jajak z kurkumą i boczkiem. Polacam. Cena też świetna.", 
+    "author" : {
+        "id" : ObjectId("5d999c195040be0ad32d5c38"), 
+        "username" : "q"
+    }, 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5d99a11e4029930fa9e8ebd9"), 
+    "foodplace" : ObjectId("5d99f91fb52e244adecf548d"), 
+    "comments" : [
+        ObjectId("5d99a3c34029930fa9e8ebe9")
+    ], 
+    "name" : "Pumkin Soup", 
+    "price" : "7.40", 
+    "image" : "https://images.unsplash.com/photo-1530734575165-ce39d996fbaa?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1051&q=80", 
+    "description" : "Sed dolores appetere platonem cu, assueverit dissentiunt no quo, mei te eros ridens eirmod. Nam vero dissentiunt eu. Ad nam tollit appareat, vim ex numquam omnesque. Nam amet saepe at, impedit propriae delectus te nam, in sea veri utinam repudiare. Duo nihil melius cu, movet hendrerit voluptatum nec eu. Duo adhuc dissentiunt vituperatoribus in. His cu malis nonumy aliquando, falli sensibus eos ea.  Vis mazim option epicuri ad. Augue moderatius vis at. Id fastidii ocurreret assentior eos, adversarium neglegentur et nec. Vix quas dissentiet ad. His te congue aperiri eripuit, modus admodum et ius, sed nonumes senserit et. Nisl mucius mei no.  Sonet tacimates his in, sit legere consulatu intellegebat an, dicam consetetur moderatius nec ut. Vis eius utinam moderatius.", 
+    "author" : {
+        "id" : ObjectId("5d99a0c94029930fa9e8ebd8"), 
+        "username" : "z"
+    }, 
+    "__v" : NumberInt(1)
+}
+{ 
+    "_id" : ObjectId("5d9db074c53c16572dda6f01"), 
+    "comments" : [
+
+    ], 
+    "foodplace" : ObjectId("5d99f91fb52e244adecf548d"), 
+    "name" : "BArdzo Długa Nazwa Ktora Schodzi Na Dwie Linijki as a b c", 
+    "price" : "12", 
+    "image" : "/images/default.jpg", 
+    "description" : "Lorem ipsum dolor sit amet, eam in ", 
+    "author" : {
+        "id" : ObjectId("5d999c195040be0ad32d5c38"), 
+        "username" : "q"
+    }, 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5d9dc87d0402d6642e1fb97c"), 
+    "comments" : [
+
+    ], 
+    "foodplace" : ObjectId("5d99f7e8b52e244adecf548b"), 
+    "name" : "Truskawki Default Image", 
+    "price" : "2", 
+    "image" : "/images/default.jpg", 
+    "description" : "", 
+    "author" : {
+        "id" : ObjectId("5d999c195040be0ad32d5c38"), 
+        "username" : "q"
+    }, 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5d9dad422e901056a4080ef9"), 
+    "comments" : [
+
+    ], 
+    "foodplace" : ObjectId("5d99f8f0b52e244adecf548c"), 
+    "name" : "Giant Shrimps ", 
+    "price" : "68", 
+    "image" : "/images/default.jpg", 
+    "description" : "They were really huge.", 
+    "author" : {
+        "id" : ObjectId("5d999c195040be0ad32d5c38"), 
+        "username" : "q"
+    }, 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5d9dcceef26aef678baa6329"), 
+    "comments" : [
+
+    ], 
+    "foodplace" : ObjectId("5d99f7e8b52e244adecf548b"), 
+    "name" : "q", 
+    "price" : "2", 
+    "image" : "/images/default.jpg", 
+    "description" : "", 
+    "author" : {
+        "id" : ObjectId("5d999c195040be0ad32d5c38"), 
+        "username" : "q"
+    }, 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5d9dd0be3c7f5373a7aab5a0"), 
+    "comments" : [
+
+    ], 
+    "foodplace" : ObjectId("5d99f7e8b52e244adecf548b"), 
+    "name" : "Broken image url ", 
+    "price" : "2", 
+    "image" : "/images/default.jpg", 
+    "description" : "", 
+    "author" : {
+        "id" : ObjectId("5d999c195040be0ad32d5c38"), 
+        "username" : "q"
+    }, 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5d9dd9b30a0e1879340d62e1"), 
+    "comments" : [
+        ObjectId("5d9dda8c0a0e1879340d62e2"), 
+        ObjectId("5d9dda9b0a0e1879340d62e4")
+    ], 
+    "foodplace" : ObjectId("5d99f7e8b52e244adecf548b"), 
+    "name" : "Created Test at 15:00", 
+    "price" : "1234", 
+    "image" : "/images/default.jpg", 
+    "description" : "Ciekawe co sie wyświetli", 
+    "author" : {
+        "id" : ObjectId("5d999c195040be0ad32d5c38"), 
+        "username" : "q"
+    }, 
+    "createdAt" : ISODate("2019-10-09T12:59:31.418+0000"), 
+    "__v" : NumberInt(2)
+}
+{ 
+    "_id" : ObjectId("5d9ed7aaa3e2873531b7bbea"), 
+    "comments" : [
+        ObjectId("5d9ed7f7a3e2873531b7bbeb"), 
+        ObjectId("5d9ed80da3e2873531b7bbed")
+    ], 
+    "foodplace" : ObjectId("5d9a121e98605561e139e858"), 
+    "name" : "Marchewka 333", 
+    "price" : "12", 
+    "image" : "https://images.unsplash.com/photo-1536065018553-5b54b5df1b1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60", 
+    "description" : "Jakis tam opis\r\n        \r\n        ", 
+    "author" : {
+        "id" : ObjectId("5d999c195040be0ad32d5c38"), 
+        "username" : "q"
+    }, 
+    "createdAt" : ISODate("2019-10-10T07:03:06.475+0000"), 
+    "__v" : NumberInt(2)
+}
