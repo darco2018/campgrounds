@@ -87,7 +87,7 @@ router.get('/map', (req, res) => {
     .then(foundFoodplaces => {
       res.render('foodplace/map', {
         foodplaces: foundFoodplaces,
-        page: 'foodplaces'
+        page: 'map'
       });
     })
     .catch(err => {
@@ -247,7 +247,5 @@ function findByIdAndUpdatePromise(id, foodplace) {
     });
   });
 }
-
-
 
 module.exports = router;
