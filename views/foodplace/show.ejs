@@ -49,47 +49,21 @@
         </div>
     </div>
 </div>
-<link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
+<% include ../partials/google-maps-scripts.ejs %>
 
-<script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
-<script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
-<script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
-<script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
-<script>
-    const marketsqCracow = { lat: 50.061721, lng: 19.938050 }
+<script type="module">
+    import { createMapWithUi, addMarkerToMap } from '/javascripts/googlemaps.js';
+
+    const mapZoom = 15;
+    const markerIcon = '/images/redfood.svg';
     const foodplaceLocation = { lat: '<%= foodplace.lat %>', lng: '<%= foodplace.lng %>' };
-    const bubbleText = '<%= foodplace.address %>'
+    const mapCenter = foodplaceLocation;
+    //const bubbleText = '<%= foodplace.address %>'
 
-    function addMarkersToMap(map) {
-        var foodplaceMarker = new H.map.Marker(foodplaceLocation);
-        map.addObject(foodplaceMarker);
-    }
+    createMapWithUi('<%= process.env.GOOGLE_MAPS_APIKEY %>', mapZoom, mapCenter);
 
-    function addInfoBubble(map) {
-        var bubble = new H.ui.InfoBubble(foodplaceLocation, {
-            content: bubbleText
-        });
-        ui.addBubble(bubble);
-    }
-
-    var platform = new H.service.Platform({
-        'apikey': '<%= process.env.GOOGLE_MAPS_APIKEY %>'
-    });
-    var maptypes = platform.createDefaultLayers();
-    var map = new H.Map(document.getElementById('map'),
-        maptypes.vector.normal.map,
-        {
-            center: foodplaceLocation,
-            zoom: 15,
-            pixelRatio: window.devicePixelRatio || 1
-        }
-    );
-    window.addEventListener('resize', () => map.getViewPort().resize());
-    var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
-    var ui = H.ui.UI.createDefault(map, maptypes);
     window.onload = function () {
-        //addInfoBubble(map); not implemented for marker click
-        addMarkersToMap(map);
+        addMarkerToMap(foodplaceLocation, markerIcon);
     }
 </script>
 
