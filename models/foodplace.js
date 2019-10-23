@@ -15,7 +15,8 @@ const foodplaceSchema = new mongoose.Schema({
       ref: 'User'
     },
     username: String
-  }
+  },
+  dishesCount: Number
 });
 
 const foodplaceModel = mongoose.model('Foodplace', foodplaceSchema);
