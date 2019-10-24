@@ -53,7 +53,7 @@ router.get('/', async (req, res) => {
       req,
       res,
       'error',
-      `Error: cannot load the dishes (${err.message})`,
+      `Error. Cannot load the dishes. Reason: ${err.message}`,
       `back`
     );
   }
@@ -84,14 +84,27 @@ router.get('/', async (req, res) => {
 
 // NEW - show form to create new dish
 // /dishes/new
-router.get('/new', middleware.isLoggedIn, (req, res) => {
+router.get('/new', middleware.isLoggedIn, async (req, res) => {
+  try {
+    let foodplaces = await Foodplace.find().exec();
+    res.render('dish/new', { foodplaces: foodplaces });
+  } catch (err) {
+    return flashAndRedirect(
+      req,
+      res,
+      'error',
+      `Error. Cannot show the form. Reason: ${err.message}`,
+      `back`
+    );
+  }
+/* 
   Foodplace.find({}, (err, foundFoodplaces) => {
     if (err) {
       handleError(req, res, err, 'Something went wrong...', 'back');
     } else {
       res.render('dish/new', { foodplaces: foundFoodplaces });
     }
-  });
+  }); */
 });
 
 // CREATE - add new dish
