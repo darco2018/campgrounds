@@ -341,19 +341,21 @@ function flashAndRedirect(req, res, flashStatus, flashMsg, url) {
 
 function addLatestCommentTo(dishes) {
   dishes.forEach(dish => {
-    let latestComment = dish.comments[0];
+    let latestComment = dish.comments[dish.comments.length - 1];
     dish.latestCommentAt = latestComment ? latestComment.createdAt : '';
   });
   return dishes;
 }
 
 function assembleDish(req) {
-  if (!req) throw new Error('Cannot assemble a dish. Request is null.');  
+  if (!req) throw new Error('Cannot assemble a dish. Request is null.');
 
   let image = req.body.dish ? req.body.dish.image : req.body.image;
   image = !image ? defaultImageUrl : image;
 
-  let description = req.body.dish ? req.body.dish.description : req.body.description;
+  let description = req.body.dish
+    ? req.body.dish.description
+    : req.body.description;
   description = description.substring(0, allowedDescriptionLength);
 
   const author = {
