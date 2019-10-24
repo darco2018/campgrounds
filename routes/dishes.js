@@ -101,7 +101,44 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
     if (err) {
       handleError(req, res, err, 'Something went wrong...', 'back');
     } else {
-      res.redirect('/dishes');
+      // increase count for the dish's foodplace
+
+      const foodplaceId = savedDish.foodplace;
+      console.log('>>>>>>>>>>>>>>>>>> Foodplace id is ' + foodplaceId);
+      // must get current count of the Foodplace & incerment it
+      Foodplace.findById(foodplaceId)
+        .then(foundFoodplace => {
+          console.log('>>>>>>>> Count is ' + foundFoodplace.dishesCount);
+          foundFoodplace.dishesCount = foundFoodplace.dishesCount + 1;
+          console.log('>>>>>>>> New count is ' + foundFoodplace.dishesCount);
+          return foundFoodplace;
+        })
+        .then(foodplace => {
+          const id = foodplace.id;
+          console.log(' >>> starting to update the foodplace');
+          findByIdAndUpdatePromise(id, foodplace);
+          console.log(' >>> Completed updating the foodplace');
+        })
+        .then(() => {
+          return flashAndRedirect(
+            req,
+            res,
+            'success',
+            'Successfully created a new dish...',
+            `/dishes/${savedDish.id}`
+          );
+        })
+        .catch(err => {
+          return flashAndRedirect(
+            req,
+            res,
+            'error',
+            `Foodplace not found (${err.message})`, // Foodplace not found (id is not defined)
+            'back'
+          );
+        });
+
+      //res.redirect('/dishes');
     }
   });
 });
@@ -204,6 +241,23 @@ function loadFoodplaces() {
   });
 
   return;
+}
+
+function findByIdAndUpdatePromise(id, foodplace) {
+  return new Promise((resolve, reject) => {
+    Foodplace.findByIdAndUpdate(id, foodplace, (err, updatedFoodplace) => {
+      if (err || !updatedFoodplace) {
+        reject('Error: Cannot update the foodplace...');
+      } else {
+        resolve(updatedFoodplace);
+      }
+    });
+  });
+}
+
+function flashAndRedirect(req, res, flashStatus, flashMsg, url) {
+  req.flash(flashStatus, flashMsg);
+  res.redirect(url);
 }
 
 module.exports = router;

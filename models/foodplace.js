@@ -16,7 +16,7 @@ const foodplaceSchema = new mongoose.Schema({
     },
     username: String
   },
-  dishesCount: Number
+  dishesCount: { type: Number, default: 0 }
 });
 
 const foodplaceModel = mongoose.model('Foodplace', foodplaceSchema);
