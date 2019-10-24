@@ -21,8 +21,9 @@ function handleError(req, res, error, message, page) {
   res.redirect(page);
 }
 
-function addDefaultImage(foundDish) {
-  foundDish.image = !foundDish.image ? defaultImageUrl : foundDish.image;
+function addDefaultImage(dish) {
+  dish.image = !dish.image ? defaultImageUrl : dish.image;
+  return dish;
 }
 
 function trimDishName(foundDish) {
@@ -97,7 +98,7 @@ router.get('/new', middleware.isLoggedIn, async (req, res) => {
       `back`
     );
   }
-/* 
+  /* 
   Foodplace.find({}, (err, foundFoodplaces) => {
     if (err) {
       handleError(req, res, err, 'Something went wrong...', 'back');
@@ -163,8 +164,29 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
 // SHOW - show details about dish
 // dishes/234
 // must be below /new
-router.get('/:id', (req, res) => {
-  // OK
+router.get('/:id', async (req, res) => {
+  try {
+    let dish = await Dish.findById(req.params.id)
+      .populate('foodplace')
+      .populate('comments')
+      .exec(); 
+
+    dish = await addDefaultImage(dish);
+
+    res.render('dish/show', {
+      dish: dish,
+      allowedDishNameLength: allowedDishNameLength
+    });
+  } catch (err) {
+    return flashAndRedirect(
+      req,
+      res,
+      'error',
+      `Error. Cannot find the dish. Reason: ${err.message}`,
+      'back'
+    );
+  }
+  /* 
   Dish.findById(req.params.id)
     .populate('foodplace')
     .populate('comments') // populate the comments array in a dish !!!
@@ -178,7 +200,7 @@ router.get('/:id', (req, res) => {
           allowedDishNameLength: allowedDishNameLength
         });
       }
-    });
+    });*/
 });
 
 // EDIT - show edit form
