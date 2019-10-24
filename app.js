@@ -72,7 +72,7 @@ app.use(
   require('express-session')({
     secret: 'I am a cool coder',
     resave: false,
-    saveUnitialized: false
+    saveUninitialized: false
   })
 );
 

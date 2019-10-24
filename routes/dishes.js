@@ -10,7 +10,7 @@ const middleware = require('../middleware'); //index.js is imported by default f
 const router = express.Router();
 const defaultImageUrl = '/images/default.jpg';
 const allowedDishNameLength = 49;
-const allowedIntroLength = 66;
+const allowedIntroDescriptionLength = 66;
 const allowedDescriptionLength = 2000;
 
 /* redirect */
@@ -33,29 +33,53 @@ function trimDishName(foundDish) {
 
 // /dishes
 // INDEX - show all dishes
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
+  try {
+    let dishes = await Dish.find()
+      .populate('foodplace')
+      .populate('comments')
+      .exec(); //returns full-fledged Promise in mongoose
+
+    dishes = await addLatestCommentTo(dishes);
+
+    res.render('dish/index', {
+      dishes: dishes,
+      page: 'dishes',
+      allowedDishNameLength: allowedDishNameLength,
+      allowedIntroLength: allowedIntroDescriptionLength
+    });
+  } catch (err) {
+    return flashAndRedirect(
+      req,
+      res,
+      'error',
+      `Error: cannot load the dishes (${err.message})`,
+      `back`
+    );
+  }
+  /* 2ND VERSION: const promise = fn.then(val=>{//process val; return sth}).catch(err) 
   Dish.find()
     .populate('foodplace')
     .populate('comments')
-    .exec((err, allDishes) => {
-      if (err) {
-        handleError(req, res, err, 'Something went wrong...', 'back');
-      } else {
-        allDishes.forEach(function(dish) {
-          let commentIDsInDish = dish.comments;
-          dish.latestCommentAt = commentIDsInDish[0]
-            ? commentIDsInDish[0].createdAt
-            : '';
-        });
-
-        res.render('dish/index', {
-          dishes: allDishes,
-          page: 'dishes',
-          allowedDishNameLength: allowedDishNameLength,
-          allowedIntroLength: allowedIntroLength
-        });
-      }
+    .then(dishes => addLatestCommentTo(dishes))
+    .then(dishes => {
+      res.render('dish/index', {
+        dishes: dishes,
+        page: 'dishes',
+        allowedDishNameLength: allowedDishNameLength,
+        allowedIntroLength: allowedIntroDescriptionLength
+      });
+    })
+    .catch(err => {
+      return flashAndRedirect(
+        req,
+        res,
+        'error',
+        `Error: cannot load the dishes (${err.message})`,
+        `back`
+      );
     });
+     */
 });
 
 // NEW - show form to create new dish
@@ -244,6 +268,14 @@ function findByIdAndUpdatePromise(id, foodplace) {
 function flashAndRedirect(req, res, flashStatus, flashMsg, url) {
   req.flash(flashStatus, flashMsg);
   res.redirect(url);
+}
+
+function addLatestCommentTo(dishes) {
+  dishes.forEach(dish => {
+    let latestComment = dish.comments[0];
+    dish.latestCommentAt = latestComment ? latestComment.createdAt : '';
+  });
+  return dishes;
 }
 
 module.exports = router;
