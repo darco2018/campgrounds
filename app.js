@@ -35,7 +35,8 @@ app.set('view engine', 'ejs');
 const dbName = 'dishes';
 mongoose.connect(`mongodb://localhost:27017/${dbName}`, {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+  useFindAndModify: false 
   /*  host: process.env.DB_HOST,
   username: process.env.DB_USER,
   password: process.env.DB_PASS */

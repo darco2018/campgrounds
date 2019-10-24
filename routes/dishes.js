@@ -73,15 +73,6 @@ router.get('/new', middleware.isLoggedIn, (req, res) => {
 // CREATE - add new dish
 // /dishes
 router.post('/', middleware.isLoggedIn, (req, res) => {
-  console.log('>>>>>>>>>>>>>>>>> req.body.foodplace: ' + req.body.foodplace);
-  /* console.log(
-    '>>>>>>>>>>>>>>>>> req.body.foodplace.id: ' + req.body.foodplace.id
-  ); */
-
-  /* const foodplace = {
-    id: req.body.foodplace.id
-    //can be read like this because in form we have select's name=foodplace[id]
-  }; */
   const author = {
     id: req.user.id,
     username: req.user.username
@@ -101,24 +92,13 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
     if (err) {
       handleError(req, res, err, 'Something went wrong...', 'back');
     } else {
-      // increase count for the dish's foodplace
-
+      // increment dish count in foodplace
       const foodplaceId = savedDish.foodplace;
-      console.log('>>>>>>>>>>>>>>>>>> Foodplace id is ' + foodplaceId);
-      // must get current count of the Foodplace & incerment it
-      Foodplace.findById(foodplaceId)
-        .then(foundFoodplace => {
-          console.log('>>>>>>>> Count is ' + foundFoodplace.dishesCount);
-          foundFoodplace.dishesCount = foundFoodplace.dishesCount + 1;
-          console.log('>>>>>>>> New count is ' + foundFoodplace.dishesCount);
-          return foundFoodplace;
-        })
-        .then(foodplace => {
-          const id = foodplace.id;
-          console.log(' >>> starting to update the foodplace');
-          findByIdAndUpdatePromise(id, foodplace);
-          console.log(' >>> Completed updating the foodplace');
-        })
+      Foodplace.findOneAndUpdate(
+        { _id: foodplaceId },
+        { $inc: { dishesCount: 1 } }
+      )
+        .exec()
         .then(() => {
           return flashAndRedirect(
             req,
@@ -133,7 +113,7 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
             req,
             res,
             'error',
-            `Foodplace not found (${err.message})`, // Foodplace not found (id is not defined)
+            `Foodplace not found (${err.message})`,
             'back'
           );
         });
@@ -217,10 +197,16 @@ router.delete(
   '/:id',
   middleware.checkDishOwnership, // does checkDishExists
   (req, res) => {
-    Dish.findByIdAndDelete(req.params.id, err => {
+    Dish.findByIdAndDelete(req.params.id, (err, deletedDish) => {
       if (err) {
         handleError(req, res, err, 'Something went wrong...', 'back');
       } else {
+        // decrement dish count in foodplace
+        const foodplaceId = deletedDish.foodplace;
+        Foodplace.findOneAndUpdate(
+          { _id: foodplaceId },
+          { $inc: { dishesCount: -1 } }
+        ).exec();
         res.redirect('/dishes/');
       }
     });
