@@ -257,6 +257,7 @@ router.put('/:id/update', middleware.checkDishOwnership, async (req, res) => {
       req.params.id,
       req.body.dish
     ).exec();
+
     return flashAndRedirect(
       req,
       res,
@@ -291,26 +292,48 @@ router.put('/:id/update', middleware.checkDishOwnership, async (req, res) => {
 
 // DESTROY - delete dish
 // dishes/:id
-// needs a FORM with post + method_override
-router.delete(
-  '/:id',
-  middleware.checkDishOwnership, // does checkDishExists
-  (req, res) => {
-    Dish.findByIdAndDelete(req.params.id, (err, deletedDish) => {
-      if (err) {
-        handleError(req, res, err, 'Something went wrong...', 'back');
-      } else {
-        // decrement dish count in foodplace
-        const foodplaceId = deletedDish.foodplace;
-        Foodplace.findOneAndUpdate(
-          { _id: foodplaceId },
-          { $inc: { dishesCount: -1 } }
-        ).exec();
-        res.redirect('/dishes/');
-      }
-    });
+// needs a FORM with post + method_override (// checkDishOwnership does checkDishExists)
+router.delete('/:id', middleware.checkDishOwnership, async (req, res) => {
+  try {
+    let deleted = await Dish.findByIdAndDelete(req.params.id).exec();
+    const foodplaceId = deleted.foodplace;
+    //decrease dish count for the given foodplace
+    await Foodplace.findOneAndUpdate(
+      { _id: foodplaceId },
+      { $inc: { dishesCount: -1 } }
+    ).exec();
+
+    return flashAndRedirect(
+      req,
+      res,
+      'success',
+      'Successfully deleted the dish...',
+      `/dishes/`
+    );
+  } catch (err) {
+    return flashAndRedirect(
+      req,
+      res,
+      'error',
+      `Error when deleting the dish. Reason: ${err.message}`,
+      '/dishes/'
+    );
   }
-);
+  /* 
+  Dish.findByIdAndDelete(req.params.id, (err, deletedDish) => {
+    if (err) {
+      handleError(req, res, err, 'Something went wrong...', 'back');
+    } else {
+      // decrement dish count in foodplace
+      const foodplaceId = deletedDish.foodplace;
+      Foodplace.findOneAndUpdate(
+        { _id: foodplaceId },
+        { $inc: { dishesCount: -1 } }
+      ).exec();
+      res.redirect('/dishes/');
+    }
+  }); */
+});
 
 /* HELPERS */
 
