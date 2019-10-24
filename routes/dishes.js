@@ -250,13 +250,34 @@ router.get('/:id/edit', middleware.checkDishOwnership, async (req, res) => {
 // UPDATE
 // dishes/234/update
 // add ?_method=PUT in url  (method-override)
-router.put('/:id/update', middleware.checkDishOwnership, (req, res) => {
+router.put('/:id/update', middleware.checkDishOwnership, async (req, res) => {
   // checkDishOwnership does checkDishExists first
+  try {
+    let updated = await Dish.findByIdAndUpdate(
+      req.params.id,
+      req.body.dish
+    ).exec();
+    return flashAndRedirect(
+      req,
+      res,
+      'success',
+      'Successfully updated the dish...',
+      `/dishes/${updated.id}`
+    );
+  } catch (err) {
+    return flashAndRedirect(
+      req,
+      res,
+      'error',
+      `Error. Cannot update the dish. Reason: ${err.message}`,
+      'back'
+    );
+  }
+  /* 
 
   Dish.findByIdAndUpdate(
     req.params.id,
-    // limit description length to (req.body.desc).substring(0, allowedDescriptionLength),
-    req.body.dish, // thanks to dish[name]/[url]/[description] in view
+    req.body.dish,
     (err, updatedDish) => {
       if (err || !updatedDish) {
         handleError(req, res, err, 'Something went wrong...', 'back');
@@ -265,7 +286,7 @@ router.put('/:id/update', middleware.checkDishOwnership, (req, res) => {
         res.redirect(`/dishes/${updatedDish.id}`);
       }
     }
-  );
+  ); */
 });
 
 // DESTROY - delete dish
