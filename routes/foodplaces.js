@@ -54,6 +54,9 @@ router.get('/new', middleware.isLoggedIn, (req, res) => {
 // CREATE - persists new
 // /foodplaces
 router.post('/', middleware.isLoggedIn, (req, res) => {
+
+  //   if (!req.user) throw new Error('You have to be logged in to do that!');
+
   if (req.body.address) {
     var address = req.body.address + cityCountry;
   } else {
@@ -200,9 +203,12 @@ function extractRelevantGeoData(geodata) {
 }
 
 function assembleFoodplace(geodata, req) {
+
+  if (!req || !geodata) throw new Error('Cannot assemble a food place. Request and/or geodata is null.');
+
   const cleanedAddress = utils.processStreetName(req.body.address);
   const nonEmptyimage = !req.body.image ? defaultImageUrl : req.body.image;
-  if (!req.user) throw new Error('You have to be logged in to do that!');
+
 
   const author = {
     id: req.user.id,

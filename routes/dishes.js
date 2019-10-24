@@ -21,11 +21,6 @@ function handleError(req, res, error, message, page) {
   res.redirect(page);
 }
 
-function addDefaultImage(dish) {
-  dish.image = !dish.image ? defaultImageUrl : dish.image;
-  return dish;
-}
-
 function trimDishName(foundDish) {
   foundDish.name = !foundDish.image ? defaultImageUrl : foundDish.image;
 }
@@ -110,55 +105,35 @@ router.get('/new', middleware.isLoggedIn, async (req, res) => {
 
 // CREATE - add new dish
 // /dishes
-router.post('/', middleware.isLoggedIn, (req, res) => {
-  const author = {
-    id: req.user.id,
-    username: req.user.username
-  };
-  const newDish = {
-    foodplace: req.body.foodplaceId,
-    name: req.body.name,
-    price: req.body.price,
-    image: req.body.image,
-    description: req.body.desc.substring(0, allowedDescriptionLength),
-    author: author
-  };
+router.post('/', middleware.isLoggedIn, async (req, res) => {
+  //if (!req.user) throw new Error('You have to be logged in to do that!');
+  try {
+    let dish = await assembleDish(req);
+    let savedDish = await Dish.create(dish);
 
-  addDefaultImage(newDish);
+    // increment dish count for the given foodplace
+    const foodplaceId = savedDish.foodplace;
+    await Foodplace.findOneAndUpdate(
+      { _id: foodplaceId },
+      { $inc: { dishesCount: 1 } }
+    ).exec();
 
-  Dish.create(newDish, (err, savedDish) => {
-    if (err) {
-      handleError(req, res, err, 'Something went wrong...', 'back');
-    } else {
-      // increment dish count in foodplace
-      const foodplaceId = savedDish.foodplace;
-      Foodplace.findOneAndUpdate(
-        { _id: foodplaceId },
-        { $inc: { dishesCount: 1 } }
-      )
-        .exec()
-        .then(() => {
-          return flashAndRedirect(
-            req,
-            res,
-            'success',
-            'Successfully created a new dish...',
-            `/dishes/${savedDish.id}`
-          );
-        })
-        .catch(err => {
-          return flashAndRedirect(
-            req,
-            res,
-            'error',
-            `Foodplace not found (${err.message})`,
-            'back'
-          );
-        });
-
-      //res.redirect('/dishes');
-    }
-  });
+    return flashAndRedirect(
+      req,
+      res,
+      'success',
+      'Successfully created a new dish...',
+      `/dishes/${savedDish.id}`
+    );
+  } catch (err) {
+    return flashAndRedirect(
+      req,
+      res,
+      'error',
+      `Foodplace not found (${err.message})`,
+      'back'
+    );
+  }
 });
 
 // SHOW - show details about dish
@@ -171,8 +146,6 @@ router.get('/:id', async (req, res) => {
       .populate('comments')
       .exec();
 
-    dish = await addDefaultImage(dish);
-
     res.render('dish/show', {
       dish: dish,
       allowedDishNameLength: allowedDishNameLength
@@ -182,7 +155,7 @@ router.get('/:id', async (req, res) => {
       req,
       res,
       'error',
-      `Error. Cannot find the dish. Reason: ${err.message}`,
+      `Error loading the dish. Reason: ${err.message}`,
       'back'
     );
   }
@@ -253,10 +226,8 @@ router.get('/:id/edit', middleware.checkDishOwnership, async (req, res) => {
 router.put('/:id/update', middleware.checkDishOwnership, async (req, res) => {
   // checkDishOwnership does checkDishExists first
   try {
-    let updated = await Dish.findByIdAndUpdate(
-      req.params.id,
-      req.body.dish
-    ).exec();
+    let dish = await assembleDish(req);
+    let updated = await Dish.findByIdAndUpdate(req.params.id, dish).exec();
 
     return flashAndRedirect(
       req,
@@ -374,6 +345,32 @@ function addLatestCommentTo(dishes) {
     dish.latestCommentAt = latestComment ? latestComment.createdAt : '';
   });
   return dishes;
+}
+
+function assembleDish(req) {
+  if (!req) throw new Error('Cannot assemble a dish. Request is null.');  
+
+  let image = req.body.dish ? req.body.dish.image : req.body.image;
+  image = !image ? defaultImageUrl : image;
+
+  let description = req.body.dish ? req.body.dish.description : req.body.description;
+  description = description.substring(0, allowedDescriptionLength);
+
+  const author = {
+    id: req.user.id,
+    username: req.user.username
+  };
+
+  let dish = {
+    foodplace: req.body.dish ? req.body.dish.foodplace : req.body.foodplaceId,
+    name: req.body.dish ? req.body.dish.name : req.body.name,
+    price: req.body.dish ? req.body.dish.price : req.body.price,
+    image: image,
+    description: description,
+    author: author
+  };
+
+  return dish;
 }
 
 module.exports = router;
