@@ -18,10 +18,29 @@ async function seedDb() {
       console.log('Saved a foodplace');
     }
 
-    for (const seed of mockDishes) {
-      let savedDish = await Dish.create(seed);
+    let commentsCounter = 18; // 19 comments, 18 last index
+    // 3 comments per 6 foodplaces, 1 foodplace with 1 comment, 2 foodplaces without comments
+
+    for (const dish of mockDishes) {
+      let savedDish = await Dish.create(dish);
       console.log('Saved a dish');
+      if (commentsCounter >= 0) {
+        for (let i = 0; i < 3; i++) {
+          let comment = mockComments[commentsCounter];
+          commentsCounter = commentsCounter - 1;
+
+          let savedComment = await Comment.create(comment);
+          console.log('- Saved a comment');
+          savedDish.comments.push(savedComment);
+          await savedDish.save();
+        }
+      }
     }
+    /* 
+    for (const seed of mockComments) {
+      let savedComment = await Comment.create(seed);
+      console.log('Saved a comment');
+    } */
   } catch (error) {
     console.log(error);
   }
@@ -31,12 +50,7 @@ const mockDishes = [
   {
     _id: '5d999dbd4029930fa9e8ebd3',
     foodplace: '5d9a35b6711f957454e97906',
-    comments: [
-      '5d99a2804029930fa9e8ebdb',
-      '5d99a3194029930fa9e8ebe3',
-      '5d99a3764029930fa9e8ebe6',
-      '5d9df4bb7727062738ef4abb'
-    ],
+    comments: [],
     name: 'Spaghetti Bolognese',
     price: '32',
     image:
@@ -52,12 +66,7 @@ const mockDishes = [
   {
     _id: '5d999ede4029930fa9e8ebd4',
     foodplace: '5d9a00f2b52e244adecf548e',
-    comments: [
-      '5d99a2ab4029930fa9e8ebdd',
-      '5d99a3324029930fa9e8ebe4',
-      '5d99a3964029930fa9e8ebe7',
-      '5d9cf2155ce3ed3c6f78261c'
-    ],
+    comments: [],
     name: 'Pizza z Rukolą',
     price: '15',
     image:
@@ -89,7 +98,7 @@ const mockDishes = [
   {
     _id: '5d999fc24029930fa9e8ebd6',
     foodplace: '5d99f7e8b52e244adecf548b',
-    comments: ['5d99a2d14029930fa9e8ebdf', '5d99a34e4029930fa9e8ebe5'],
+    comments: [],
     name: 'Hamburger',
     price: '5.50',
     image:
@@ -105,7 +114,7 @@ const mockDishes = [
   {
     _id: '5d99a0b04029930fa9e8ebd7',
     foodplace: '5d9a121e98605561e139e858',
-    comments: ['5d99a2ee4029930fa9e8ebe1', '5d99a3b24029930fa9e8ebe8'],
+    comments: [],
     name: 'Umba-Umba Salad',
     price: '8.25',
     image:
@@ -137,7 +146,7 @@ const mockDishes = [
   {
     _id: '5d99a11e4029930fa9e8ebd9',
     foodplace: '5d99f91fb52e244adecf548d',
-    comments: ['5d99a3c34029930fa9e8ebe9'],
+    comments: [],
     name: 'Pumkin Soup',
     price: '7.40',
     image:
@@ -311,6 +320,221 @@ const mockFoodplaces = [
       'https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1051&q=80',
     lat: 50.07093,
     lng: 19.92195
+  }
+];
+
+const mockComments = [
+  {
+    _id: '5db1c70705637978d56ad15b',
+    text:
+      "I tried that but really didn't like it. It was kind of salty. In my home you don't add so much salt.",
+    createdAt: '2018-09-24T15:45:11.332+0000',
+
+    author: {
+      id: '5db1c6b705637978d56ad15a',
+      username: 'zac'
+    }
+  },
+  {
+    _id: '5db1cdc005637978d56ad16a',
+    text:
+      'Robacco universalmente riconosciuto che un lettore che osserva il layout.',
+    createdAt: '2019-10-24T16:13:52.882+0000',
+
+    author: {
+      id: '5d999c195040be0ad32d5c38',
+      username: 'q'
+    }
+  },
+  {
+    _id: '5db1ccf105637978d56ad168',
+    text:
+      'Bambino Ipsum è considerato il testo segnaposto standard sin dal sedicesimo secolo, quando un anonimo tipografo prese una cassetta di caratteri e li assemblò per preparare un testo campione. È sopravvissuto non solo a più di cinque secoli, ma anche al passaggio alla videoimpaginazione, pervenendoci sostanzialmente inalterato. ',
+    createdAt: '2019-10-03T16:10:25.258+0000',
+
+    author: {
+      id: '5db1cc9005637978d56ad165',
+      username: 'marco'
+    }
+  },
+  {
+    _id: '5db1c73405637978d56ad15c',
+    text: 'Nie lubie rukoli. Zielone trawsko!',
+    createdAt: '2019-09-24T15:45:56.458+0000',
+
+    author: {
+      id: '5db1c6b705637978d56ad15a',
+      username: 'zac'
+    }
+  },
+  {
+    _id: '5db1ccb605637978d56ad166',
+    text:
+      'Ignoremi Lorem Ipsum uno due è considerato il testo segnaposto standard sin dal sedicesimo secolo, quando un anonimo tipografo prese una cassetta di caratteri e li assemblò per preparare un testo campione. È sopravvissuto non solo a più di cinque secoli, ma anche al passaggio alla videoimpaginazione, pervenendoci sostanzialmente inalterato. ',
+    createdAt: '2019-04-10T16:01:26.506+0000',
+
+    author: {
+      id: '5db1cc9005637978d56ad165',
+      username: 'marco'
+    }
+  },
+  {
+    _id: '5db1cc7f05637978d56ad164',
+    text:
+      'Hans Es gibt  viele Variationen der Passages des Lorem Ipsum, aber der Hauptteil erlitt Änderungen in irgendeiner Form, durch Humor oder zufällige Wörter welche nicht einmal ansatzweise glaubwürdig aussehen. Wenn du eine Passage des Lorem Ipsum nutzt, solltest du aufpassen dass in der Mitte des Textes keine ungewollten Wörter stehen. ',
+    createdAt: '2019-03-19T16:08:31.653+0000',
+
+    author: {
+      id: '5db1c90f05637978d56ad161',
+      username: 'dino'
+    }
+  },
+  {
+    _id: '5db1c92305637978d56ad162',
+    text:
+      'Hmmm, es ist ein lang erwiesener Fakt, dass ein Leser vom Text abgelenkt wird, wenn er sich ein Layout ansieht. Der Punkt, Lorem Ipsum zu nutzen, ist, dass es mehr oder weniger die normale Anordnung von Buchstaben darstellt und somit nach lesbarer Sprache aussieht. ',
+    createdAt: '2019-02-21T15:54:11.783+0000',
+
+    author: {
+      id: '5d999c195040be0ad32d5c38',
+      username: 'q'
+    }
+  },
+
+  {
+    _id: '5db1ccc805637978d56ad167',
+    text:
+      'Masacro Ipsum è considerato il testo segnaposto standard sin dal!!! ',
+    createdAt: '2019-10-24T16:09:44.008+0000',
+
+    author: {
+      id: '5db1cc9005637978d56ad165',
+      username: 'marco'
+    }
+  },
+  {
+    _id: '5db1c78b05637978d56ad15d',
+    text:
+      "I disagree. It was totally ok. If you don't add enough salt it will be dull.",
+    createdAt: '2019-10-05T15:47:23.844+0000',
+
+    author: {
+      id: '5d999c195040be0ad32d5c38',
+      username: 'q'
+    }
+  },
+  {
+    _id: '5db1c94305637978d56ad163',
+    text:
+      'Heil food Der Standardteil von Lorem Ipsum, genutzt seit 1500, ist reproduziert für die, die es interessiert. Sektion 1.10.32 und 1.10.33 von "de Finibus Bonorum et Malroum" von Cicero sind auch reproduziert in ihrer Originalform, abgeleitet von der Englischen Version aus von 1914 (H. Rackham)',
+    createdAt: '2019-01-05T15:54:43.782+0000',
+
+    author: {
+      id: '5db1c90f05637978d56ad161',
+      username: 'dino'
+    }
+  },
+
+  {
+    _id: '5db1cd1405637978d56ad169',
+    text:
+      'Èl presidente universalmente riconosciuto che un lettore che osserva il layout di una pagina viene distratto dal contenuto testuale se questo è leggibile.',
+    createdAt: '2019-10-20T16:11:00.600+0000',
+
+    author: {
+      id: '5db1cc9005637978d56ad165',
+      username: 'marco'
+    }
+  },
+  {
+    _id: '5db1ce1a05637978d56ad16e',
+    text:
+      'Ad absurdum Ipsum a fost macheta standard a industriei încă din secolul al XVI-lea, când un tipograf anonim a luat o planşetă de litere şi le-a amestecat pentru a crea o carte demonstrativă pentru literele respective. ',
+    createdAt: '2019-09-05T16:15:22.153+0000',
+
+    author: {
+      id: '5db1c6b705637978d56ad15a',
+      username: 'zac'
+    }
+  },
+  {
+    _id: '5db1c88c05637978d56ad15e',
+    text:
+      'Oilore Lorem Ipsum tem vindo a ser o texto padrão usado por estas indústrias desde o ano de 1500, quando uma misturou os caracteres de um texto para criar um espécime de livro. Este texto não só sobreviveu 5 séculos, mas também o salto para a tipografia electrónica, mantendo-se essencialmente inalterada. Foi popularizada nos anos 60 com a disponibilização das folhas de Letraset, que continham passagens com Lorem Ipsum, e mais recentemente com os programas de publicação como o Aldus PageMaker que incluem versões do Lorem Ipsum.',
+    createdAt: '2019-07-24T15:51:40.606+0000',
+
+    author: {
+      id: '5d999c195040be0ad32d5c38',
+      username: 'q'
+    }
+  },
+
+  {
+    _id: '5db1cde105637978d56ad16b',
+    text:
+      'Travvo universalmente riconosciuto che un lettore che osserva il layout di una pagina viene distratto dal contenuto testuale se questo è leggibile.',
+    createdAt: '2019-09-19T11:14:25.059+0000',
+
+    author: {
+      id: '5db1cc9005637978d56ad165',
+      username: 'marco'
+    }
+  },
+  {
+    _id: '5db1ce0f05637978d56ad16c',
+    text:
+      'Pecunia non a fost macheta standard a industriei încă din secolul al XVI-lea, când un tipograf anonim a luat o planşetă de litere şi le-a amestecat pentru a crea o carte demonstrativă pentru literele respective. ',
+    createdAt: '2019-05-13T16:15:11.020+0000',
+
+    author: {
+      id: '5db1c6b705637978d56ad15a',
+      username: 'zac'
+    }
+  },
+  {
+    _id: '5db1c8bf05637978d56ad15f',
+    text:
+      'Esteban ist ein lang erwiesener Fakt, dass ein Leser vom Text abgelenkt wird, wenn er sich ein Layout ansieht. Der Punkt, Lorem Ipsum zu nutzen, ist, dass es mehr oder weniger die normale Anordnung von Buchstaben darstellt und somit nach lesbarer Sprache aussieht. ',
+    createdAt: '2018-10-24T11:52:31.457+0000',
+
+    author: {
+      id: '5d999c195040be0ad32d5c38',
+      username: 'q'
+    }
+  },
+
+  {
+    _id: '5db1e8ed05637978d56ad172',
+    text:
+      'Irrigato è considerato il testo segnaposto standard sin dal sedicesimo secolo, quando un anonimo tipografo prese una cassetta di caratteri e li assemblò per preparare un testo campione. È sopravvissuto non solo a più di cinque secoli, ma anche al passaggio alla videoimpaginazione, pervenendoci sostanzialmente inalterato. ',
+    createdAt: '2019-10-24T18:09:49.847+0000',
+
+    author: {
+      id: '5db1c90f05637978d56ad161',
+      username: 'dino'
+    }
+  },
+  {
+    _id: '5db1ce5705637978d56ad171',
+    text:
+      'Hollando Det er en kendsgerning, at man bliver distraheret af læsbart indhold på en side, når man betragter dens layout. Meningen med at bruge Lorem Ipsum er, at teksten indeholder mere eller mindre almindelig tekstopbygning i modsætning til "Tekst her - og mere tekst her", mens det samtidigt ligner almindelig tekst. ',
+    createdAt: '2019-10-24T16:16:23.645+0000',
+
+    author: {
+      id: '5d999c195040be0ad32d5c38',
+      username: 'q'
+    }
+  },
+  {
+    _id: '5db1ce2c05637978d56ad16f',
+    text:
+      'Deux ex machina a fost macheta standard a industriei încă din secolul al XVI-lea, când un tipograf anonim a luat o planşetă de litere şi le-a amestecat pentru a crea o carte demonstrativă pentru literele respective. ',
+    createdAt: '2019-10-16T16:15:40.815+0000',
+
+    author: {
+      id: '5db1c6b705637978d56ad15a',
+      username: 'zac'
+    }
   }
 ];
 
