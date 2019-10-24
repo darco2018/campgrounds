@@ -169,7 +169,7 @@ router.get('/:id', async (req, res) => {
     let dish = await Dish.findById(req.params.id)
       .populate('foodplace')
       .populate('comments')
-      .exec(); 
+      .exec();
 
     dish = await addDefaultImage(dish);
 
@@ -205,9 +205,28 @@ router.get('/:id', async (req, res) => {
 
 // EDIT - show edit form
 // dishes/234/edit
-router.get('/:id/edit', middleware.checkDishOwnership, (req, res) => {
-  // BUGGING HERE CANT SEE <option value="<%= dish[foodplace][id] %>">" in views/dish/edit.ejs:14
+router.get('/:id/edit', middleware.checkDishOwnership, async (req, res) => {
+  try {
+    let dish = await Dish.findById(req.params.id)
+      .populate('foodplace')
+      .exec();
 
+    let foodplaces = await Foodplace.find().exec();
+
+    res.render('dish/edit', {
+      dish: dish,
+      foodplaces: foodplaces
+    }); //refactor with  res.locals.dish/foundDish
+  } catch (err) {
+    return flashAndRedirect(
+      req,
+      res,
+      'error',
+      `Error. Cannot show the edit form. Reason: ${err.message}`,
+      'back'
+    );
+  }
+  /* 
   Dish.findById(req.params.id)
     .populate('foodplace')
     .exec((err, foundDish) => {
@@ -225,7 +244,7 @@ router.get('/:id/edit', middleware.checkDishOwnership, (req, res) => {
           }); //refactor with  res.locals.dish/foundDish
         }
       });
-    });
+    }); */
 });
 
 // UPDATE
