@@ -6,24 +6,13 @@ const Dish = require('../models/dish');
 const foodplace = require('../models/foodplace');
 const Foodplace = foodplace.foodplaceModel;
 const middleware = require('../middleware'); //index.js is imported by default from middleware folder
+const { flashAndRedirect } = require('../utils/index');
 
 const router = express.Router();
 const defaultImageUrl = '/images/default.jpg';
 const allowedDishNameLength = 49;
 const allowedIntroDescriptionLength = 66;
 const allowedDescriptionLength = 2000;
-
-/* redirect */
-
-function handleError(req, res, error, message, page) {
-  console.log(error);
-  req.flash('error', message ? message : '');
-  res.redirect(page);
-}
-
-function trimDishName(foundDish) {
-  foundDish.name = !foundDish.image ? defaultImageUrl : foundDish.image;
-}
 
 /* ------------------------- ROUTES ------------------------------- */
 
@@ -308,20 +297,6 @@ router.delete('/:id', middleware.checkDishOwnership, async (req, res) => {
 
 /* HELPERS */
 
-function loadFoodplaces() {
-  Foodplace.find({}, (err, foundFoodplaces) => {
-    if (err) {
-      handleError(req, res, err, 'Something went wrong...', 'back');
-      return null;
-    } else {
-      return foundFoodplaces;
-      //res.render('dish/new', { foodplaces: foundFoodplaces });
-    }
-  });
-
-  return;
-}
-
 function findByIdAndUpdatePromise(id, foodplace) {
   return new Promise((resolve, reject) => {
     Foodplace.findByIdAndUpdate(id, foodplace, (err, updatedFoodplace) => {
@@ -332,11 +307,6 @@ function findByIdAndUpdatePromise(id, foodplace) {
       }
     });
   });
-}
-
-function flashAndRedirect(req, res, flashStatus, flashMsg, url) {
-  req.flash(flashStatus, flashMsg);
-  res.redirect(url);
 }
 
 function addLatestCommentTo(dishes) {

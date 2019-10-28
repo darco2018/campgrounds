@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
+// custom imports
+const { flashAndRedirect } = require('../utils/index');
+
 // authentication imports
 const passport = require('passport');
-
 const User = require('../models/user');
 
 // show register form
@@ -13,26 +15,26 @@ router.get('/register', (req, res) => {
 
 // process register data
 // /auth/register
-router.post('/register', (req, res) => {
-  const newUser = new User({
-    username: req.body.username
-  });
-  // passportLocalMongoose method to hash pswd
-  User.register(newUser, req.body.password, (err, savedUser) => {
-    console.log('-------- Registering user ' + newUser.username);
-
-    if (err) {
-      console.log(err);
-      //absolute url when redirect but no / when render
-      return res.render('auth/register', { error: err.message });
-    }
-
-    passport.authenticate('local')(req, res, function() {
-      console.log('------------Local-authenticating');
-      req.flash('success', 'Welcome ' + savedUser.username + '!');
-      res.redirect('/dishes');
+router.post('/register', async (req, res) => {
+  try {
+    const newUser = new User({
+      username: req.body.username
     });
-  });
+    // passportLocalMongoose method to hash pswd
+    let savedUser = await User.register(newUser, req.body.password);
+    await passport.authenticate('local');
+
+    return flashAndRedirect(
+      req,
+      res,
+      'success',
+      `Welcome ${savedUser.username}!`,
+      `/dishes/`
+    );
+  } catch (err) {
+    //absolute url when redirect but no / when render
+    return res.render('auth/register', { error: err.message });
+  }
 });
 
 // show login form
@@ -57,10 +59,15 @@ router.post(
   function(req, res) {}
 );
 
-router.get('/logout', (req, res) => {
-  req.logout();
-  req.flash('success', 'You have been logged out successfully');
-  res.redirect('/dishes');
+router.get('/logout', async (req, res) => {
+  await req.logout();
+  return flashAndRedirect(
+    req,
+    res,
+    'success',
+    `You have been logged out successfully`,
+    `/dishes/`
+  );
 });
 
 module.exports = router;

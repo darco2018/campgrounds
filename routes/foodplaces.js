@@ -12,6 +12,7 @@ debugError = debug('error');
 
 const utils = require('../public/javascripts/utilities/utils');
 const geocoding = require('../services/geocoding');
+const { flashAndRedirect } = require('../utils/index');
 
 // -------------------- VARS -----------------------
 
@@ -184,11 +185,6 @@ router.delete('/:id', middleware.checkFoodplaceExists, (req, res) => {
 });
 
 /* ------------------------- HELPERS ------------------------------- */
-
-function flashAndRedirect(req, res, flashStatus, flashMsg, url) {
-  req.flash(flashStatus, flashMsg);
-  res.redirect(url);
-}
 
 function extractRelevantGeoData(geodata) {
   const coords = geocoding.getCoordinates(geodata);

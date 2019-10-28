@@ -7,6 +7,8 @@ const comment = require('../models/comment');
 const Comment = comment.commentModel;
 const middleware = require('../middleware'); //index.js is imported by default from middleware folder
 
+const { flashAndRedirect } = require('../utils/index');
+
 const router = express.Router({ mergeParams: true });
 const allowedCommentLength = 2000;
 
@@ -185,11 +187,6 @@ function assembleComment(req) {
   };
 
   return comment;
-}
-
-function flashAndRedirect(req, res, flashStatus, flashMsg, url) {
-  req.flash(flashStatus, flashMsg);
-  res.redirect(url);
 }
 
 module.exports = router;
