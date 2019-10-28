@@ -6,11 +6,11 @@ let defaultCenter = marketsqCracow;
 let defaultZoom = 13;
 
 export function createMapWithUi(key, zoom, center) {
-  var platform = new H.service.Platform({
+  let platform = new H.service.Platform({
     apikey: key
   });
 
-  var maptypes = platform.createDefaultLayers();
+  let maptypes = platform.createDefaultLayers();
   map = new H.Map(document.getElementById('map'), maptypes.vector.normal.map, {
     center: !center ? defaultCenter : center,
     zoom: !zoom ? defaultZoom : zoom,
@@ -21,15 +21,40 @@ export function createMapWithUi(key, zoom, center) {
   ui = H.ui.UI.createDefault(map, maptypes);
 }
 
-export function addMarkerToMap(location, url) {
-  var icon = new H.map.Icon(url);
-  var marker = new H.map.Marker(location, { icon: icon });
+export function createMarker(location, iconUrl, html) {
+  let icon = new H.map.Icon(iconUrl);
+  let marker = new H.map.Marker(location, { icon: icon });
+  marker.setData(html);
+  return marker;
+}
+
+export function addMarkerToMap(marker) {
   map.addObject(marker);
 }
 
 export function addInfoBubble(location, text) {
-  var bubble = new H.ui.InfoBubble(location, {
+  let bubble = new H.ui.InfoBubble(location, {
     content: text
   });
   ui.addBubble(bubble);
+}
+
+export function addGroupToMap(group) {
+  map.addObject(group);
+}
+
+export function createInfoBubbleOnMarkerClick(group) {
+  /* add 'tap' event listener, that opens info bubble, to the group
+   event target is the marker itself, group is a parent event target
+   for all objects that it contains */
+  group.addEventListener(
+    'tap',
+    function(evt) {
+      let bubble = new H.ui.InfoBubble(evt.target.getGeometry(), {
+        content: evt.target.getData()
+      });
+      ui.addBubble(bubble);
+    },
+    false
+  );
 }

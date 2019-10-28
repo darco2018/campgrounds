@@ -52,18 +52,17 @@
 <% include ../partials/google-maps-scripts.ejs %>
 
 <script type="module">
-    import { createMapWithUi, addMarkerToMap } from '/javascripts/googlemaps.js';
+    import { createMapWithUi, createMarker, addMarkerToMap } from '/javascripts/googlemaps.js';
 
     const mapZoom = 15;
     const markerIcon = '/images/redfood.svg';
     const foodplaceLocation = { lat: '<%= foodplace.lat %>', lng: '<%= foodplace.lng %>' };
     const mapCenter = foodplaceLocation;
-    //const bubbleText = '<%= foodplace.address %>'
-
+    let marker = createMarker(foodplaceLocation, markerIcon, '<%= foodplace.address %>');
     createMapWithUi('<%= process.env.GOOGLE_MAPS_APIKEY %>', mapZoom, mapCenter);
 
     window.onload = function () {
-        addMarkerToMap(foodplaceLocation, markerIcon);
+        addMarkerToMap(marker);
     }
 </script>
 

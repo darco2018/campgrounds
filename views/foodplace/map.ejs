@@ -5,35 +5,43 @@
 </div>
 
 <!-- end page container -->
- 
+
 <!-- HERE maps imports -->
- <% include ../partials/google-maps-scripts.ejs %>
+<% include ../partials/google-maps-scripts.ejs %>
 
 <script type="module" src="/javascripts/googlemaps.js"></script>
 
 <script type="module">
-    import { createMapWithUi, addMarkerToMap } from '/javascripts/googlemaps.js';
+    import { createMapWithUi, addGroupToMap, createMarker, createInfoBubbleOnMarkerClick } from '/javascripts/googlemaps.js';
 
     const cracowCenter = { lat: 50.061721, lng: 19.93805 };
     const mapZoom = 15;
     const markerIcon = '/images/redfood.svg';
     const mapCenter = '/images/redfood.svg';
-    
 
-    createMapWithUi('<%= process.env.GOOGLE_MAPS_APIKEY %>', mapZoom, cracowCenter)
+    createMapWithUi('<%= process.env.GOOGLE_MAPS_APIKEY %>', mapZoom, cracowCenter);
+    const foodplacesGroup = new H.map.Group();
 
     // IMPORTANT: VS Code on save reformats %- to % - in the next line; 
     // (%- Outputs the unescaped value into the template)
     window.onload = function () {
-        var places = <%-JSON.stringify(foodplaces) %>; 
+        var places = <%-JSON.stringify(foodplaces) %>;
 
         for (var place of places) {
-            const text = place.address;
-            const location = { lat: place.lat, lng: place.lng };
-            //addInfoBubble(location, text);
-            addMarkerToMap(location, markerIcon);
-        }   
+            let marker = createMarker(
+                { lat: place.lat, lng: place.lng },
+                markerIcon,
+                `<div style="display: inline-block; min-width: 120px">
+                    <span>${place.name}</span><br>
+                        <span>${place.address}</span>
+                </div>`
+            );
+            foodplacesGroup.addObject(marker);
+        }
+        addGroupToMap(foodplacesGroup);
+        createInfoBubbleOnMarkerClick(foodplacesGroup);
     }
+
     /* It works too. Add ostry nawias na poczatku linijek
          nawias% foodplaces.forEach(function (place) { %>
             console.log( "nawias%-place.name %nawias");
