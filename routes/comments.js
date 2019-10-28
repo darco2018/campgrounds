@@ -51,7 +51,7 @@ router.post(
         res,
         'success',
         'Successfully added a new comment...',
-        `/dishes/${req.params.id}`
+        `/dishes/${foundDish.id}`
       );
     } catch (err) {
       return flashAndRedirect(
@@ -89,20 +89,32 @@ router.put(
   middleware.checkCommentOwnership, //includes isAuthenticated()
   middleware.checkDishExists,
 
-  (req, res) => {
-    Comment.findByIdAndUpdate(
-      req.params.comment_id,
-      req.body.comment, // thanks to dish[name]/[url]/[description] in view
-      (err, updatedComment) => {
-        if (err) {
-          console.log(`Error  updating comment: ${err}`);
-          req.flash('error', 'Something went wrong...');
-          res.redirect('back');
-        } else {
-          res.redirect(`/dishes/${res.locals.foundDish.id}`);
-        }
-      }
-    );
+  async (req, res) => {
+    try {
+      let comment = await assembleComment(req);
+      let updated = await Comment.findByIdAndUpdate(
+        req.params.comment_id,
+        comment
+      ).exec();
+
+      return flashAndRedirect(
+        req,
+        res,
+        'success',
+        'Successfully updated the comment...',
+        `/dishes/${res.locals.foundDish.id}`
+      );
+    } catch (err) {
+      return flashAndRedirect(
+        req,
+        res,
+        'error',
+        `Error. Cannot update the dish. Reason: ${err.message}`,
+        'back'
+      );
+    }
+
+   
   }
 );
 
