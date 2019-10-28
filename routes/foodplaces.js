@@ -17,6 +17,7 @@ const geocoding = require('../services/geocoding');
 
 const defaultImageUrl = '/images/default-restaurant.jpg';
 const cityCountry = ', Cracow, Poland';
+const allowedFoodplaceDescLength = 2000;
 
 /* ------------------------- ROUTES ------------------------------- */
 
@@ -54,7 +55,6 @@ router.get('/new', middleware.isLoggedIn, (req, res) => {
 // CREATE - persists new
 // /foodplaces
 router.post('/', middleware.isLoggedIn, (req, res) => {
-
   //   if (!req.user) throw new Error('You have to be logged in to do that!');
 
   if (req.body.address) {
@@ -203,12 +203,18 @@ function extractRelevantGeoData(geodata) {
 }
 
 function assembleFoodplace(geodata, req) {
-
-  if (!req || !geodata) throw new Error('Cannot assemble a food place. Request and/or geodata is null.');
+  if (!req || !geodata)
+    throw new Error(
+      'Cannot assemble a food place. Request and/or geodata is null.'
+    );
 
   const cleanedAddress = utils.processStreetName(req.body.address);
   const nonEmptyimage = !req.body.image ? defaultImageUrl : req.body.image;
 
+  let description = req.body.foodplace
+    ? req.body.foodplace.description
+    : req.body.description;
+  description = description.substring(0, allowedFoodplaceDescLength);
 
   const author = {
     id: req.user.id,
@@ -223,7 +229,7 @@ function assembleFoodplace(geodata, req) {
     lng: geodata.longitude, // provided by geocoder
     formattedAddress: geodata.formattedAddress,
     image: nonEmptyimage,
-    description: req.body.description,
+    description: description,
     author: author
   };
 

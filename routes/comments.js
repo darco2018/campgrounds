@@ -8,6 +8,7 @@ const Comment = comment.commentModel;
 const middleware = require('../middleware'); //index.js is imported by default from middleware folder
 
 const router = express.Router({ mergeParams: true });
+const allowedCommentLength = 2000;
 
 // NEW - show form to create new comment
 // /dishes/:id/comments/new
@@ -131,7 +132,7 @@ router.delete(
       console.log('>>>>>>>>>>>> commentId: ' + commentId);
 
       let deleted = await Comment.findByIdAndDelete(commentId);
-      const dishId = res.locals.foundDish.id; // or req.params.id     
+      const dishId = res.locals.foundDish.id; // or req.params.id
       await Dish.findOneAndUpdate(
         { _id: dishId },
         { $pull: { comments: commentId } }
@@ -142,7 +143,7 @@ router.delete(
         res,
         'success',
         'Successfully deleted the comment...',
-        `/dishes/${dishId}` 
+        `/dishes/${dishId}`
       );
     } catch (err) {
       return flashAndRedirect(
@@ -170,13 +171,16 @@ router.delete(
 function assembleComment(req) {
   if (!req) throw new Error('Cannot assemble a comment. Request is null.');
 
+  let text = req.body.comment ? req.body.comment.text : req.body.text;
+  text = text.substring(0, allowedCommentLength);
+
   const author = {
     id: req.user.id,
     username: req.user.username
   };
 
   let comment = {
-    text: req.body.comment ? req.body.comment.text : req.body.text,
+    text: text,
     author: author
   };
 
