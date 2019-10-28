@@ -113,8 +113,6 @@ router.put(
         'back'
       );
     }
-
-   
   }
 );
 
@@ -127,7 +125,35 @@ router.delete(
   middleware.checkCommentOwnership, //includes isAuthenticated()
   middleware.checkDishExists,
 
-  (req, res) => {
+  async (req, res) => {
+    try {
+      let commentId = req.params.comment_id;
+      console.log('>>>>>>>>>>>> commentId: ' + commentId);
+
+      let deleted = await Comment.findByIdAndDelete(commentId);
+      const dishId = res.locals.foundDish.id; // or req.params.id     
+      await Dish.findOneAndUpdate(
+        { _id: dishId },
+        { $pull: { comments: commentId } }
+      ).exec();
+
+      return flashAndRedirect(
+        req,
+        res,
+        'success',
+        'Successfully deleted the comment...',
+        `/dishes/${dishId}` 
+      );
+    } catch (err) {
+      return flashAndRedirect(
+        req,
+        res,
+        'error',
+        `Error when deleting the comment. Reason: ${err.message}`,
+        'back'
+      );
+    }
+
     Comment.findByIdAndDelete(req.params.comment_id, err => {
       if (err) {
         console.log(`Error  deleting comment: ${err}`);

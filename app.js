@@ -36,7 +36,7 @@ const dbName = 'dishes';
 mongoose.connect(`mongodb://localhost:27017/${dbName}`, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  useFindAndModify: false 
+  useFindAndModify: false
   /*  host: process.env.DB_HOST,
   username: process.env.DB_USER,
   password: process.env.DB_PASS */
@@ -64,7 +64,7 @@ app.use(flash()); // before password config
 
 /* ---------- SEED DB -------------*/
 
-//seedDb();
+seedDb();
 
 /* ---------- PASSWORD CONFIG -------------*/
 
