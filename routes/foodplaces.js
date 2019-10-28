@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const middleware = require('../middleware'); //index.js is imported by default from middleware folder
-const place = require('../models/foodplace');
-const Foodplace = place.foodplaceModel;
 const foodplace = require('../controllers/foodplace.controller');
 
 router.get('/', foodplace.getFoodplaces);
@@ -16,10 +14,22 @@ router.get('/map', foodplace.showFoodplacesOnMap);
 
 router.get('/:id', foodplace.showFoodplace);
 
-router.get('/:id/edit', middleware.checkFoodplaceExists, foodplace.editFoodplace);
- 
-router.put('/:id/update', middleware.checkFoodplaceExists, foodplace.putFoodplace);
+router.get(
+  '/:id/edit',
+  middleware.checkFoodplaceExists,
+  foodplace.editFoodplace
+);
 
-router.delete('/:id', middleware.checkFoodplaceExists, foodplace.deleteFoodplace);
- 
+router.put(
+  '/:id/update',
+  middleware.checkFoodplaceExists,
+  foodplace.putFoodplace
+);
+
+router.delete(
+  '/:id',
+  middleware.checkFoodplaceExists,
+  foodplace.deleteFoodplace
+);
+
 module.exports = router;
