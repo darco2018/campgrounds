@@ -15,9 +15,21 @@ router.get(
   '/new',
   middleware.isLoggedIn,
   middleware.checkDishExists, //adds foundDish to res.locals
-  (req, res) => {
-    res.render('comment/new', { dish: res.locals.foundDish });
+  async (req, res) => {
+    try {
+      res.render('comment/new', { dish: res.locals.foundDish });
+    } catch (err) {
+      return flashAndRedirect(
+        req,
+        res,
+        'error',
+        `Error getting a comment. Reason: ${err.message}`,
+        `back`
+      );
+    }
+    
   }
+
 );
 
 // CREATE - add new comment
