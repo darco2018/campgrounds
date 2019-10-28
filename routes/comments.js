@@ -27,9 +27,7 @@ router.get(
         `back`
       );
     }
-    
   }
-
 );
 
 // CREATE - add new comment
@@ -39,24 +37,31 @@ router.post(
   '/',
   middleware.isLoggedIn,
   middleware.checkDishExists,
-  (req, res) => {
-    Comment.create(req.body.comment, (err, savedComment) => {
-      if (err) {
-        cconsole.log(`Error  creating comment: ${err}`);
-        req.flash('error', 'Somethng went wrong...');
-        req.redirect('back');
-      }
-
-      savedComment.author.id = req.user.id;
-      savedComment.author.username = req.user.username;
-      savedComment.save();
+  async (req, res) => {
+    try {
+      let comment = await assembleComment(req);
+      let savedComment = await Comment.create(comment);
 
       const foundDish = res.locals.foundDish;
       foundDish.comments.push(savedComment);
-      foundDish.save();
-      req.flash('success', 'Successfully added comment...');
-      res.redirect('/dishes/' + req.params.id);
-    });
+      await foundDish.save();
+
+      return flashAndRedirect(
+        req,
+        res,
+        'success',
+        'Successfully added a new comment...',
+        `/dishes/${req.params.id}`
+      );
+    } catch (err) {
+      return flashAndRedirect(
+        req,
+        res,
+        'error',
+        `Error saving the comment. Reason:  (${err.message})`,
+        'back'
+      );
+    }
   }
 );
 
@@ -123,5 +128,26 @@ router.delete(
     });
   }
 );
+
+function assembleComment(req) {
+  if (!req) throw new Error('Cannot assemble a comment. Request is null.');
+
+  const author = {
+    id: req.user.id,
+    username: req.user.username
+  };
+
+  let comment = {
+    text: req.body.comment ? req.body.comment.text : req.body.text,
+    author: author
+  };
+
+  return comment;
+}
+
+function flashAndRedirect(req, res, flashStatus, flashMsg, url) {
+  req.flash(flashStatus, flashMsg);
+  res.redirect(url);
+}
 
 module.exports = router;

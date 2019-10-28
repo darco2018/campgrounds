@@ -130,7 +130,7 @@ router.post('/', middleware.isLoggedIn, async (req, res) => {
       req,
       res,
       'error',
-      `Foodplace not found (${err.message})`,
+      `Error creating a new dish. Reason: (${err.message})`,
       'back'
     );
   }
