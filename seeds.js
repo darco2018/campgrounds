@@ -13,8 +13,8 @@ async function seedDb() {
     await Foodplace.deleteMany({});
     console.log('Removed dishes, comments, foodplaces.');
 
-    for (const seed of mockFoodplaces) {
-      let savedFoodplace = await Foodplace.create(seed);
+    for (const foodplace of mockFoodplaces) {
+      let savedFoodplace = await Foodplace.create(foodplace);
       console.log('Saved a foodplace');
     }
 
@@ -23,6 +23,12 @@ async function seedDb() {
 
     for (const dish of mockDishes) {
       let savedDish = await Dish.create(dish);
+      let foodplaceId = savedDish.foodplace;
+      await Foodplace.findOneAndUpdate(
+        { _id: foodplaceId },
+        { $inc: { dishesCount: 1 } }
+      ).exec();
+
       console.log('Saved a dish');
       if (commentsCounter >= 0) {
         for (let i = 0; i < 3; i++) {

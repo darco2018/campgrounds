@@ -18,10 +18,10 @@
         </span>
       </div>
       <div>
-        <% let num = Math.floor((Math.random() * 20) + 1);
-        let plural = (num === 1) ? " dish" : " dishes" %>
+        <% let count = foodplace.dishesCount;
+        let plural = (count === 1) ? " dish" : " dishes" %>
         <span class="badge badge-info badge-pill">
-          <%= num %>
+          <%= count %>
         </span>
         <%= plural %>
       </div>
