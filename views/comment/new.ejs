@@ -7,13 +7,8 @@
 <div class="container text-center col-9 col-sm-8 col-md-6 col-lg-5 col-xl-4">
   <form action="/dishes/<%= dish._id %>/comments" method="post">
     <div class="form-group">
-      <input
-        class="form-control"
-        type="text"
-        name="comment[text]"
-        placeholder="text"
-        required
-      />
+      <textarea class="form-control" name="comment[text]" rows="8" required>
+      </textarea>
     </div>
     <div class="form-group">
       <button class="btn btn-primary btn-block w-50 mx-auto" type="submit">
