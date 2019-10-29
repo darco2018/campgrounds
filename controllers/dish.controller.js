@@ -64,16 +64,13 @@ const postDish = async (req, res) => {
   try {
     let dish = await assembleDish(req);
     let savedDish = await Dish.create(dish);
-    console.log('>>>>>>>>>> savedDish ' + savedDish);
 
     // increment dish count for the given foodplace
     const foodplaceId = savedDish.foodplace;
-    console.log('>>>>>>>>>> foodplaceId ' + foodplaceId);
     await Foodplace.findOneAndUpdate(
       { _id: foodplaceId },
       { $inc: { dishesCount: 1 } }
     ).exec();
-    console.log('>>>>>>>>>> savedDish.id ' + savedDish.id);
 
     return flashAndRedirect(
       req,

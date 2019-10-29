@@ -27,6 +27,4 @@ const dishSchema = new mongoose.Schema({
   ]
 });
 
-console.log('Compiling Dish schema');
-
 module.exports = mongoose.model('Dish', dishSchema);

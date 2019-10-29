@@ -88,7 +88,6 @@ const putComment = async (req, res) => {
 const deleteComment = async (req, res) => {
   try {
     let commentId = req.params.comment_id;
-    console.log('>>>>>>>>>>>> commentId: ' + commentId);
 
     let deleted = await Comment.findByIdAndDelete(commentId);
     const dishId = res.locals.foundDish.id; // or req.params.id
@@ -116,7 +115,6 @@ const deleteComment = async (req, res) => {
 
   Comment.findByIdAndDelete(req.params.comment_id, err => {
     if (err) {
-      console.log(`Error  deleting comment: ${err}`);
       req.flash('error', 'Something went wrong...');
       res.redirect('back');
     } else {
