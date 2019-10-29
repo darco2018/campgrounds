@@ -13,4 +13,8 @@ const commentSchema = new Schema({
   }
 });
 
+commentSchema.virtual("url").get(()=>
+  '/catalogue/comment' + this.id
+)
+
 module.exports = mongoose.model('Comment', commentSchema);

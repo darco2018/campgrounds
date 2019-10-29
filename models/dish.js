@@ -28,4 +28,9 @@ const dishSchema = new Schema({
   ]
 });
 
+// virtual for dish's URL - useful in tmeplates to get a particular instance of the model
+dishSchema.virtual("url").get(()=>
+  '/catalogue/dish' + this.id
+)
+
 module.exports = mongoose.model('Dish', dishSchema);

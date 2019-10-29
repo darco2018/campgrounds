@@ -22,13 +22,17 @@ const foodplaceSchema = new Schema({
     default: 0,
     min: [0, "The dish count can't be negative!"]
   },
-  status: { type: String, enum: ['open', 'closed'] }
+  status: { type: String, enum: ['open', 'closed'], default: 'open' }
 });
 
 foodplaceSchema.virtual('cracowAddress').get(() => {
   return this.name + ' ' + this.address;
 });
 
-module.exports =  mongoose.model('Foodplace', foodplaceSchema);
+foodplaceSchema.virtual("url").get(()=>
+  '/catalogue/foodplace' + this.id
+)
 
+foodplaceSchema.virtual('url').get(() => '/catalogue/foodplace' + this.id);
 
+module.exports = mongoose.model('Foodplace', foodplaceSchema);
