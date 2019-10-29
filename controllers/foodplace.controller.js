@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const middleware = require('../middleware'); //index.js is imported by default from middleware folder
-const foodplace = require('../models/foodplace');
-const Foodplace = foodplace.foodplaceModel;
+const Foodplace = require('../models/foodplace');
 //---------- debug
 const debug = require('debug');
 debugWarn = debug('warn');

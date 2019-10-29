@@ -3,8 +3,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const Dish = require('../models/dish');
-const foodplace = require('../models/foodplace');
-const Foodplace = foodplace.foodplaceModel;
+const Foodplace = require('../models/foodplace');
 //const middleware = require('../middleware'); //index.js is imported by default from middleware folder
 const { flashAndRedirect } = require('../utils/index');
 

@@ -1,9 +1,7 @@
 // all middleware
 const Dish = require('../models/dish');
-const comment = require('../models/comment');
-const Comment = comment.commentModel;
-const foodplace = require('../models/foodplace');
-const Foodplace = foodplace.foodplaceModel;
+const Comment = require('../models/comment');
+const Foodplace = require('../models/foodplace');
 
 const middlewareObj = {};
 

@@ -1,13 +1,10 @@
 const mongoose = require('mongoose');
-const comment = require('./comment');
-
-const { commentSchema } = comment;
 
 const dishSchema = new mongoose.Schema({
-  name: {type: String, required: true, trim: true},
+  name: { type: String, required: true, trim: true },
   price: String,
   image: String,
-  description: {type: String, trim: true},
+  description: { type: String, trim: true },
   createdAt: { type: Date, default: Date.now },
   author: {
     // includes all info about author
@@ -28,9 +25,6 @@ const dishSchema = new mongoose.Schema({
       ref: 'Comment'
     }
   ]
-  // alternative:
-  // const comment = require('./comment');
-  // comments: [comment.commentSchema],
 });
 
 console.log('Compiling Dish schema');

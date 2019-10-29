@@ -28,9 +28,6 @@ foodplaceSchema.virtual('cracowAddress').get(() => {
   return this.name + ' ' + this.address;
 });
 
-const foodplaceModel = mongoose.model('Foodplace', foodplaceSchema);
+module.exports =  mongoose.model('Foodplace', foodplaceSchema);
 
-module.exports = {
-  foodplaceSchema,
-  foodplaceModel
-};
+

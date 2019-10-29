@@ -1,10 +1,8 @@
 /* eslint-disable consistent-return */
 const mongoose = require('mongoose');
 const Dish = require('./models/dish');
-const foodplace = require('./models/foodplace');
-const Foodplace = foodplace.foodplaceModel;
-const comment = require('./models/comment');
-const Comment = comment.commentModel;
+const Foodplace = require('./models/foodplace');
+const Comment = require('./models/comment');
 
 async function seedDb() {
   try {
