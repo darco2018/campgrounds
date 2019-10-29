@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const middleware = require('../middleware'); //index.js is imported by default from middleware folder
 const Foodplace = require('../models/foodplace');
+const Dish = require('../models/dish');
+
 //---------- debug
 const debug = require('debug');
 debugWarn = debug('warn');
@@ -18,6 +20,8 @@ const { flashAndRedirect } = require('../utils/index');
 const defaultImageUrl = '/images/default-restaurant.jpg';
 const cityCountry = ', Cracow, Poland';
 const allowedFoodplaceDescLength = 2000;
+const allowedDishNameLength = 49;
+const allowedIntroDescriptionLength = 66;
 
 /* ------------------------- ROUTES ------------------------------- */
 
@@ -28,10 +32,10 @@ const getFoodplaces = async (req, res) => {
 
   try {
     // no callback so query is reteurned. no execution yet
-    let query = Foodplace.find(); 
+    let query = Foodplace.find();
     // fileds of intereset: query.select('name  address');
     // query.limit(5);
-    query.sort({name: "ascending"});
+    query.sort({ name: 'ascending' });
     const foodplaces = await query.exec(); // query executed
     if (foodplaces == null) {
       foodplaces = [];
@@ -109,10 +113,6 @@ const showFoodplacesOnMap = (req, res) => {
 const showFoodplace = (req, res) => {
   Foodplace.findById(req.params.id)
     .then(foundFoodplace => {
-      if (foundFoodplace == null) {
-        throw new Error('Foodplace not found.');
-      }
-
       res.render('foodplace/show', { foodplace: foundFoodplace });
     })
     .catch(err => {
@@ -128,6 +128,25 @@ const showFoodplace = (req, res) => {
 
 const editFoodplace = (req, res) => {
   res.render('foodplace/edit', { foodplace: res.locals.foodplace });
+};
+
+const showDishes = async (req, res) => {
+  try {
+    const foodplaceId = req.params.id;
+    let foodplaces = [await Foodplace.findById(foodplaceId)] ;
+    let dishes = await Dish.find({ foodplace: foodplaceId }).exec();
+    console.log(dishes);
+   
+    res.render('foodplace/dishes', { foodplaces: foodplaces, dishes: dishes, allowedIntroLength: allowedIntroDescriptionLength, allowedDishNameLength,  });
+  } catch (err) {
+    return flashAndRedirect(
+      req,
+      res,
+      'error',
+      `Error showing the dishes. Reason: (${err.message})`,
+      'back'
+    );
+  }
 };
 
 const putFoodplace = (req, res) => {
@@ -258,6 +277,7 @@ module.exports = {
   showFoodplacesOnMap,
   showFoodplace,
   editFoodplace,
+  showDishes,
   putFoodplace,
   deleteFoodplace
 };

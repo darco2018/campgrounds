@@ -20,6 +20,12 @@ router.get(
   foodplace.editFoodplace
 );
 
+router.get(
+  '/:id/dishes',
+  middleware.checkFoodplaceExists,
+  foodplace.showDishes
+);
+
 router.put(
   '/:id/update',
   middleware.checkFoodplaceExists,
