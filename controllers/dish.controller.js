@@ -23,6 +23,9 @@ const getDishes = async (req, res) => {
       .exec(); //returns full-fledged Promise in mongoose
 
     dishes = await addLatestCommentTo(dishes);
+    if (dishes == null) {
+      dishes = [];
+    }
 
     res.render('dish/index', {
       dishes: dishes,
@@ -97,6 +100,10 @@ const showDish = async (req, res) => {
       .populate('comments')
       .exec();
 
+    if (dish == null) {
+      throw new Error('Dish not found!');
+    }
+
     res.render('dish/show', {
       dish: dish,
       allowedDishNameLength: allowedDishNameLength
@@ -118,7 +125,14 @@ const editDish = async (req, res) => {
       .populate('foodplace')
       .exec();
 
+    if (dish == null) {
+      throw new Error('Dish not found!');
+    }
+
     let foodplaces = await Foodplace.find().exec();
+    if (foodplaces == null) {
+      foodplaces = [];
+    }
 
     res.render('dish/edit', {
       dish: dish,

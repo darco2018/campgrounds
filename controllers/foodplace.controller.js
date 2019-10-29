@@ -27,10 +27,13 @@ const getFoodplaces = async (req, res) => {
   debugError('>>>>>>>>>> error in debug');
 
   try {
-    const foundFoodplaces = await Foodplace.find();
+    const foodplaces = await Foodplace.find();
+    if (foodplaces == null) {
+      foodplaces = [];
+    }
 
     res.render('foodplace/index', {
-      foodplaces: foundFoodplaces,
+      foodplaces: foodplaces,
       page: 'foodplaces'
     });
   } catch (err) {
@@ -79,6 +82,9 @@ const postFoodplace = async (req, res) => {
 const showFoodplacesOnMap = (req, res) => {
   Foodplace.find()
     .then(foundFoodplaces => {
+      if (foundFoodplaces == null) {
+        foundFoodplaces = [];
+      }
       res.render('foodplace/map', {
         foodplaces: foundFoodplaces,
         page: 'map'
@@ -98,6 +104,10 @@ const showFoodplacesOnMap = (req, res) => {
 const showFoodplace = (req, res) => {
   Foodplace.findById(req.params.id)
     .then(foundFoodplace => {
+      if (foundFoodplace == null) {
+        throw new Error('Foodplace not found.');
+      }
+
       res.render('foodplace/show', { foodplace: foundFoodplace });
     })
     .catch(err => {
@@ -142,7 +152,6 @@ const putFoodplace = (req, res) => {
     });
 };
 
-
 const deleteFoodplace = (req, res) => {
   Foodplace.findByIdAndDelete(req.params.id)
     .then(() => {
@@ -163,8 +172,7 @@ const deleteFoodplace = (req, res) => {
         `back`
       );
     });
-}
-
+};
 
 /* ------------------------- HELPERS ------------------------------- */
 
@@ -246,5 +254,5 @@ module.exports = {
   showFoodplace,
   editFoodplace,
   putFoodplace,
-  deleteFoodplace 
+  deleteFoodplace
 };
