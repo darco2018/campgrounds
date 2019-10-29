@@ -27,7 +27,12 @@ const getFoodplaces = async (req, res) => {
   debugError('>>>>>>>>>> error in debug');
 
   try {
-    const foodplaces = await Foodplace.find();
+    // no callback so query is reteurned. no execution yet
+    let query = Foodplace.find(); 
+    // fileds of intereset: query.select('name  address');
+    // query.limit(5);
+    query.sort({name: "ascending"});
+    const foodplaces = await query.exec(); // query executed
     if (foodplaces == null) {
       foodplaces = [];
     }
