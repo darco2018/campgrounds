@@ -4,10 +4,10 @@ const comment = require('./comment');
 const { commentSchema } = comment;
 
 const dishSchema = new mongoose.Schema({
-  name: String,
+  name: {type: String, required: true, trim: true},
   price: String,
   image: String,
-  description: String,
+  description: {type: String, trim: true},
   createdAt: { type: Date, default: Date.now },
   author: {
     // includes all info about author
