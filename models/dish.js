@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const dishSchema = new mongoose.Schema({
+const dishSchema = new Schema({
   name: { type: String, required: true, trim: true },
   price: String,
   image: String,
@@ -9,19 +10,19 @@ const dishSchema = new mongoose.Schema({
   author: {
     // includes all info about author
     id: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'User'
     },
     username: String
   },
   foodplace: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'Foodplace'
   },
   // includes only id - use this
   comments: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'Comment'
     }
   ]

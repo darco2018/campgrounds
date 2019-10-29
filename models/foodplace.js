@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const foodplaceSchema = new mongoose.Schema({
+const foodplaceSchema = new Schema({
   name: { type: String, required: true, trim: true },
   address: { type: String, required: true, trim: true },
   city: { type: String, required: true, trim: true },
@@ -11,7 +12,7 @@ const foodplaceSchema = new mongoose.Schema({
   image: { type: String, trim: true },
   author: {
     id: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'User'
     },
     username: String
