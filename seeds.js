@@ -211,7 +211,8 @@ const mockFoodplaces = [
     image:
       'https://images.unsplash.com/photo-1556742393-d75f468bfcb0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80',
     lat: 50.06399,
-    lng: 19.92692
+    lng: 19.92692,
+    fullAddress : 'ulica Czysta 5, 31-121 Kraków, Polska'
   },
   {
     _id: '5d99f8f0b52e244adecf548c',
@@ -227,7 +228,8 @@ const mockFoodplaces = [
     image:
       'https://images.unsplash.com/photo-1556745750-68295fefafc5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=967&q=80',
     lat: 50.05973,
-    lng: 19.93785
+    lng: 19.93785,
+    fullAddress : 'ulica Grodzka 8, 31-006 Kraków, Polska'
   },
   {
     _id: '5d99f91fb52e244adecf548d',
@@ -243,7 +245,8 @@ const mockFoodplaces = [
     image:
       'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80',
     lat: 50.06251,
-    lng: 19.93457
+    lng: 19.93457,
+    fullAddress : 'ulica Szewska 12, 31-009 Kraków, Polska'
   },
   {
     _id: '5d9a00f2b52e244adecf548e',
@@ -259,7 +262,8 @@ const mockFoodplaces = [
     image:
       'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=967&q=80',
     lat: 50.0777912,
-    lng: 19.9005365
+    lng: 19.9005365,
+    fullAddress : 'ulica Bronowicka 30, 30-091 Kraków, Polska'
   },
   {
     _id: '5d9a121e98605561e139e858',
@@ -275,7 +279,8 @@ const mockFoodplaces = [
     image:
       'https://images.unsplash.com/photo-1525610553991-2bede1a236e2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80',
     lat: 50.08766,
-    lng: 19.96083
+    lng: 19.96083,
+    fullAddress : 'ulica Dobrego Pasterza 24, 31-416 Kraków, Polska'
   },
   {
     _id: '5d9a35b6711f957454e97906',
@@ -291,7 +296,8 @@ const mockFoodplaces = [
     image:
       'https://images.unsplash.com/photo-1514933651103-005eec06c04b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=967&q=80',
     lat: 50.04491,
-    lng: 19.95338
+    lng: 19.95338,
+    fullAddress : 'ulica Bolesława Limanowskiego 20, 30-534 Kraków, Polska'
   },
   {
     _id: '5d9b6c0fa8959c67e3e41bcf',
@@ -307,7 +313,8 @@ const mockFoodplaces = [
     image:
       'https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80',
     lat: 50.03939,
-    lng: 19.96509
+    lng: 19.96509,
+    fullAddress : 'ulica Wielicka 30, 30-552 Kraków, Polska'
   },
   {
     _id: '5d9ed875a3e2873531b7bbee',
@@ -323,7 +330,8 @@ const mockFoodplaces = [
     image:
       'https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1051&q=80',
     lat: 50.07093,
-    lng: 19.92195
+    lng: 19.92195,
+    fullAddress : 'ulica Królewska 20, 30-045 Kraków, Polska'
   }
 ];
 
