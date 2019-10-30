@@ -133,11 +133,16 @@ const editFoodplace = (req, res) => {
 const showDishes = async (req, res) => {
   try {
     const foodplaceId = req.params.id;
-    let foodplaces = [await Foodplace.findById(foodplaceId)] ;
+    let foodplaces = [await Foodplace.findById(foodplaceId)];
     let dishes = await Dish.find({ foodplace: foodplaceId }).exec();
     console.log(dishes);
-   
-    res.render('foodplace/dishes', { foodplaces: foodplaces, dishes: dishes, allowedIntroLength: allowedIntroDescriptionLength, allowedDishNameLength,  });
+
+    res.render('foodplace/dishes', {
+      foodplaces: foodplaces,
+      dishes: dishes,
+      allowedIntroLength: allowedIntroDescriptionLength,
+      allowedDishNameLength
+    });
   } catch (err) {
     return flashAndRedirect(
       req,
@@ -202,11 +207,11 @@ const deleteFoodplace = (req, res) => {
 
 function extractRelevantGeoData(geodata) {
   const coords = geocoding.getCoordinates(geodata);
-  const formattedAddress = geocoding.getValueFor(geodata, 'formattedAddress');
+  const fullAddress = geocoding.getValueFor(geodata, 'formattedAddress');
   const extracted = {
     latitude: coords.latitude,
     longitude: coords.longitude,
-    formattedAddress: formattedAddress
+    fullAddress: formattedAddress
   };
 
   return extracted;
@@ -237,7 +242,7 @@ function assembleFoodplace(geodata, req) {
     city: req.body.city,
     lat: geodata.latitude, // provided by geocoder
     lng: geodata.longitude, // provided by geocoder
-    formattedAddress: geodata.formattedAddress,
+    fullAddress: geodata.formattedAddress,
     image: nonEmptyimage,
     description: description,
     author: author

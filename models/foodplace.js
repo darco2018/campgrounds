@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const moment = require('moment');
 
 const foodplaceSchema = new Schema({
   name: { type: String, required: true, trim: true },
@@ -7,7 +8,7 @@ const foodplaceSchema = new Schema({
   city: { type: String, required: true, trim: true },
   lat: { type: Number, min: [0, "The latitude can't be negative!"] },
   lng: { type: Number, min: [0, "The longitude can't be negative!"] },
-  formattedAddress: { type: String, trim: true },
+  fullAddress: { type: String, trim: true },
   description: { type: String, trim: true },
   image: { type: String, trim: true },
   author: {
@@ -25,14 +26,21 @@ const foodplaceSchema = new Schema({
   status: { type: String, enum: ['open', 'closed'], default: 'open' }
 });
 
-foodplaceSchema.virtual('cracowAddress').get(() => {
-  return this.name + ' ' + this.address;
+foodplaceSchema.virtual('shortAddress').get(function() {
+  return this.address + ', ' + this.city;
 });
 
-foodplaceSchema.virtual("url").get(()=>
-  '/catalogue/foodplace' + this.id
-)
+foodplaceSchema.virtual('longAddress').get(function() {
+  let address = this.fullAddress.replace(', Polska', '');
+  return address;
+});
 
-foodplaceSchema.virtual('url').get(() => '/catalogue/foodplace' + this.id);
+foodplaceSchema.virtual('url').get(() => '/foodplace/' + this.id);
+
+// <a href=<%= val.url%> id="<% val.name %>"> if(val.status=='closed')Closed</a>
+
+foodplaceSchema
+  .virtual('dateCreatedFormatted')
+  .get(() => moment(this.createdAt).format('MMMM Do, YY'));
 
 module.exports = mongoose.model('Foodplace', foodplaceSchema);

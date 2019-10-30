@@ -16,6 +16,7 @@ router.get('/:id', foodplace.showFoodplace);
 
 router.get(
   '/:id/edit',
+  middleware.isLoggedIn,
   middleware.checkFoodplaceExists,
   foodplace.editFoodplace
 );
@@ -28,6 +29,7 @@ router.get(
 
 router.put(
   '/:id/update',
+  middleware.isLoggedIn,
   middleware.checkFoodplaceExists,
   foodplace.putFoodplace
 );
