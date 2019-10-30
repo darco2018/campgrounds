@@ -35,7 +35,7 @@ const getFoodplaces = async (req, res) => {
     let query = Foodplace.find();
     // fileds of intereset: query.select('name  address');
     // query.limit(5);
-    query.sort({ name: 'ascending' });
+    query.sort({ dishesCount: 'descending' });
     const foodplaces = await query.exec(); // query executed
     if (foodplaces == null) {
       foodplaces = [];
