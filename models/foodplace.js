@@ -35,12 +35,12 @@ foodplaceSchema.virtual('longAddress').get(function() {
   return address;
 });
 
-foodplaceSchema.virtual('url').get(() => '/foodplace/' + this.id);
-
-// <a href=<%= val.url%> id="<% val.name %>"> if(val.status=='closed')Closed</a>
+foodplaceSchema.virtual('url').get(function() {
+  return '/foodplaces/' + this.id;
+});
 
 foodplaceSchema
-  .virtual('dateCreatedFormatted')
-  .get(() => moment(this.createdAt).format('MMMM Do, YY'));
+  .virtual('formattedDate')
+  .get(() => moment(this.createdAt).format('DD MMM YYYY'));
 
 module.exports = mongoose.model('Foodplace', foodplaceSchema);

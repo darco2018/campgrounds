@@ -1,11 +1,11 @@
 <li class="list-group-item d-flex justify-content-between align-items-center">
     <div class="">
-        <a class="btn btn-outline-info btn-sm mr-3" href="/foodplaces/<%= foodplace.id %>">Details</a>
-        <a class="btn btn-outline-info btn-sm mr-3" href="/foodplaces/<%= foodplace.id %>/dishes">Show
+        <a class="btn btn-outline-info btn-sm mr-3" href="<%= foodplace.url %>">Details</a>
+        <a class="btn btn-outline-info btn-sm mr-3" href="<%= foodplace.url %>/dishes">Show
             dishes</a>
-        <a class="btn btn-sm btn-warning mr-3" href="/foodplaces/<%= foodplace.id %>/edit">Suggest
+        <a class="btn btn-sm btn-warning mr-3" href="<%= foodplace.url %>/edit">Suggest
             update</a>
-        <form class="d-inline mr-3" action="/foodplaces/<%= foodplace.id %>?_method=delete" method="post">
+        <form class="d-inline mr-3" action="<%= foodplace.url %>?_method=delete" method="post">
             <button class="btn btn-sm btn-danger">Delete</button>
         </form>
         <strong class="text-left"><%= foodplace.name %></strong>

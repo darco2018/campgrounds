@@ -207,11 +207,12 @@ const deleteFoodplace = (req, res) => {
 
 function extractRelevantGeoData(geodata) {
   const coords = geocoding.getCoordinates(geodata);
-  const fullAddress = geocoding.getValueFor(geodata, 'formattedAddress');
+  const geoAddress = geocoding.getValueFor(geodata, 'formattedAddress');
+
   const extracted = {
     latitude: coords.latitude,
     longitude: coords.longitude,
-    fullAddress: formattedAddress
+    geoAddress: geoAddress
   };
 
   return extracted;
@@ -242,7 +243,7 @@ function assembleFoodplace(geodata, req) {
     city: req.body.city,
     lat: geodata.latitude, // provided by geocoder
     lng: geodata.longitude, // provided by geocoder
-    fullAddress: geodata.formattedAddress,
+    fullAddress: geodata.geoAddress, // // provided by geocoder
     image: nonEmptyimage,
     description: description,
     author: author
