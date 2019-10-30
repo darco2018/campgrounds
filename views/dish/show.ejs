@@ -43,10 +43,10 @@
               </em>
             </div>
             <% if (currentUser && dish.author.id.equals(currentUser.id)) { %>
-            <a class="btn btn-sm btn-warning mr-3" href="/dishes/<%= dish.id %>/edit">
+            <a class="btn btn-sm btn-warning mr-3" href="<%= dish.url %>/edit">
               Edit
             </a>
-            <form class="d-inline mr-3" action="/dishes/<%= dish.id %>?_method=delete" method="post">
+            <form class="d-inline mr-3" action="<%= dish.url %>?_method=delete" method="post">
               <button class="btn btn-sm btn-danger">Delete</button>
             </form>
             <% } %>
@@ -56,7 +56,7 @@
       <div class="card bg-light">
         <div class="card-body  pt-3 px-5">
           <div class="mb-5">
-            <a href="/dishes/<%= dish.id %>/comments/new" class="btn btn-success float-right my-1">Leave a review</a>
+            <a href="<%= dish.url %>/comments/new" class="btn btn-success float-right my-1">Leave a review</a>
           </div>
           <% let comments = dish.comments;
            for(let i = comments.length - 1; i >= 0; i--){
@@ -71,11 +71,10 @@
             </div>
 
             <% if (currentUser && comment.author.id.equals(currentUser.id)) { %>
-            <a class="btn btn-sm btn-warning " href="/dishes/<%= dish.id %>/comments/<%= comment.id%>/edit">
+            <a class="btn btn-sm btn-warning " href="<%= dish.url %>/comments/<%= comment.id%>/edit">
               Edit
             </a>
-            <form class="d-inline ml-1" action="/dishes/<%= dish.id %>/comments/<%= comment.id%>?_method=delete"
-              method="post">
+            <form class="d-inline ml-1" action="<%= dish.url %>/comments/<%= comment.id%>?_method=delete" method="post">
               <button class="btn btn-sm btn-danger">Delete</button>
             </form>
             <% } %>

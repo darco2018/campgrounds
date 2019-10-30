@@ -7,11 +7,10 @@
             <h2 class="text-center"><%= foodplace.name %></h2>
             <p class="text-center">
                 <%= foodplace.address %>, <%= foodplace.city %>
-            </p>
-            <p class="text-center">
+
                 <% let count = foodplace.dishesCount;
                                 let plural = (count === 1) ? " dish" : " dishes" %>
-                <span class="badge badge-info badge-pill">
+                <span class="badge badge-info badge-pill ml-3">
                     <%= count %>
                 </span>
                 <span class="text-info">
@@ -26,7 +25,7 @@
             <% dishes.forEach((dish) =>{ %>
             <div class="col-md-6 col-xl-4 mb-3">
                 <div class="card p-1 dish-card">
-                    <a class="btn btn-outline-info btn-sm" href="/dishes/<%= dish.id %>">
+                    <a class="btn btn-outline-info btn-sm" href="<%= dish.url %>">
                         <img src="<%= dish.image %>" class="card-img-top" alt="..." /></a>
                     <div class="card-body">
                         <div class="inner-dish-card d-flex flex-column justify-content-between">
@@ -49,14 +48,14 @@
                                     </p>
                                 </div>
                                 <div class="btn-details">
-                                    <a class="btn btn-outline-info btn-sm" href="/dishes/<%= dish.id %>">Details</a>
+                                    <a class="btn btn-outline-info btn-sm" href="<%= dish.url %>">Details</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="card-footer">
                         <small class="text-muted text-red"><span class="float-left">From
-                                <%= moment(dish.createdAt).format("DD/MM/YY") %></span>
+                                <%= dish.formattedCreatedAt %></span>
                             <span class="float-right">Last comment:
                                 <%= moment(dish.latestCommentAt).fromNow() === "Invalid date" ? "No comments yet" :  
                 moment(dish.latestCommentAt).fromNow() %>

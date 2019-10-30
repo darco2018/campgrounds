@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const moment = require('moment');
 
 const dishSchema = new Schema({
   name: { type: String, required: true, trim: true },
@@ -29,8 +30,12 @@ const dishSchema = new Schema({
 });
 
 // virtual for dish's URL - useful in tmeplates to get a particular instance of the model
-dishSchema.virtual("url").get(()=>
-  '/catalogue/dish' + this.id
-)
+dishSchema.virtual('url').get(function() {
+  return '/dishes/' + this.id;
+});
+
+dishSchema
+  .virtual('formattedCreatedAt')
+  .get(() => moment(this.createdAt).format('DD/MM/YY'));
 
 module.exports = mongoose.model('Dish', dishSchema);
