@@ -114,9 +114,9 @@ app.use('/', landingRouter);
 app.use('/auth', authRouter);
 app.use('/dishes', dishesRouter);
 app.use('/dishes/:id/comments', commentsRouter);
+app.use("/dishes/:id/reviews", reviewRouter);
 app.use('/foodplaces', foodplacesRouter);
 app.use('/admin', adminRouter);
-app.use('/reviews', reviewRouter);
 
 /* ---------- ERROR HANDLING -------------*/
 
