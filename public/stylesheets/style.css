@@ -41,3 +41,7 @@ img {
   height: 450px;
   background: grey;
 }
+
+.checked {
+  color: orange;
+}
