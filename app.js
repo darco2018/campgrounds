@@ -25,6 +25,7 @@ const authRouter = require('./routes/auth');
 const commentsRouter = require('./routes/comments');
 const foodplacesRouter = require('./routes/foodplaces');
 const adminRouter = require('./routes/admin');
+const reviewRouter = require('./routes/reviews');
 
 /* ---------- VIEW ENGINE -------------*/
 
@@ -115,6 +116,7 @@ app.use('/dishes', dishesRouter);
 app.use('/dishes/:id/comments', commentsRouter);
 app.use('/foodplaces', foodplacesRouter);
 app.use('/admin', adminRouter);
+app.use('/reviews', reviewRouter);
 
 /* ---------- ERROR HANDLING -------------*/
 
