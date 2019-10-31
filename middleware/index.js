@@ -132,7 +132,7 @@ middlewareObj.checkFoodplaceExists = function(req, res, next) {
   });
 };
 
-middlewareObj.checkReviewExiststs = function(req, res, next) {
+middlewareObj.checkReviewExists = function(req, res, next) {
   next();
 };
 

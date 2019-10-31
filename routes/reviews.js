@@ -28,7 +28,7 @@ router.get(
   '/new',
   //IMPORTANT! REMOVE COMMENTS FOR NEXT LINE
   /*  middleware.isLoggedIn, */
-  middleware.checkReviewExiststs,
+  middleware.checkReviewExists,
   function(req, res) {
     //IMPORTANT! Replace id with req.params.id
     Dish.findById('5d999dbd4029930fa9e8ebd3', function(err, dish) {
@@ -46,7 +46,7 @@ router.post(
   '/',
   //IMPORTANT! REMOVE COMMENTS FOR NEXT LINE
   /*  middleware.isLoggedIn, */
-  middleware.checkReviewOwnership,
+  middleware.checkReviewExists,
   function(req, res) {
     Dish.findById(req.params.id)
       .populate('reviews')
