@@ -72,7 +72,7 @@ router.post(
           //save dish
           dish.save();
           req.flash('success', 'Your review has been successfully added.');
-          res.redirect('/dishs/' + dish._id);
+          res.redirect('/dishes/' + dish._id);
         });
       });
   }
@@ -135,7 +135,7 @@ router.delete("/:review_id", middleware.checkReviewOwnership, function (req, res
             //save changes
             dish.save();
             req.flash("success", "Your review was deleted successfully.");
-            res.redirect("/dishs/" + req.params.id);
+            res.redirect("/dishes/" + req.params.id);
         });
     });
 });
