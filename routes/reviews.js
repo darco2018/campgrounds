@@ -94,6 +94,29 @@ router.get('/:review_id/edit', middleware.checkReviewOwnership, function(
   });
 });
 
+// Reviews Update
+router.put("/:review_id", middleware.checkReviewOwnership, function (req, res) {
+    Review.findByIdAndUpdate(req.params.review_id, req.body.review, {new: true}, function (err, updatedReview) {
+        if (err) {
+            req.flash("error", err.message);
+            return res.redirect("back");
+        }
+        Dish.findById(req.params.id).populate("reviews").exec(function (err, dish) {
+            if (err) {
+                req.flash("error", err.message);
+                return res.redirect("back");
+            }
+            // recalculate dish average
+            dish.rating = calculateAverage(dish.reviews);
+            //save changes
+            dish.save();
+            req.flash("success", "Your review was successfully edited.");
+            res.redirect('/dishes/' + dish._id);
+        });
+    });
+});
+
+
 function calculateAverage(reviews) {
   if (reviews.length === 0) {
     return 0;
