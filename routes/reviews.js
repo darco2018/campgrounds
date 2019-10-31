@@ -41,4 +41,45 @@ router.get(
   }
 );
 
+// Reviews Create
+router.post(
+  '/',
+  //IMPORTANT! REMOVE COMMENTS FOR NEXT LINE
+  /*  middleware.isLoggedIn, */
+  middleware.checkReviewExiststs,
+  function(req, res) {
+    Dish.findById(req.params.id)
+      .populate('reviews')
+      .exec(function(err, dish) {
+        if (err) {
+          req.flash('error', err.message);
+          return res.redirect('back');
+        }
+        Review.create(req.body.review, function(err, review) {
+          if (err) {
+            req.flash('error', err.message);
+            return res.redirect('back');
+          }
+          //add author username/id and associated dish to the review
+          review.author.id = req.user._id;
+          review.author.username = req.user.username;
+          review.dish = dish;
+          //save review
+          review.save();
+          dish.reviews.push(review);
+          // calculate the new average review for the dish
+          dish.rating = calculateAverage(dish.reviews);
+          //save dish
+          dish.save();
+          req.flash('success', 'Your review has been successfully added.');
+          res.redirect('/dishs/' + dish._id);
+        });
+      });
+  }
+);
+
+function calculateAverage(reviews) {
+  return 3;
+}
+
 module.exports = router;
