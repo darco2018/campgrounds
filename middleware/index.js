@@ -136,4 +136,8 @@ middlewareObj.checkReviewExiststs = function(req, res, next) {
   next();
 };
 
+middlewareObj.checkReviewOwnership = function(req, res, next) {
+  next();
+};
+
 module.exports = middlewareObj;

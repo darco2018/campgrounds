@@ -46,7 +46,7 @@ router.post(
   '/',
   //IMPORTANT! REMOVE COMMENTS FOR NEXT LINE
   /*  middleware.isLoggedIn, */
-  middleware.checkReviewExiststs,
+  middleware.checkReviewOwnership,
   function(req, res) {
     Dish.findById(req.params.id)
       .populate('reviews')
@@ -77,6 +77,22 @@ router.post(
       });
   }
 );
+
+// Reviews Edit  reviews/5dba711a74c31463a57ce407/edit
+router.get('/:review_id/edit', middleware.checkReviewOwnership, function(
+  req,
+  res
+) {
+  //IMPORTANT! Replace id with req.params.review_id
+  Review.findById('5dbab354bc3d6d5c949e7d71', function(err, foundReview) {
+    if (err) {
+      req.flash('error', err.message);
+      return res.redirect('back');
+    }
+    console.log(foundReview);
+    res.render('review/edit', { dish_id: req.params.id, review: foundReview });
+  });
+});
 
 function calculateAverage(reviews) {
   if (reviews.length === 0) {
