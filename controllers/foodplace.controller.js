@@ -134,8 +134,13 @@ const showDishes = async (req, res) => {
   try {
     const foodplaceId = req.params.id;
     let foodplaces = [await Foodplace.findById(foodplaceId)];
-    let dishes = await Dish.find({ foodplace: foodplaceId }).exec();
-    console.log(dishes);
+    let dishes = await Dish.find({ foodplace: foodplaceId })
+      .populate('comments')
+      .exec();
+    dishes = await addLatestCommentTo(dishes);
+    if (dishes == null) {
+      dishes = [];
+    }
 
     res.render('foodplace/dishes', {
       foodplaces: foodplaces,
@@ -274,6 +279,14 @@ function findByIdAndUpdatePromise(id, foodplace) {
       }
     });
   });
+}
+
+function addLatestCommentTo(dishes) {
+  dishes.forEach(dish => {
+    let latestComment = dish.comments[dish.comments.length - 1];
+    dish.latestCommentAt = latestComment ? latestComment.createdAt : '';
+  });
+  return dishes;
 }
 
 module.exports = {
