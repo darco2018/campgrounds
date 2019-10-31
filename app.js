@@ -52,6 +52,20 @@ db.once('open', () => {
 
 app.locals.moment = moment;
 
+//// start - DELETE WHEN DONE
+/* 
+app.use(function(req, res, next) { // can add ("/dishes" to apply it to a special endpoint)
+  // modify req or res then go to next middleware
+  console.log('>>>>Executed always for each request(also scripts, images, css): ' + Date.now());
+  next();
+});
+
+middlewarehandler will be executed before the app.use above!!
+app.get('/dishes', middlewarehandler, ()=>{});
+
+ */
+//// end - DELETE WHEN DONE
+
 app.use(logger('dev'));
 // express.json & express.urlencoded are only needed for POST & PUT
 app.use(express.json());
@@ -101,7 +115,6 @@ app.use('/dishes', dishesRouter);
 app.use('/dishes/:id/comments', commentsRouter);
 app.use('/foodplaces', foodplacesRouter);
 app.use('/admin', adminRouter);
-
 
 /* ---------- ERROR HANDLING -------------*/
 
