@@ -117,6 +117,30 @@ router.put("/:review_id", middleware.checkReviewOwnership, function (req, res) {
 });
 
 
+// Reviews Delete
+router.delete("/:review_id", middleware.checkReviewOwnership, function (req, res) {
+    Review.findByIdAndRemove(req.params.review_id, function (err) {
+        if (err) {
+            req.flash("error", err.message);
+            return res.redirect("back");
+        }
+        // pull removes the reference of the review from dish's array
+        Dish.findByIdAndUpdate(req.params.id, {$pull: {reviews: req.params.review_id}}, {new: true}).populate("reviews").exec(function (err, dish) {
+            if (err) {
+                req.flash("error", err.message);
+                return res.redirect("back");
+            }
+            // recalculate dish average
+            dish.rating = calculateAverage(dish.reviews);
+            //save changes
+            dish.save();
+            req.flash("success", "Your review was deleted successfully.");
+            res.redirect("/dishs/" + req.params.id);
+        });
+    });
+});
+
+
 function calculateAverage(reviews) {
   if (reviews.length === 0) {
     return 0;
