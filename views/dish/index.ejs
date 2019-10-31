@@ -18,17 +18,17 @@
                 <p class="text-muted text-uppercase small mb-1">
                   <b><%= dish.foodplace ? dish.foodplace.name : "" %></b>
                 </p>
-
-                <% if (dish.rating === 0) { %>
-                <em>No reviews yet.</em>
-                <% } else { %>
-                <span class="fa fa-star checked"></span>
-                <span class="fa fa-star <% if (dish.rating > 1.5) { %> checked <% } %>"></span>
-                <span class="fa fa-star <% if (dish.rating > 2.5) { %> checked <% } %>"></span>
-                <span class="fa fa-star <% if (dish.rating > 3.5) { %> checked <% } %>"></span>
-                <span class="fa fa-star <% if (dish.rating > 4.5) { %> checked <% } %>"></span>
-                <% } %>
-
+                <section id="ratings">
+                  <% if (dish.rating === 0) { %>
+                  <em>No reviews yet.</em>
+                  <% } else { %>
+                  <span class="fa fa-star checked"></span>
+                  <span class="fa fa-star <% if (dish.rating > 1.5) { %> checked <% } %>"></span>
+                  <span class="fa fa-star <% if (dish.rating > 2.5) { %> checked <% } %>"></span>
+                  <span class="fa fa-star <% if (dish.rating > 3.5) { %> checked <% } %>"></span>
+                  <span class="fa fa-star <% if (dish.rating > 4.5) { %> checked <% } %>"></span>
+                  <% } %>
+                </section>
               </div>
               <div class="dish-description-button d-flex flex-column justify-content-between">
                 <div>
