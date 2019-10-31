@@ -4,6 +4,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const Dish = require('../models/dish');
 const Foodplace = require('../models/foodplace');
+const Review = require('../models/review');
 //const middleware = require('../middleware'); //index.js is imported by default from middleware folder
 const { flashAndRedirect } = require('../utils/index');
 
@@ -95,6 +96,10 @@ const showDish = async (req, res) => {
     let dish = await Dish.findById(req.params.id)
       .populate('foodplace')
       .populate('comments')
+      .populate({
+        path: 'reviews',
+        options: { sort: { createdAt: -1 } }
+      })
       .exec();
 
     if (dish == null) {
@@ -147,6 +152,11 @@ const editDish = async (req, res) => {
 };
 
 const putDish = async (req, res) => {
+  // protect the campground.rating field from manipulation on update
+  if (req.body.dish.rating) {
+    delete req.body.dish.rating;
+  }
+
   // checkDishOwnership does checkDishExists first
   try {
     let dish = await assembleDish(req);
@@ -172,13 +182,23 @@ const putDish = async (req, res) => {
 
 const deleteDish = async (req, res) => {
   try {
-    let deleted = await Dish.findByIdAndDelete(req.params.id).exec();
+    const dishId = req.params.id;
+    let deleted = await Dish.findByIdAndDelete(dishId).exec();
     const foodplaceId = deleted.foodplace;
     //decrease dish count for the given foodplace
     await Foodplace.findOneAndUpdate(
       { _id: foodplaceId },
       { $inc: { dishesCount: -1 } }
     ).exec();
+
+    // more on : Cascade Delete with MongoDB: https://www.youtube.com/watch?v=5iz69Wq_77k
+    // deletes all comments & reviews associated with the dish
+    /* $in operator which finds all Comment and Review database entries which have ids contained 
+    in dish.comments and dish.reviews, and deletes them along with the associated dish that 
+    is getting removed.  */
+    await Comment.remove({"_id": {$in: deleted.comments}});
+    await Review.remove({"_id": {$in: deleted.reviews}});
+    // dish.remove(); niepotrzebne
 
     return flashAndRedirect(
       req,
