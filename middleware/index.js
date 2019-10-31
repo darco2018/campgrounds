@@ -132,8 +132,30 @@ middlewareObj.checkFoodplaceExists = function(req, res, next) {
   });
 };
 
-middlewareObj.checkReviewExists = function(req, res, next) {
-  next();
+middlewareObj.checkReviewExists = function (req, res, next) {
+  if (req.isAuthenticated()) {
+      Dish.findById(req.params.id).populate("reviews").exec(function (err, foundDish) {
+          if (err || !foundDish) {
+              req.flash("error", "Dish not found.");
+              res.redirect("back");
+          } else {
+              // check if req.user._id exists in foundDish.reviews
+              // some() true if any array element matches
+              var foundUserReview = foundDish.reviews.some(function (review) {
+                  return review.author.id.equals(req.user._id);
+              });
+              if (foundUserReview) {
+                  req.flash("error", "You already wrote a review.");
+                  return res.redirect("/dishes/" + foundDish._id);
+              }
+              // if the review was not found, go to the next middleware
+              next();
+          }
+      });
+  } else {
+      req.flash("error", "You need to login first.");
+      res.redirect("back");
+  }
 };
 
 middlewareObj.checkReviewOwnership = function(req, res, next) {
