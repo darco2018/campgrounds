@@ -26,7 +26,17 @@ const dishSchema = new Schema({
       type: Schema.Types.ObjectId,
       ref: 'Comment'
     }
-  ]
+  ],
+  reviews: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Review'
+    }
+  ],
+  rating: {
+    type: Number,
+    default: 0
+  }
 });
 
 // virtual for dish's URL - useful in tmeplates to get a particular instance of the model
