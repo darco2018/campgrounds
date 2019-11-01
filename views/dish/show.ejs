@@ -97,10 +97,10 @@
                   <%= review.text %>
                 </p>
                 <% if(currentUser && review.author.id.equals(currentUser._id)){ %>
-                <a class="btn btn-sm btn-warning mr-3"
+                <a class="btn btn-sm btn-warning"
                   href="/dishes/<%=dish._id %>/reviews/<%=review._id %>/edit">Edit</a>
 
-                <form class="d-inline mr-3" action="/dishes/<%=dish._id %>/reviews/<%=review._id %>?_method=DELETE"
+                <form class="d-inline ml-1" action="/dishes/<%=dish._id %>/reviews/<%=review._id %>?_method=DELETE"
                   method="POST">
                   <button class="btn btn-sm btn-danger">Delete</button>
                 </form>
@@ -119,7 +119,7 @@
               <a class="btn btn-sm btn-success my-1 <% if (currentUser && dish.reviews.some(function (review) {return review.author.id.equals(currentUser._id)})) { %> disabled <% } %>"
                 href="/dishes/<%= dish._id %>/reviews/new">
                 Rate &amp; review</a>
-              <a href="<%= dish.url %>/comments/new" class="btn btn-sm btn-success mx-5">Leave a comment</a>
+              <a href="<%= dish.url %>/comments/new" class="btn btn-sm btn-success ml-1">Leave a comment</a>
             </div>
           </section>
 
@@ -147,13 +147,17 @@
             </div>
 
             <% if (currentUser && comment.author.id.equals(currentUser.id)) { %>
-            <a class="btn btn-sm btn-warning mr-3" href="<%= dish.url %>/comments/<%= comment.id%>/edit">
-              Edit
-            </a>
-            <form class="d-inline ml-1" action="<%= dish.url %>/comments/<%= comment.id%>?_method=delete" method="post">
-              <button class="btn btn-sm btn-danger">Delete</button>
-            </form>
+            <div>
+              <a class="btn btn-sm btn-warning ml-3" href="<%= dish.url %>/comments/<%= comment.id%>/edit">
+                Edit
+              </a>
+              <form class="d-inline ml-1 " action="<%= dish.url %>/comments/<%= comment.id%>?_method=delete"
+                method="post">
+                <button class="btn btn-sm btn-danger">Delete</button>
+              </form>
+            </div>
             <% } %>
+
           </div>
           <% } %>
         </div>
