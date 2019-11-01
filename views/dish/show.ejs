@@ -79,9 +79,9 @@
           <section id="review">
 
             <% if (dish.rating === 0) { %>
-           
+
             <% } else { %>
-           
+
             <h5 class="text-center">Latest review</h5>
 
             <hr style="margin-top: 0;">
@@ -89,8 +89,8 @@
             <div class="row">
               <div class="col-md-3">
                 <%- '<span class="fa fa-star checked"></span>'.repeat(review.rating) %><%- '<span class="fa fa-star"></span>'.repeat(5 - review.rating) %>
-                <div>Review by: <strong><%= review.author.username %></strong></div>
-                <span><em><%= review.updatedAt.toDateString() %></em></span>
+                <div><strong><%= review.author.username %></strong></div>
+                <span class="text-muted"><%= moment(review.updatedAt).fromNow() %></span>
               </div>
               <div class="col-md-9">
                 <p style="text-align: justify; word-wrap: break-word;">
@@ -104,8 +104,6 @@
                   method="POST">
                   <button class="btn btn-sm btn-danger">Delete</button>
                 </form>
-
-
 
                 <% } %>
               </div>
