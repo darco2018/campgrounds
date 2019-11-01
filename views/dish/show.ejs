@@ -61,10 +61,10 @@
               </em>
             </div>
             <% if (currentUser && dish.author.id.equals(currentUser.id)) { %>
-            <a class="btn btn-sm btn-warning mr-3" href="<%= dish.url %>/edit">
+            <a class="btn btn-sm btn-warning" href="<%= dish.url %>/edit">
               Edit
             </a>
-            <form class="d-inline mr-3" action="<%= dish.url %>?_method=delete" method="post">
+            <form class="d-inline ml-1" action="<%= dish.url %>?_method=delete" method="post">
               <button class="btn btn-sm btn-danger">Delete</button>
             </form>
             <% } %>
