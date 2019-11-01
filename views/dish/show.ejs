@@ -68,6 +68,15 @@
               <button class="btn btn-sm btn-danger">Delete</button>
             </form>
             <% } %>
+
+
+            <div>
+                <a class="btn btn-sm btn-success my-1 <% if (currentUser && dish.reviews.some(function (review) {return review.author.id.equals(currentUser._id)})) { %> disabled <% } %>"
+                  href="/dishes/<%= dish._id %>/reviews/new">
+                  Rate &amp; review</a>
+                <a href="<%= dish.url %>/comments/new" class="btn btn-sm btn-success ml-1">Leave a comment</a>
+              </div>
+
           </div>
         </div>
       </section>
@@ -115,12 +124,11 @@
                   all reviews</a></h6>
             </div>
             <% } %>
-            <div>
-              <a class="btn btn-sm btn-success my-1 <% if (currentUser && dish.reviews.some(function (review) {return review.author.id.equals(currentUser._id)})) { %> disabled <% } %>"
-                href="/dishes/<%= dish._id %>/reviews/new">
-                Rate &amp; review</a>
-              <a href="<%= dish.url %>/comments/new" class="btn btn-sm btn-success ml-1">Leave a comment</a>
-            </div>
+           
+
+
+
+
           </section>
 
           <div id="comment-btn" class="mb-5">
