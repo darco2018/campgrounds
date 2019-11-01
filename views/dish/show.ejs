@@ -35,6 +35,22 @@
                 </small>
               </p>
             </div>
+            <% if (dish.rating === 0) { %>
+            <p>
+              <em>No reviews yet.</em>
+            </p>
+            <% } else { %>
+            <p>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star <% if (dish.rating > 1.5) { %> checked <% } %>"></span>
+              <span class="fa fa-star <% if (dish.rating > 2.5) { %> checked <% } %>"></span>
+              <span class="fa fa-star <% if (dish.rating > 3.5) { %> checked <% } %>"></span>
+              <span class="fa fa-star <% if (dish.rating > 4.5) { %> checked <% } %>"></span>
+              &nbsp;&nbsp;
+              <em><strong><%= dish.rating.toFixed(2) %></strong></em>
+              <em>&nbsp;(total reviews: <%= dish.reviews.length %>)</em>
+            </p>
+            <% }  %>
 
             <div class="card-text mb-2">
               <%= dish.description %>
@@ -63,24 +79,11 @@
           <section id="review">
 
             <% if (dish.rating === 0) { %>
-            <h5>
-              <em>No reviews yet.</em>
-            </h5>
+           
             <% } else { %>
-            <p>
-              <span class="fa fa-star checked"></span>
-              <span class="fa fa-star <% if (dish.rating > 1.5) { %> checked <% } %>"></span>
-              <span class="fa fa-star <% if (dish.rating > 2.5) { %> checked <% } %>"></span>
-              <span class="fa fa-star <% if (dish.rating > 3.5) { %> checked <% } %>"></span>
-              <span class="fa fa-star <% if (dish.rating > 4.5) { %> checked <% } %>"></span>
-              &nbsp;&nbsp;
-              <em>Avg.: <strong><%= dish.rating.toFixed(2) %></strong></em>
-              <em>(total reviews: <%= dish.reviews.length %>)</em>
-            </p>
+           
+            <h5 class="text-center">Latest review</h5>
 
-            <p>
-              <h5 class="text-center">Latest review</h5>
-            </p>
             <hr style="margin-top: 0;">
             <% dish.reviews.slice(0, 5).forEach(function(review){ %>
             <div class="row">
@@ -117,7 +120,7 @@
             <div>
               <a class="btn btn-success my-1 <% if (currentUser && dish.reviews.some(function (review) {return review.author.id.equals(currentUser._id)})) { %> disabled <% } %>"
                 href="/dishes/<%= dish._id %>/reviews/new">
-                Write a review</a>
+                Rate &amp; review</a>
               <a href="<%= dish.url %>/comments/new" class="btn btn-success mx-5">Leave a comment</a>
             </div>
           </section>
