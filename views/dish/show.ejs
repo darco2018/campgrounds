@@ -111,15 +111,15 @@
             <hr>
             <% }); %>
             <div style="margin-bottom: 10px;">
-              <h4><a href="/dishes/<%= dish._id %>/reviews"><i class="fa fa-search" aria-hidden="true"></i> See
-                  all reviews</a></h4>
+              <h6><a href="/dishes/<%= dish._id %>/reviews"><i class="fa fa-search" aria-hidden="true"></i> See
+                  all reviews</a></h6>
             </div>
             <% } %>
             <div>
-              <a class="btn btn-success my-1 <% if (currentUser && dish.reviews.some(function (review) {return review.author.id.equals(currentUser._id)})) { %> disabled <% } %>"
+              <a class="btn btn-sm btn-success my-1 <% if (currentUser && dish.reviews.some(function (review) {return review.author.id.equals(currentUser._id)})) { %> disabled <% } %>"
                 href="/dishes/<%= dish._id %>/reviews/new">
                 Rate &amp; review</a>
-              <a href="<%= dish.url %>/comments/new" class="btn btn-success mx-5">Leave a comment</a>
+              <a href="<%= dish.url %>/comments/new" class="btn btn-sm btn-success mx-5">Leave a comment</a>
             </div>
           </section>
 
