@@ -61,21 +61,23 @@
               </em>
             </div>
             <% if (currentUser && dish.author.id.equals(currentUser.id)) { %>
-            <a class="btn btn-sm btn-warning" href="<%= dish.url %>/edit">
-              Edit
-            </a>
-            <form class="d-inline ml-1" action="<%= dish.url %>?_method=delete" method="post">
-              <button class="btn btn-sm btn-danger">Delete</button>
-            </form>
+            <div class="mb-4">
+              <a class="btn btn-sm btn-warning" href="<%= dish.url %>/edit">
+                Edit
+              </a>
+              <form class="d-inline ml-1" action="<%= dish.url %>?_method=delete" method="post">
+                <button class="btn btn-sm btn-danger">Delete</button>
+              </form>
+            </div>
             <% } %>
 
 
             <div>
-                <a class="btn btn-sm btn-success my-1 <% if (currentUser && dish.reviews.some(function (review) {return review.author.id.equals(currentUser._id)})) { %> disabled <% } %>"
-                  href="/dishes/<%= dish._id %>/reviews/new">
-                  Rate &amp; review</a>
-                <a href="<%= dish.url %>/comments/new" class="btn btn-sm btn-success ml-1">Leave a comment</a>
-              </div>
+              <a class="btn btn-sm btn-success my-1 <% if (currentUser && dish.reviews.some(function (review) {return review.author.id.equals(currentUser._id)})) { %> disabled <% } %>"
+                href="/dishes/<%= dish._id %>/reviews/new">
+                Rate &amp; review</a>
+              <a href="<%= dish.url %>/comments/new" class="btn btn-sm btn-success ml-1">Leave a comment</a>
+            </div>
 
           </div>
         </div>
@@ -93,9 +95,9 @@
 
             <h5 class="text-center">Latest review</h5>
 
-            <hr style="margin-top: 0;">
+
             <% dish.reviews.slice(0, 5).forEach(function(review){ %>
-            <div class="row">
+            <div class="row mt-3">
               <div class="col-md-3">
                 <%- '<span class="fa fa-star checked"></span>'.repeat(review.rating) %><%- '<span class="fa fa-star"></span>'.repeat(5 - review.rating) %>
                 <div><strong><%= review.author.username %></strong></div>
@@ -106,8 +108,7 @@
                   <%= review.text %>
                 </p>
                 <% if(currentUser && review.author.id.equals(currentUser._id)){ %>
-                <a class="btn btn-sm btn-warning"
-                  href="/dishes/<%=dish._id %>/reviews/<%=review._id %>/edit">Edit</a>
+                <a class="btn btn-sm btn-warning" href="/dishes/<%=dish._id %>/reviews/<%=review._id %>/edit">Edit</a>
 
                 <form class="d-inline ml-1" action="/dishes/<%=dish._id %>/reviews/<%=review._id %>?_method=DELETE"
                   method="POST">
@@ -117,14 +118,14 @@
                 <% } %>
               </div>
             </div>
-            <hr>
+
             <% }); %>
-            <div style="margin-bottom: 10px;">
-              <h6><a href="/dishes/<%= dish._id %>/reviews"><i class="fa fa-search" aria-hidden="true"></i> See
-                  all reviews</a></h6>
-            </div>
+
+            <h6><a href="/dishes/<%= dish._id %>/reviews"><i class="fa fa-search" aria-hidden="true"></i> See
+                all reviews</a></h6>
+
             <% } %>
-           
+
 
 
 
@@ -155,7 +156,7 @@
             </div>
 
             <% if (currentUser && comment.author.id.equals(currentUser.id)) { %>
-            <div>
+            <div class="mb-3 mt-n1">
               <a class="btn btn-sm btn-warning ml-3" href="<%= dish.url %>/comments/<%= comment.id%>/edit">
                 Edit
               </a>
