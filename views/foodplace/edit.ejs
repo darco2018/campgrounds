@@ -1,6 +1,6 @@
 <% include ../partials/header.ejs %>
 
-<h1 class="text-center my-3">Edit the food place</h1>
+<h1 class="text-center my-3">Changing the food place</h1>
 
 <div class="container text-center col-9 col-sm-8 col-md-6 col-lg-5 col-xl-4">
   <form action="/foodplaces/<%= foodplace.id%>/update?_method=PUT" method="post">
@@ -31,6 +31,12 @@
       </button>
     </div>
   </form>
+  <div class="my-3">
+    <a class="btn btn-default text-primary" href="/foodplaces %>">
+      <i class="fa fa-arrow-left"></i>
+      Go back
+    </a>
+  </div>
 </div>
 
 <% include ../partials/footer.ejs %>

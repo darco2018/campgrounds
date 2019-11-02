@@ -1,6 +1,6 @@
 <% include ../partials/header.ejs %>
 
-<h1 class="text-center my-3">Edit the dish</h1>
+<h1 class="text-center my-3">Changing <%= dish.name %></h1>
 
 <div class="row">
   <div class="container text-center col-9 col-sm-8 col-md-6 col-lg-5 col-xl-4">
@@ -22,7 +22,7 @@
 
       <h5>THE DISH</h5>
       <div class="form-group">
-        <input class="form-control" type="text" name="dish[name]" value="<%= dish.name %>" required/>
+        <input class="form-control" type="text" name="dish[name]" value="<%= dish.name %>" required />
       </div>
       <div class="form-group">
         <input class="form-control" type="number" name="dish[price]" value="<%= dish.price %>" min="0.01" step="0.01" />
@@ -40,6 +40,12 @@
         </button>
       </div>
     </form>
+    <div class="my-3">
+      <a class="btn btn-default text-primary" href="/dishes/<%= dish.id %>">
+        <i class="fa fa-arrow-left"></i>
+        Go back
+      </a>
+    </div>
   </div>
 </div>
 <% include ../partials/footer.ejs %>

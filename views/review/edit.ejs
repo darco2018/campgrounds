@@ -53,7 +53,12 @@
                     <button class="btn btn-primary btn-block">Submit a Review</button>
                 </div>
             </form>
-            <a href="/dishes/<%= dish_id %>">Go Back</a>
+            <div class="my-3">
+                <a class="btn btn-default text-primary" href="/dishes/<%= dish._id %>">
+                    <i class="fa fa-arrow-left"></i>
+                    Go back
+                </a>
+            </div>
         </div>
     </div>
 </div>
