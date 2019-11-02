@@ -1,12 +1,15 @@
 <% include ../partials/header %>
-<div class="container">
-    <div class="row">
-        <h1 class="text-center my-3">Change Review</h1>
-        <div style="width: 30%; margin: 25px auto;">
-            <form action="/dishes/<%= dishId %>/reviews/<%= review._id %>?_method=PUT" method="POST">
+<h1 class="text-center my-3">Reviewing <%= dish.name %></h1>
+
+<div class="row">
+    <div class="container text-center col-9 col-sm-8 col-md-6 col-lg-5 col-xl-4">
+        <div>
+            <form action="<%= dish.url%>/reviews/<%= review.id %>?_method=PUT" " method="POST">
                 <div class="form-group">
-                    <label for="rating">Leave a rating:</label>
-                    <fieldset class="starability-basic form-group" id="rating">
+                    <div class="mx-auto" style="width: 200px">
+                        <div class="text-left"><label for="rating">Leave a rating:</label>
+                        </div>
+                        <fieldset class="form-group text-left" id="rating">
                         <div>
                             <input type="radio" id="first-rate5" name="review[rating]" value="5"
                                 <% if (review.rating === 5) { %> checked <% } %> />
@@ -44,17 +47,18 @@
                         </div>
 
                     </fieldset>
+                    </div>
                 </div>
                 <div class="form-group">
                     <textarea class="form-control" type="text" name="review[text]"
                         placeholder="Write a review for this review..." rows="10"><%= review.text %></textarea>
                 </div>
                 <div class="form-group">
-                    <button class="btn btn-primary btn-block">Submit a Review</button>
+                    <button class="btn btn-primary btn-block">Submit changes</button>
                 </div>
             </form>
             <div class="my-3">
-                <a class="btn btn-default text-primary" href="/dishes/<%= dishId %>">
+                <a class="btn btn-default text-primary" href="<%= dish.url%>">
                     <i class="fa fa-arrow-left"></i>
                     Go back
                 </a>

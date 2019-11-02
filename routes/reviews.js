@@ -75,21 +75,24 @@ router.post(
 );
 
 // Reviews Edit  reviews/5dba711a74c31463a57ce407/edit
-router.get('/:review_id/edit', middleware.checkReviewOwnership, function(
+router.get('/:review_id/edit', middleware.checkReviewOwnership, async function(
   req,
   res
 ) {
+  const dish = await Dish.findById(req.params.id);
+
   Review.findById(req.params.review_id, function(err, foundReview) {
     if (err) {
       req.flash('error', err.message);
       return res.redirect('back');
     }
     console.log(foundReview);
-    res.render('review/edit', { dishId: req.params.id, review: foundReview });
+    res.render('review/edit', { dish: dish, review: foundReview });
   });
 });
 
 // Reviews Update
+// dishes/5d999dbd4029930fa9e8ebd3/reviews/5dbc369f478dcb0ec7925c4e?_method=PUT
 router.put('/:review_id', middleware.checkReviewOwnership, function(req, res) {
   Review.findByIdAndUpdate(
     req.params.review_id,

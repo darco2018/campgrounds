@@ -1,14 +1,12 @@
 <% include ../partials/header %>
 
-<h1 class="text-center my-3">New Review: <%= dish.name %></h1>
+<h1 class="text-center my-3">Reviewing <%= dish.name %></h1>
 
 <div class="row">
-
     <div class="container text-center col-9 col-sm-8 col-md-6 col-lg-5 col-xl-4">
         <div>
             <form action="/dishes/<%= dish._id %>/reviews" method="POST">
                 <div class="form-group">
-
                     <div class="mx-auto" style="width: 200px">
                         <div class="text-left"><label for="rating">Leave a rating:</label></div>
                         <fieldset class="form-group text-left" id="rating">
@@ -52,7 +50,7 @@
                 </div>
                 <div class="form-group">
                     <button class="btn btn-primary btn-block w-50 mx-auto" type="submit">
-                        Submit a Review
+                        Submit the review
                     </button>
                 </div>
             </form>
