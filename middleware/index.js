@@ -2,6 +2,7 @@
 const Dish = require('../models/dish');
 const Comment = require('../models/comment');
 const Foodplace = require('../models/foodplace');
+const Review = require('../models/review');
 
 const middlewareObj = {};
 
