@@ -85,7 +85,7 @@ router.get('/:review_id/edit', middleware.checkReviewOwnership, function(
       return res.redirect('back');
     }
     console.log(foundReview);
-    res.render('review/edit', { dish_id: req.params.id, review: foundReview });
+    res.render('review/edit', { dishId: req.params.id, review: foundReview });
   });
 });
 

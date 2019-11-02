@@ -3,7 +3,7 @@
     <div class="row">
         <h1 class="text-center my-3">Change Review</h1>
         <div style="width: 30%; margin: 25px auto;">
-            <form action="/dishes/<%= dish_id %>/reviews/<%= review._id %>?_method=PUT" method="POST">
+            <form action="/dishes/<%= dishId %>/reviews/<%= review._id %>?_method=PUT" method="POST">
                 <div class="form-group">
                     <label for="rating">Leave a rating:</label>
                     <fieldset class="starability-basic form-group" id="rating">
@@ -54,7 +54,7 @@
                 </div>
             </form>
             <div class="my-3">
-                <a class="btn btn-default text-primary" href="/dishes/<%= dish._id %>">
+                <a class="btn btn-default text-primary" href="/dishes/<%= dishId %>">
                     <i class="fa fa-arrow-left"></i>
                     Go back
                 </a>
