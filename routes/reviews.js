@@ -6,8 +6,7 @@ var middleware = require('../middleware');
 
 // Reviews Index - display reviews for a given DISH
 router.get('/', function(req, res) {
-  //IMPORTANT! Replace id with req.params.id
-  Dish.findById('5d999dbd4029930fa9e8ebd3')
+  Dish.findById(req.params.id)
     .populate({
       path: 'reviews',
       options: { sort: { createdAt: -1 } } // sorting the populated reviews array to show the latest first
@@ -26,12 +25,10 @@ router.get('/', function(req, res) {
 // middleware.checkReviewExistence checks if a user already reviewed the dish, only one review per user is allowed
 router.get(
   '/new',
-  //IMPORTANT! REMOVE COMMENTS FOR NEXT LINE
-  /*  middleware.isLoggedIn, */
+  middleware.isLoggedIn,
   middleware.checkReviewExists,
   function(req, res) {
-    //IMPORTANT! Replace id with req.params.id
-    Dish.findById('5d999dbd4029930fa9e8ebd3', function(err, dish) {
+    Dish.findById(req.params.id, function(err, dish) {
       if (err) {
         req.flash('error', err.message);
         return res.redirect('back');
@@ -44,8 +41,7 @@ router.get(
 // Reviews Create
 router.post(
   '/',
-  //IMPORTANT! REMOVE COMMENTS FOR NEXT LINE
-  /*  middleware.isLoggedIn, */
+   middleware.isLoggedIn,
   middleware.checkReviewExists,
   function(req, res) {
     Dish.findById(req.params.id)
@@ -83,8 +79,7 @@ router.get('/:review_id/edit', middleware.checkReviewOwnership, function(
   req,
   res
 ) {
-  //IMPORTANT! Replace id with req.params.review_id
-  Review.findById('5dbab354bc3d6d5c949e7d71', function(err, foundReview) {
+  Review.findById(req.params.review_id, function(err, foundReview) {
     if (err) {
       req.flash('error', err.message);
       return res.redirect('back');
@@ -95,51 +90,65 @@ router.get('/:review_id/edit', middleware.checkReviewOwnership, function(
 });
 
 // Reviews Update
-router.put("/:review_id", middleware.checkReviewOwnership, function (req, res) {
-    Review.findByIdAndUpdate(req.params.review_id, req.body.review, {new: true}, function (err, updatedReview) {
-        if (err) {
-            req.flash("error", err.message);
-            return res.redirect("back");
-        }
-        Dish.findById(req.params.id).populate("reviews").exec(function (err, dish) {
-            if (err) {
-                req.flash("error", err.message);
-                return res.redirect("back");
-            }
-            // recalculate dish average
-            dish.rating = calculateAverage(dish.reviews);
-            //save changes
-            dish.save();
-            req.flash("success", "Your review was successfully edited.");
-            res.redirect('/dishes/' + dish._id);
+router.put('/:review_id', middleware.checkReviewOwnership, function(req, res) {
+  Review.findByIdAndUpdate(
+    req.params.review_id,
+    req.body.review,
+    { new: true },
+    function(err, updatedReview) {
+      if (err) {
+        req.flash('error', err.message);
+        return res.redirect('back');
+      }
+      Dish.findById(req.params.id)
+        .populate('reviews')
+        .exec(function(err, dish) {
+          if (err) {
+            req.flash('error', err.message);
+            return res.redirect('back');
+          }
+          // recalculate dish average
+          dish.rating = calculateAverage(dish.reviews);
+          //save changes
+          dish.save();
+          req.flash('success', 'Your review was successfully edited.');
+          res.redirect('/dishes/' + dish._id);
         });
-    });
+    }
+  );
 });
-
 
 // Reviews Delete
-router.delete("/:review_id", middleware.checkReviewOwnership, function (req, res) {
-    Review.findByIdAndRemove(req.params.review_id, function (err) {
+router.delete('/:review_id', middleware.checkReviewOwnership, function(
+  req,
+  res
+) {
+  Review.findByIdAndRemove(req.params.review_id, function(err) {
+    if (err) {
+      req.flash('error', err.message);
+      return res.redirect('back');
+    }
+    // pull removes the reference of the review from dish's array
+    Dish.findByIdAndUpdate(
+      req.params.id,
+      { $pull: { reviews: req.params.review_id } },
+      { new: true }
+    )
+      .populate('reviews')
+      .exec(function(err, dish) {
         if (err) {
-            req.flash("error", err.message);
-            return res.redirect("back");
+          req.flash('error', err.message);
+          return res.redirect('back');
         }
-        // pull removes the reference of the review from dish's array
-        Dish.findByIdAndUpdate(req.params.id, {$pull: {reviews: req.params.review_id}}, {new: true}).populate("reviews").exec(function (err, dish) {
-            if (err) {
-                req.flash("error", err.message);
-                return res.redirect("back");
-            }
-            // recalculate dish average
-            dish.rating = calculateAverage(dish.reviews);
-            //save changes
-            dish.save();
-            req.flash("success", "Your review was deleted successfully.");
-            res.redirect("/dishes/" + req.params.id);
-        });
-    });
+        // recalculate dish average
+        dish.rating = calculateAverage(dish.reviews);
+        //save changes
+        dish.save();
+        req.flash('success', 'Your review was deleted successfully.');
+        res.redirect('/dishes/' + req.params.id);
+      });
+  });
 });
-
 
 function calculateAverage(reviews) {
   if (reviews.length === 0) {
