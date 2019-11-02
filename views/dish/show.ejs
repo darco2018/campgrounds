@@ -83,60 +83,48 @@
         </div>
       </section>
 
-      <!-- Review & comment buttons -->
-      <section id="buttons" class="card bg-light">
+      <% if (dish.rating === 0) { %>
+        <!-- no display?! -->
+      <% } else { %>
+
+      <!--Review section-->
+      <section id="latest-review" class="card bg-light">
         <div class="card-body  pt-3 px-5">
-          <!--Review section-->
-          <section id="review">
-
-            <% if (dish.rating === 0) { %>
-
-            <% } else { %>
-
+          <div id="review">
             <h5 class="text-center">Latest review</h5>
-
-
-            <% dish.reviews.slice(0, 5).forEach(function(review){ %>
+            <% dish.reviews.slice(0, 1).forEach(function(review){ %>
             <div class="row mt-3">
               <div class="col-md-3">
-                <%- '<span class="fa fa-star checked"></span>'.repeat(review.rating) %><%- '<span class="fa fa-star"></span>'.repeat(5 - review.rating) %>
+                <%- '<span class="fa fa-star checked"></span>'.repeat(review.rating) %>
+                <%- '<span class="fa fa-star"></span>'.repeat(5 - review.rating) %>
                 <div><strong><%= review.author.username %></strong></div>
                 <span class="text-muted"><%= moment(review.updatedAt).fromNow() %></span>
               </div>
               <div class="col-md-9">
-                <p style="text-align: justify; word-wrap: break-word;">
+                <p class="text-justify" style="word-wrap: break-word;">
                   <%= review.text %>
                 </p>
                 <% if(currentUser && review.author.id.equals(currentUser._id)){ %>
                 <a class="btn btn-sm btn-warning" href="/dishes/<%=dish._id %>/reviews/<%=review._id %>/edit">Edit</a>
-
                 <form class="d-inline ml-1" action="/dishes/<%=dish._id %>/reviews/<%=review._id %>?_method=DELETE"
                   method="POST">
                   <button class="btn btn-sm btn-danger">Delete</button>
                 </form>
-
                 <% } %>
               </div>
             </div>
-
             <% }); %>
-
-            <h6><a href="/dishes/<%= dish._id %>/reviews"><i class="fa fa-search" aria-hidden="true"></i> See
-                all reviews</a></h6>
-
-            <% } %>
-
-
-
-
-
-          </section>
-
-          <div id="comment-btn" class="mb-5">
-
+            <h6>
+              <a href="<%= dish.url %>/reviews">
+                <i class="fa fa-search" aria-hidden="true"></i>
+                See all reviews
+              </a>
+            </h6>
           </div>
         </div>
       </section>
+
+      <% } %>
 
       <!--Comments section-->
       <section id="comments" class="card bg-light">
