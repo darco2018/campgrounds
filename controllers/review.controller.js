@@ -27,7 +27,33 @@ const getNewReview = async (req, res) => {
   }
 };
 
-const postReview = async (req, res) => {};
+const postReview = async (req, res) => {
+  try {
+    const foundDish = res.locals.foundDish;
+    let review = await assembleReview(req, foundDish);
+    let savedReview = await Review.create(review);
+
+    foundDish.reviews.push(savedReview);
+    foundDish.rating = calculateAverage(foundDish.reviews);
+    await foundDish.save();
+
+    return flashAndRedirect(
+      req,
+      res,
+      'success',
+      'Your review has been successfully added.',
+      `/dishes/${foundDish.id}`
+    );
+  } catch (err) {
+    return flashAndRedirect(
+      req,
+      res,
+      'error',
+      `Error saving the review. Reason:  (${err.message})`,
+      'back'
+    );
+  }
+};
 
 const showReview = async (req, res) => {};
 
@@ -37,10 +63,10 @@ const putReview = async (req, res) => {};
 
 const deleteReview = async (req, res) => {};
 
-function assembleReview(req) {
+function assembleReview(req, dish) {
   if (!req) throw new Error('Cannot assemble a review. Request is null.');
 
-  let rating = req.body.rating ? req.body.review.rating : req.body.rating;
+  let rating = req.body.review ? req.body.review.rating : req.body.rating;
 
   let text = req.body.review ? req.body.review.text : req.body.text;
   text = text.substring(0, allowedReviewLength);
@@ -51,7 +77,7 @@ function assembleReview(req) {
   };
 
   // Dish.findById(req.params.id)
-  let dish = req.params.id;
+  //let dish = req.params.id;
 
   let review = {
     rating: rating,
@@ -61,6 +87,17 @@ function assembleReview(req) {
   };
 
   return review;
+}
+
+function calculateAverage(reviews) {
+  if (reviews.length === 0) {
+    return 0;
+  }
+  var sum = 0;
+  reviews.forEach(function(element) {
+    sum += element.rating;
+  });
+  return sum / reviews.length;
 }
 
 module.exports = {
