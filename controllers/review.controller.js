@@ -12,16 +12,15 @@ const router = express.Router({ mergeParams: true });
 const allowedReviewLength = 2000;
 
 const getReviews = async (req, res) => {
-
   try {
     let dish = await Dish.findById(req.params.id)
-    .populate({
-      path: 'reviews',
-      options: { sort: { createdAt: -1 } } // sorting the populated reviews array to show the latest first. 
-    })
-    .exec();
-  
-      res.render('review/index', { dish: dish });
+      .populate({
+        path: 'reviews',
+        options: { sort: { createdAt: -1 } } // sorting the populated reviews array to show the latest first.
+      })
+      .exec();
+
+    res.render('review/index', { dish: dish });
   } catch (err) {
     return flashAndRedirect(
       req,
@@ -30,9 +29,7 @@ const getReviews = async (req, res) => {
       `Error displaying the reviews. Reason:  (${err.message})`,
       'back'
     );
-  } 
-
-
+  }
 };
 
 const getNewReview = async (req, res) => {
@@ -49,15 +46,18 @@ const getNewReview = async (req, res) => {
   }
 };
 
-
-// Dish validation failed: rating: 
+// Dish validation failed: rating:
 // Cast to Number failed for value "NaN" at path "rating")
 const postReview = async (req, res) => {
   try {
-    const foundDish = res.locals.foundDish;
+    let foundDish = res.locals.foundDish;
     let review = await assembleReview(req, foundDish);
     let savedReview = await Review.create(review);
 
+    // populate reviews for the given dish
+    foundDish = await Dish.findById(req.params.id)
+      .populate('reviews')
+      .exec();
     foundDish.reviews.push(savedReview);
     foundDish.rating = calculateAverage(foundDish.reviews);
     await foundDish.save();
@@ -137,7 +137,7 @@ const deleteReview = async (req, res) => {
   try {
     let reviewId = req.params.review_id;
     let deleted = await Review.findByIdAndDelete(reviewId);
-    const dishId = res.locals.foundDish.id; 
+    const dishId = res.locals.foundDish.id;
 
     let dish = await Dish.findOneAndUpdate(
       { _id: dishId },
@@ -182,9 +182,6 @@ function assembleReview(req, dish) {
     username: req.user.username
   };
 
-  // Dish.findById(req.params.id)
-  //let dish = req.params.id;
-
   let review = {
     rating: rating,
     text: text,
@@ -200,9 +197,10 @@ function calculateAverage(reviews) {
     return 0;
   }
   var sum = 0;
-  reviews.forEach(function(element) {
-    sum += element.rating;
+  reviews.forEach(function(review) {
+    sum += review.rating;
   });
+
   return sum / reviews.length;
 }
 
