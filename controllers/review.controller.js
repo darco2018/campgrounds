@@ -57,7 +57,24 @@ const postReview = async (req, res) => {
 
 const showReview = async (req, res) => {};
 
-const editReview = async (req, res) => {};
+const editReview = async (req, res) => {
+  try {
+    const foundReview = await Review.findById(req.params.review_id);
+
+    res.render('review/edit', {
+      review: foundReview,
+      dish: res.locals.foundDish
+    });
+  } catch (err) {
+    return flashAndRedirect(
+      req,
+      res,
+      'error',
+      `Error editing the review. Reason:  (${err.message})`,
+      'back'
+    );
+  }
+};
 
 const putReview = async (req, res) => {};
 
