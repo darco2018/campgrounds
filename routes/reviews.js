@@ -38,7 +38,7 @@ router.put(
 
 router.delete(
   '/:review_id',
-  middleware.checkReviewExists,
+  /* middleware.checkReviewExists, otherwise msg You already wrote a review */
   middleware.checkReviewOwnership, //includes isAuthenticated()
   middleware.checkDishExists,
   review.deleteReview
