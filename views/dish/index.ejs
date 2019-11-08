@@ -35,8 +35,8 @@
                   <p style="overflow: hidden; text-overflow: ellipsis; word-wrap: break-word;">
                     <% if(dish.description.trim() === "") { %>
                     &nbsp
-                    <% } else {%>
-                    <%=  (dish.description.trim()).substring(0, allowedIntroLength) %>...
+                    <% } else { %>
+                    <%=  (dish.description.trim()).substring(0, dish.name.length > 23 ? 28 : allowedIntroLength) %>...
                     <% } %>
                   </p>
                 </div>
