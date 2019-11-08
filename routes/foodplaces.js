@@ -28,7 +28,7 @@ router.get(
 );
 
 router.put(
-  '/:id/update',
+  '/:id',
   middleware.isLoggedIn,
   middleware.checkFoodplaceExists,
   foodplace.putFoodplace

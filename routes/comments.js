@@ -28,7 +28,7 @@ router.get(
 );
 
 router.put(
-  '/:comment_id/update',
+  '/:comment_id',
   middleware.checkCommentExists,
   middleware.checkCommentOwnership, //includes isAuthenticated()
   middleware.checkDishExists,
