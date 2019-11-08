@@ -61,8 +61,8 @@ const editComment = (req, res) => {
 
 const putComment = async (req, res) => {
   try {
-    let comment = await assembleComment(req);
-    let updated = await Comment.findByIdAndUpdate(
+    let comment = assembleComment(req);
+    await Comment.findByIdAndUpdate(
       req.params.comment_id,
       comment
     ).exec();
