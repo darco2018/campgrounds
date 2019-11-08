@@ -11,7 +11,19 @@ const { flashAndRedirect } = require('../utils/index');
 const router = express.Router({ mergeParams: true });
 const allowedReviewLength = 2000;
 
-
+const getNewReview = async (req, res) => {
+  try {
+    res.render('review/new', { dish: res.locals.foundDish });
+  } catch (err) {
+    return flashAndRedirect(
+      req,
+      res,
+      'error',
+      `Error getting a review. Reason: ${err.message}`,
+      `back`
+    );
+  }
+};
 
 function assembleReview(req) {
   if (!req) throw new Error('Cannot assemble a review. Request is null.');
@@ -40,12 +52,12 @@ function assembleReview(req) {
 }
 
 module.exports = {
-
+  getNewReview
 };
 /* 
 module.exports = {
   getReviews,
-  getNewReview,
+  
   postReview,
   showReview,
   editReview,

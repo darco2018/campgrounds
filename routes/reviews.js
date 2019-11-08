@@ -4,12 +4,32 @@ var Dish = require('../models/dish');
 var Review = require('../models/review');
 var middleware = require('../middleware');
 
-// Reviews Index - display reviews for a given DISH
-router.get('/', function(req, res) {
+const review = require('../controllers/review.controller');
+
+// INDEX - all reviews for a given DISH
+// /dishes/:id/reviews/
+router.get('/', async function(req, res) {
+  /* 
+  try {
+    console.log(">>>>>>>>>>>>> See all reviews");
+    
+    const dish = await Dish.findById(req.params.id)
+      .populate({
+        path: 'reviews',
+        options: { sort: { createdAt: -1 } } // sorting the populated reviews array to show the latest first. Limit reviews to 1
+      })
+      .exec();
+
+    res.render('review/index', { dish: dish });
+  } catch (err) {
+    req.flash('error', err.message);
+    return res.redirect('back');
+  }
+ */
   Dish.findById(req.params.id)
     .populate({
       path: 'reviews',
-      options: { sort: { createdAt: -1 } } // sorting the populated reviews array to show the latest first
+      options: { sort: { createdAt: -1 } } // sorting the populated reviews array to show the latest first. Limit reviews to 1
     })
     .exec(function(err, dish) {
       if (err || !dish) {
@@ -23,7 +43,7 @@ router.get('/', function(req, res) {
 
 // Reviews New
 // middleware.checkReviewExistence checks if a user already reviewed the dish, only one review per user is allowed
-router.get(
+/* router.get(
   '/new',
   middleware.isLoggedIn,
   middleware.checkReviewExists,
@@ -37,42 +57,48 @@ router.get(
     });
   }
 );
+ */
+router.get(
+  '/new',
+  middleware.isLoggedIn,
+  middleware.checkDishExists,
+  middleware.checkReviewExists,
+  review.getNewReview
+);
 
 // Reviews Create
-router.post(
-  '/',
-   middleware.isLoggedIn,
-  middleware.checkReviewExists,
-  function(req, res) {
-    Dish.findById(req.params.id)
-      .populate('reviews')
-      .exec(function(err, dish) {
+router.post('/', middleware.isLoggedIn, middleware.checkReviewExists, function(
+  req,
+  res
+) {
+  Dish.findById(req.params.id)
+    .populate('reviews')
+    .exec(function(err, dish) {
+      if (err) {
+        req.flash('error', err.message);
+        return res.redirect('back');
+      }
+      Review.create(req.body.review, function(err, review) {
         if (err) {
           req.flash('error', err.message);
           return res.redirect('back');
         }
-        Review.create(req.body.review, function(err, review) {
-          if (err) {
-            req.flash('error', err.message);
-            return res.redirect('back');
-          }
-          //add author username/id and associated dish to the review
-          review.author.id = req.user._id;
-          review.author.username = req.user.username;
-          review.dish = dish;
-          //save review
-          review.save();
-          dish.reviews.push(review);
-          // calculate the new average review for the dish
-          dish.rating = calculateAverage(dish.reviews);
-          //save dish
-          dish.save();
-          req.flash('success', 'Your review has been successfully added.');
-          res.redirect('/dishes/' + dish._id);
-        });
+        //add author username/id and associated dish to the review
+        review.author.id = req.user._id;
+        review.author.username = req.user.username;
+        review.dish = dish;
+        //save review
+        review.save();
+        dish.reviews.push(review);
+        // calculate the new average review for the dish
+        dish.rating = calculateAverage(dish.reviews);
+        //save dish
+        dish.save();
+        req.flash('success', 'Your review has been successfully added.');
+        res.redirect('/dishes/' + dish._id);
       });
-  }
-);
+    });
+});
 
 // Reviews Edit  reviews/5dba711a74c31463a57ce407/edit
 router.get('/:review_id/edit', middleware.checkReviewOwnership, async function(
@@ -92,7 +118,6 @@ router.get('/:review_id/edit', middleware.checkReviewOwnership, async function(
 });
 
 // Reviews Update
-// dishes/5d999dbd4029930fa9e8ebd3/reviews/5dbc369f478dcb0ec7925c4e?_method=PUT
 router.put('/:review_id', middleware.checkReviewOwnership, function(req, res) {
   Review.findByIdAndUpdate(
     req.params.review_id,
