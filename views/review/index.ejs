@@ -2,13 +2,15 @@
 
 <div class="container">
     <div class="my-3">
-        <a class="btn btn-default text-primary" href="/dishes/<%= dish._id %>"><i class="fa fa-arrow-left"></i> Go
-            back</a>
+        <a class="btn btn-default text-primary" href="<%= dish.url %>">
+            <i class="fa fa-arrow-left"></i>
+            Go back
+        </a>
     </div>
     <div class="row">
         <div class="col-md-12">
             <h1 class="text-center">REVIEWS: <%= dish.name %></h1>
-            <div class="">
+            <div>
                 <div>
                     <div class="text-center">
                         <% if (dish.rating === 0) { %>
@@ -28,8 +30,18 @@
                             Current dish rating: <strong><%= dish.rating.toFixed(2) %></strong>
                         </p>
                         <div class="mb-3">
-                            <a class="btn btn-sm btn-success my-1  <% if (currentUser && dish.reviews.some(function (review) {return review.author.id.equals(currentUser._id)})) { %> disabled <% } %>"
-                                href="/dishes/<%= dish._id %>/reviews/new">
+                            <a class="btn btn-sm btn-success my-1  
+
+                            <!-- disable Rate review button if user has already written a review -->
+                            <% if (currentUser && dish.reviews.some( 
+                                  function (review) { 
+                                      return review.author.id.equals( currentUser._id );
+                                  }
+                            )){ %> 
+                                disabled                             
+                            <% } %>
+
+                            " href="<%= dish.url %>/reviews/new">
                                 Rate &amp; review</a>
                         </div>
                     </div>
@@ -37,9 +49,12 @@
                     <% dish.reviews.forEach(function(review){ %>
                     <div class="row">
                         <div class="col-md-3">
-                            <%- '<span class="fa fa-star checked"></span>'.repeat(review.rating) %><%- '<span class="fa fa-star"></span>'.repeat(5 - review.rating) %>
+                            <%- '<span class="fa fa-star checked"></span>'.repeat(review.rating) %>
+                            <%- '<span class="fa fa-star"></span>'.repeat(5 - review.rating) %>
                             <div>Review by: <strong><%= review.author.username %></strong></div>
-                            <span class="text-muted"><small><%= review.updatedAt.toDateString() %></small></span>
+                            <span class="text-muted">
+                                <small><%= review.updatedAt.toDateString() %></small>
+                            </span>
                         </div>
                         <div class="col-md-9">
                             <p style="text-align: justify; word-wrap: break-word;">
@@ -47,9 +62,9 @@
                             </p>
                             <% if(currentUser && review.author.id.equals(currentUser._id)){ %>
                             <a class="btn btn-sm btn-warning"
-                                href="/dishes/<%=dish._id %>/reviews/<%=review._id %>/edit">Edit</a>
-                            <form class="d-inline ml-1"
-                                action="/dishes/<%=dish._id %>/reviews/<%=review._id %>?_method=DELETE" method="POST">
+                                href="<%= dish.url %>/reviews/<%=review._id %>/edit">Edit</a>
+                            <form class="d-inline ml-1" action="<%= dish.url %>/reviews/<%=review._id %>?_method=DELETE"
+                                method="POST">
                                 <button class="btn btn-sm btn-danger">Delete</button>
                             </form>
                             <% } %>
@@ -61,8 +76,8 @@
 
 
                     <div>
-                        <a class="btn btn-default text-primary" href="/dishes/<%= dish._id %>"><i
-                                class="fa fa-arrow-left"></i> Go back</a>
+                        <a class="btn btn-default text-primary" href="<%= dish.url %>"><i class="fa fa-arrow-left"></i>
+                            Go back</a>
                     </div>
                 </div>
             </div>
