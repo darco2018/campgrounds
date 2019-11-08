@@ -11,7 +11,29 @@ const { flashAndRedirect } = require('../utils/index');
 const router = express.Router({ mergeParams: true });
 const allowedReviewLength = 2000;
 
-const getReviews = async (req, res) => {};
+const getReviews = async (req, res) => {
+
+  try {
+    let dish = await Dish.findById(req.params.id)
+    .populate({
+      path: 'reviews',
+      options: { sort: { createdAt: -1 } } // sorting the populated reviews array to show the latest first. 
+    })
+    .exec();
+  
+      res.render('review/index', { dish: dish });
+  } catch (err) {
+    return flashAndRedirect(
+      req,
+      res,
+      'error',
+      `Error displaying the reviews. Reason:  (${err.message})`,
+      'back'
+    );
+  } 
+
+
+};
 
 const getNewReview = async (req, res) => {
   try {
@@ -27,6 +49,9 @@ const getNewReview = async (req, res) => {
   }
 };
 
+
+// Dish validation failed: rating: 
+// Cast to Number failed for value "NaN" at path "rating")
 const postReview = async (req, res) => {
   try {
     const foundDish = res.locals.foundDish;
@@ -113,7 +138,7 @@ const deleteReview = async (req, res) => {
     let reviewId = req.params.review_id;
     let deleted = await Review.findByIdAndDelete(reviewId);
     const dishId = res.locals.foundDish.id; 
-    
+
     let dish = await Dish.findOneAndUpdate(
       { _id: dishId },
       { $pull: { reviews: reviewId } },
