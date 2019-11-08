@@ -46,8 +46,6 @@ const getNewReview = async (req, res) => {
   }
 };
 
-// Dish validation failed: rating:
-// Cast to Number failed for value "NaN" at path "rating")
 const postReview = async (req, res) => {
   try {
     let foundDish = res.locals.foundDish;
@@ -59,7 +57,7 @@ const postReview = async (req, res) => {
       .populate('reviews')
       .exec();
     foundDish.reviews.push(savedReview);
-    foundDish.rating = calculateAverage(foundDish.reviews);
+    foundDish.rating = calculateDishAverageRating(foundDish.reviews);
     await foundDish.save();
 
     return flashAndRedirect(
@@ -79,8 +77,6 @@ const postReview = async (req, res) => {
     );
   }
 };
-
-const showReview = async (req, res) => {};
 
 const editReview = async (req, res) => {
   try {
@@ -113,7 +109,7 @@ const putReview = async (req, res) => {
     foundDish = await Dish.findById(req.params.id)
       .populate('reviews')
       .exec();
-    foundDish.rating = calculateAverage(foundDish.reviews);
+    foundDish.rating = calculateDishAverageRating(foundDish.reviews);
     await foundDish.save();
     return flashAndRedirect(
       req,
@@ -148,7 +144,7 @@ const deleteReview = async (req, res) => {
       .exec();
 
     // recalculate dish average
-    dish.rating = calculateAverage(dish.reviews);
+    dish.rating = calculateDishAverageRating(dish.reviews);
     dish.save();
 
     return flashAndRedirect(
@@ -192,7 +188,7 @@ function assembleReview(req, dish) {
   return review;
 }
 
-function calculateAverage(reviews) {
+function calculateDishAverageRating(reviews) {
   if (reviews.length === 0) {
     return 0;
   }
@@ -208,7 +204,6 @@ module.exports = {
   getReviews,
   getNewReview,
   postReview,
-  showReview,
   editReview,
   putReview,
   deleteReview
