@@ -76,9 +76,73 @@ const editReview = async (req, res) => {
   }
 };
 
-const putReview = async (req, res) => {};
+const putReview = async (req, res) => {
+  try {
+    let foundDish = res.locals.foundDish;
+    let review = assembleReview(req, foundDish);
+    await Review.findByIdAndUpdate(req.params.review_id, review, {
+      new: true
+    }).exec();
 
-const deleteReview = async (req, res) => {};
+    //  Get updated reviews to recalculate dish average.
+    foundDish = await Dish.findById(req.params.id)
+      .populate('reviews')
+      .exec();
+    foundDish.rating = calculateAverage(foundDish.reviews);
+    await foundDish.save();
+    return flashAndRedirect(
+      req,
+      res,
+      'success',
+      'Successfully updated the review...',
+      `/dishes/${foundDish.id}`
+    );
+  } catch (err) {
+    return flashAndRedirect(
+      req,
+      res,
+      'error',
+      `Error updating the review. Reason: ${err.message}`,
+      'back'
+    );
+  }
+};
+
+const deleteReview = async (req, res) => {
+  try {
+    let reviewId = req.params.review_id;
+    let deleted = await Review.findByIdAndDelete(reviewId);
+    const dishId = res.locals.foundDish.id; 
+    
+    let dish = await Dish.findOneAndUpdate(
+      { _id: dishId },
+      { $pull: { reviews: reviewId } },
+      { new: true }
+    )
+      .populate('reviews')
+      .exec();
+
+    // recalculate dish average
+    dish.rating = calculateAverage(dish.reviews);
+    dish.save();
+
+    return flashAndRedirect(
+      req,
+      res,
+      'success',
+      'Successfully deleted the review...',
+      `/dishes/${dishId}`
+    );
+  } catch (err) {
+    return flashAndRedirect(
+      req,
+      res,
+      'error',
+      `Error when deleting the review. Reason: ${err.message}`,
+      'back'
+    );
+  }
+};
 
 function assembleReview(req, dish) {
   if (!req) throw new Error('Cannot assemble a review. Request is null.');
