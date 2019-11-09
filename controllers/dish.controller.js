@@ -14,6 +14,30 @@ const allowedDishNameLength = 49;
 const allowedIntroDescriptionLength = 66;
 const allowedDescriptionLength = 2000;
 
+/* ------------------------- IMAGE UPLOAD ------------------------------- */
+
+const multer = require('multer');
+const storage = multer.diskStorage({
+  filename: function(req, file, callback) {
+    callback(null, Date.now() + file.originalname);
+  }
+});
+const imageFilter = function(req, file, cb) {
+  // accept image files only
+  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+    return cb(new Error('Only image files are allowed!'), false);
+  }
+  cb(null, true);
+};
+const upload = multer({ storage: storage, fileFilter: imageFilter });
+
+const cloudinary = require('cloudinary');
+cloudinary.config({
+  cloud_name: 'darco',
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
 /* ------------------------- ROUTES ------------------------------- */
 
 const getDishes = async (req, res) => {
@@ -196,8 +220,8 @@ const deleteDish = async (req, res) => {
     /* $in operator which finds all Comment and Review database entries which have ids contained 
     in dish.comments and dish.reviews, and deletes them along with the associated dish that 
     is getting removed.  */
-    await Comment.remove({"_id": {$in: deleted.comments}});
-    await Review.remove({"_id": {$in: deleted.reviews}});
+    await Comment.remove({ _id: { $in: deleted.comments } });
+    await Review.remove({ _id: { $in: deleted.reviews } });
     // dish.remove(); niepotrzebne
 
     return flashAndRedirect(
