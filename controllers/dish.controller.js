@@ -65,14 +65,16 @@ const postDish = async (req, res) => {
   //if (!req.user) throw new Error('You have to be logged in to do that!');
   try {
     try {
-      let result = await cloudinary.uploader.upload(req.file.path)
-        if (req.body.dish) {
-          req.body.dish.image = result.secure_url;
-        } else {
-          req.body.image = result.secure_url;
-        }      
+      let result = await cloudinary.uploader.upload(req.file.path);
+      if (req.body.dish) {
+        req.body.dish.image = result.secure_url;
+      } else {
+        req.body.image = result.secure_url;
+      }
     } catch (err) {
-      throw new Error(`Error when uploading image with cloudinary. ${err.message}` );
+      throw new Error(
+        `Error when uploading image with cloudinary. ${err.message}`
+      );
     }
 
     let dish = await assembleDish(req);
@@ -255,29 +257,33 @@ function addLatestCommentTo(dishes) {
 function assembleDish(req) {
   if (!req) throw new Error('Cannot assemble a dish. Request is null.');
 
-  let image = req.body.dish ? req.body.dish.image : req.body.image;
-  image = !image ? defaultImageUrl : image;
+  try {
+    let image = req.body.dish ? req.body.dish.image : req.body.image;
+    image = !image ? defaultImageUrl : image;
 
-  let description = req.body.dish
-    ? req.body.dish.description
-    : req.body.description;
-  description = description.substring(0, allowedDescriptionLength);
+    let description = req.body.dish
+      ? req.body.dish.description
+      : req.body.description;
+    description = description.substring(0, allowedDescriptionLength);
 
-  const author = {
-    id: req.user.id,
-    username: req.user.username
-  };
+    const author = {
+      id: req.user.id,
+      username: req.user.username
+    };
 
-  let dish = {
-    foodplace: req.body.dish ? req.body.dish.foodplace : req.body.foodplaceId,
-    name: req.body.dish ? req.body.dish.name : req.body.name,
-    price: req.body.dish ? req.body.dish.price : req.body.price,
-    image: image,
-    description: description,
-    author: author
-  };
+    let dish = {
+      foodplace: req.body.dish ? req.body.dish.foodplace : req.body.foodplaceId,
+      name: req.body.dish ? req.body.dish.name : req.body.name,
+      price: req.body.dish ? req.body.dish.price : req.body.price,
+      image: image,
+      description: description,
+      author: author
+    };
 
-  return dish;
+    return dish;
+  } catch (err) {
+    throw new Error(`Error assembling the dish. ${err.message}`);
+  }
 }
 
 module.exports = {
