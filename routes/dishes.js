@@ -28,7 +28,7 @@ router.get('/:id/edit', middleware.checkDishOwnership, dish.editDish);
 // UPDATE
 // dishes/234/update
 // add ?_method=PUT in url  (method-override)
-router.put('/:id', middleware.checkDishOwnership, dish.putDish);
+router.put('/:id', middleware.checkDishOwnership, middleware.upload.single('dish[image]'), dish.putDish);
 
 // DESTROY - delete dish
 // needs a FORM with post + method_override (// checkDishOwnership does checkDishExists)

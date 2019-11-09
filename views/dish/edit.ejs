@@ -5,7 +5,7 @@
 <div class="row">
   <div class="container text-center col-9 col-sm-8 col-md-6 col-lg-5 col-xl-4">
     <h5>THE FOOD PLACE</h5>
-    <form action="/dishes/<%= dish.id%>?_method=PUT" method="post">
+    <form action="/dishes/<%= dish.id%>?_method=PUT" method="post" enctype="multipart/form-data">
       <div class="form-group">
         <label class="text-left" for="foodplaces-select">If the food place is not on the list below, please first add it
           <a href="/foodplaces/new">here</a>
@@ -26,9 +26,10 @@
       </div>
       <div class="form-group">
         <input class="form-control" type="number" name="dish[price]" value="<%= dish.price %>" min="0.01" step="0.01" />
-      </div>
-      <div class="form-group">
-        <input class="form-control" type="text" name="dish[image]" value="<%= dish.image %>" />
+      </div>      
+      <div class="form-group d-flex justify-content-start">
+        <label class="ml-3 mr-3 mt-1 text-muted" for="image">image</label>
+        <input style="min-height: 45px" type="file" id="image" name="dish[image]" accept="image/*">
       </div>
       <div class="form-group">
         <textarea class="form-control" name="dish[description]" rows="8"><%= dish.description %>

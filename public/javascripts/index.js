@@ -13,7 +13,7 @@ $(document).ready(() => {
         image.setAttribute('src', defaultImageUrl);
       }
     }
-  }, 2000);
+  }, 9 * 1000);
 
   // --------------------------------------------
 

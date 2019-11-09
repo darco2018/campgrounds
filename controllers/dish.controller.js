@@ -65,19 +65,25 @@ const getNewDish = async (req, res) => {
 const postDish = async (req, res) => {
   //if (!req.user) throw new Error('You have to be logged in to do that!');
   try {
-    try {
-      let result = await cloudinary.uploader.upload(req.file.path);
-      if (req.body.dish) {
-        req.body.dish.image = result.secure_url;
-      } else {
-        req.body.image = result.secure_url;
-      }
-    } catch (err) {
-      throw new Error(
-        `Error uploading image. ${err.message}`
-      );
+    let result = await cloudinary.v2.uploader.upload(req.file.path);
+    if (req.body.dish) {
+      req.body.dish.image = result.secure_url;
+      req.body.dish.imageId = result.public_id;
+    } else {
+      req.body.image = result.secure_url;
+      req.body.imageId = result.public_id;
     }
+  } catch (err) {
+    return flashAndRedirect(
+      req,
+      res,
+      'error',
+      `Error uploading the file. Reason: ${err.message}`,
+      'back'
+    );
+  }
 
+  try {
     let dish = await assembleDish(req);
     let savedDish = await Dish.create(dish);
 
@@ -167,9 +173,45 @@ const editDish = async (req, res) => {
 };
 
 const putDish = async (req, res) => {
-  // protect the campground.rating field from manipulation on update
+  // protect the dish.rating field from manipulation on update
   if (req.body.dish.rating) {
     delete req.body.dish.rating;
+  }
+
+  // handle image upload
+  try {
+    let oldDish = await Dish.findById(req.params.id);
+
+    if (req.file) {
+      // delete file from cloudinary
+      await cloudinary.v2.uploader.destroy(oldDish.imageId);
+      let result = await cloudinary.v2.uploader.upload(req.file.path);
+
+      if (req.body.dish) {
+        req.body.dish.image = result.secure_url;
+        req.body.dish.imageId = result.public_id;
+      } else {
+        req.body.image = result.secure_url;
+        req.body.imageId = result.public_id;
+      }
+    } else {
+      // preserve old image
+      if (req.body.dish) {
+        req.body.dish.image = oldDish.image;
+        req.body.dish.imageId = oldDish.imageId;
+      } else {
+        req.body.image = oldDish.image;
+        req.body.imageId = oldDish.imageId;
+      }
+    }
+  } catch (err) {
+    return flashAndRedirect(
+      req,
+      res,
+      'error',
+      `Error uploading the file. Reason: ${err.message}`,
+      'back'
+    );
   }
 
   // checkDishOwnership does checkDishExists first
@@ -277,6 +319,7 @@ function assembleDish(req) {
       name: req.body.dish ? req.body.dish.name : req.body.name,
       price: req.body.dish ? req.body.dish.price : req.body.price,
       image: image,
+      imageId: req.body.dish ? req.body.dish.imageId : req.body.imageId,
       description: description,
       author: author
     };
