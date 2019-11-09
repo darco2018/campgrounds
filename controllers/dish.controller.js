@@ -64,27 +64,15 @@ const getNewDish = async (req, res) => {
 const postDish = async (req, res) => {
   //if (!req.user) throw new Error('You have to be logged in to do that!');
   try {
-    console.log('>>>>>>>> req.file.path path: ' + req.file.path);
-    let cloudinaryUrl = null;
     try {
-      // let result = await cloudinary.uploader.upload(req.file.path); // name of uploaded image
-
-      await cloudinary.uploader.upload(req.file.path, function(result) {
-        // add cloudinary url for the image to the campground object under image property
-        console.log('>>>>>>>> result.secure_url: ' + result.secure_url);
-        cloudinaryUrl = result.secure_url;
-
+      let result = await cloudinary.uploader.upload(req.file.path)
         if (req.body.dish) {
-          req.body.dish.image = cloudinaryUrl;
-          console.log('1. >>>>>>>>' + req.body.dish.image);
+          req.body.dish.image = result.secure_url;
         } else {
-          console.log('2. >>>>>>>> cloudinaryUrl: ' + cloudinaryUrl);
-          req.body.image = cloudinaryUrl;
-          console.log('2. >>>>>>>>' + req.body.image);
-        }
-      });
-    } catch (error) {
-      console.log('>>>>> Cloudinary error when uploading image: ' + error);
+          req.body.image = result.secure_url;
+        }      
+    } catch (err) {
+      throw new Error(`Error when uploading image with cloudinary. ${err.message}` );
     }
 
     let dish = await assembleDish(req);
