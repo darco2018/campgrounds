@@ -74,7 +74,7 @@ const postDish = async (req, res) => {
       }
     } catch (err) {
       throw new Error(
-        `Error when uploading image with cloudinary. ${err.message}`
+        `Error uploading image. ${err.message}`
       );
     }
 
