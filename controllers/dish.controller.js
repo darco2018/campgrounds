@@ -5,9 +5,10 @@ const mongoose = require('mongoose');
 const Dish = require('../models/dish');
 const Foodplace = require('../models/foodplace');
 const Review = require('../models/review');
+const Comment = require('../models/comment');
 //const middleware = require('../middleware'); //index.js is imported by default from middleware folder
 const { flashAndRedirect } = require('../utils/index');
-const cloudinary = require('../services/cloudinary');
+const cloudinary = require('../services/cloudinary'); // cloud image service
 
 const router = express.Router();
 const defaultImageUrl = '/images/default.jpg';
