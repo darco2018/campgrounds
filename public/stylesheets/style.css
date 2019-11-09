@@ -12,10 +12,16 @@
   color: #f1962e;
 }
 
-img {
-  width: 200px; /* You can set the dimensions to whatever you want */
-  height: 200px;
+#dish-index img,
+#foodplace-dishes img {
   object-fit: cover;
+  max-height: 201px;
+}
+
+#dish-show img,
+#foodplace-show img {
+  object-fit: cover;
+  max-height: 470px;
 }
 
 .dish-card {
