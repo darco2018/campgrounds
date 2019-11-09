@@ -7,21 +7,13 @@ const Foodplace = require('../models/foodplace');
 const Review = require('../models/review');
 //const middleware = require('../middleware'); //index.js is imported by default from middleware folder
 const { flashAndRedirect } = require('../utils/index');
+const cloudinary = require('../services/cloudinary');
 
 const router = express.Router();
 const defaultImageUrl = '/images/default.jpg';
 const allowedDishNameLength = 49;
 const allowedIntroDescriptionLength = 66;
 const allowedDescriptionLength = 2000;
-
-/* ------------------------- IMAGE UPLOAD ------------------------------- */
-
-const cloudinary = require('cloudinary');
-cloudinary.config({
-  cloud_name: 'darco',
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
-});
 
 /* ------------------------- ROUTES ------------------------------- */
 
