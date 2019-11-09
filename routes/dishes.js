@@ -22,12 +22,6 @@ const imageFilter = function(req, file, cb) {
 };
 const upload = multer({ storage: storage, fileFilter: imageFilter });
 
-const cloudinary = require('cloudinary');
-cloudinary.config({
-  cloud_name: 'darco',
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
-});
 
 /* ------------------------- ROUTES------------------------------- */
 
