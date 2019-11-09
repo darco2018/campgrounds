@@ -5,6 +5,32 @@ const router = express.Router();
 const middleware = require('../middleware'); //index.js is imported by default from middleware folder
 const dish = require('../controllers/dish.controller');
 
+/* ------------------------- IMAGE UPLOAD ------------------------------- */
+
+const multer = require('multer');
+const storage = multer.diskStorage({
+  filename: function(req, file, callback) {
+    callback(null, Date.now() + file.originalname);
+  }
+});
+const imageFilter = function(req, file, cb) {
+  // accept image files only
+  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+    return cb(new Error('Only image files are allowed!'), false);
+  }
+  cb(null, true);
+};
+const upload = multer({ storage: storage, fileFilter: imageFilter });
+
+const cloudinary = require('cloudinary');
+cloudinary.config({
+  cloud_name: 'darco',
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+/* ------------------------- ROUTES------------------------------- */
+
 // INDEX - show all dishes
 router.get('/', dish.getDishes);
 
@@ -12,7 +38,7 @@ router.get('/', dish.getDishes);
 router.get('/new', middleware.isLoggedIn, dish.getNewDish);
 
 // CREATE - add new dish
-router.post('/', middleware.isLoggedIn, dish.postDish);
+router.post('/', middleware.isLoggedIn, upload.single('image'), dish.postDish);
 
 // SHOW - show details about dish
 // dishes/234
