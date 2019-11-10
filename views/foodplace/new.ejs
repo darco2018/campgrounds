@@ -3,25 +3,24 @@
 <h1 class="text-center my-3">Add a food place</h1>
 
 <div class="container text-center col-9 col-sm-8 col-md-6 col-lg-5 col-xl-4">
-  <form action="/foodplaces" method="post">
+  <form action="/foodplaces" method="post" enctype="multipart/form-data">
     <div class="form-group">
-      <input class="form-control" type="text" name="name" placeholder="name e.g. 
-      Pizzahut" required />
+      <input class="form-control" type="text" name="name" placeholder="name, e.g. Pizzahut" required />
     </div>
     <div class="form-group">
-      <input class="form-control" type="text" name="address" placeholder="address, 
-      e.g. ul. Florianska 15" required />
+      <input class="form-control" type="text" name="address" placeholder="address, e.g. ul. Florianska 15" required />
     </div>
     <div class="form-group">
       <select id="city" class="form-control" type="text" name="city">
         <option selected value="Kraków">Kraków</option>
       </select>
     </div>
-    <div class="form-group">
-      <input class="form-control" type="text" name="image" placeholder="image url" />
+    <div class="form-group d-flex justify-content-start">
+      <label class="ml-3 mr-3 mt-1 text-muted" for="image">image</label>
+      <input type="file" id="image" name="image" accept="image/*" required>
     </div>
-    <label for="description">Description:</label>
-    <div class="form-group">
+    <div class="form-group text-left text-muted">
+      <label class="ml-3" for="description">Description:</label>
       <textarea class="form-control" type="text" name="description" rows="7"></textarea>
     </div>
     <div class="form-group">

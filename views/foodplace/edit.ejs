@@ -3,7 +3,7 @@
 <h1 class="text-center my-3">Changing the food place</h1>
 
 <div class="container text-center col-9 col-sm-8 col-md-6 col-lg-5 col-xl-4">
-  <form action="/foodplaces/<%= foodplace.id%>?_method=PUT" method="post">
+  <form action="/foodplaces/<%= foodplace.id%>?_method=PUT" method="post" enctype="multipart/form-data">
     <div class="form-group">
       <input class="form-control" type="text" name="name" value="<%= foodplace.name %>" required />
     </div>
@@ -15,10 +15,10 @@
         <option selected value="Kraków">Kraków</option>
       </select>
     </div>
-    <div class="form-group">
-      <input class="form-control" type="text" value="<%= foodplace.image %>" name="image" />
+    <div class="form-group d-flex justify-content-start">
+      <label class="ml-3 mr-3 mt-1 text-muted" for="image">image</label>
+      <input  type="file" id="image" name="image" accept="image/*">
     </div>
-    <label for="description">Description:</label>
     <div class="form-group">
       <textarea class="form-control" type="text" name="description" rows="7"><%= foodplace.description %></textarea>
     </div>
