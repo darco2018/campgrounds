@@ -192,9 +192,9 @@ const putFoodplace = async (req, res) => {
       req.body.image = result.secure_url;
       req.body.imageId = result.public_id;
     } else {
-      // preserve old image      
-        req.body.image = oldFoodplace.image;
-        req.body.imageId = oldFoodplace.imageId;      
+      // preserve old image
+      req.body.image = oldFoodplace.image;
+      req.body.imageId = oldFoodplace.imageId;
     }
   } catch (error) {
     return flashAndRedirect(
@@ -225,26 +225,32 @@ const putFoodplace = async (req, res) => {
     });
 };
 
-const deleteFoodplace = (req, res) => {
-  Foodplace.findByIdAndDelete(req.params.id)
-    .then(() => {
-      return flashAndRedirect(
-        req,
-        res,
-        'success',
-        'Successfully deleted the food place...',
-        `/foodplaces/`
-      );
-    })
-    .catch(err => {
-      return flashAndRedirect(
-        req,
-        res,
-        'error',
-        `Error: cannot delete the food place (${err.message})`,
-        `back`
-      );
-    });
+const deleteFoodplace = async (req, res) => {
+  try {
+    let foodplace = await Foodplace.findById(req.params.id);
+
+    // remove img from cloudinary. (pre-loaded foodplacees dont have imageId property)
+    if (foodplace.imageId) {
+      await cloudinary.v2.uploader.destroy(foodplace.imageId);
+    }
+
+    foodplace.remove();
+    return flashAndRedirect(
+      req,
+      res,
+      'success',
+      'Successfully deleted the food place...',
+      `/foodplaces/`
+    );
+  } catch (err) {
+    return flashAndRedirect(
+      req,
+      res,
+      'error',
+      `Error deleting the food place (${err.message})`,
+      `back`
+    );
+  }
 };
 
 /* ------------------------- HELPERS ------------------------------- */
