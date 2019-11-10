@@ -174,12 +174,36 @@ const showDishes = async (req, res) => {
   }
 };
 
-const putFoodplace = (req, res) => {
+const putFoodplace = async (req, res) => {
   if (req.params.id && req.body.address) {
     var id = req.params.id;
     var address = req.body.address + cityCountry;
   } else {
     throw new Error('Invalid id and/or address in the request');
+  }
+
+  // handle image upload
+  try {
+    let oldFoodplace = await Foodplace.findById(req.params.id);
+    if (req.file) {
+      // if new img filepath, delete file from cloudinary
+      await cloudinary.v2.uploader.destroy(oldFoodplace.imageId);
+      let result = await cloudinary.v2.uploader.upload(req.file.path);
+      req.body.image = result.secure_url;
+      req.body.imageId = result.public_id;
+    } else {
+      // preserve old image      
+        req.body.image = oldFoodplace.image;
+        req.body.imageId = oldFoodplace.imageId;      
+    }
+  } catch (error) {
+    return flashAndRedirect(
+      req,
+      res,
+      'error',
+      `Error uploading the file. Reason: ${err.message}`,
+      'back'
+    );
   }
 
   geocoding
