@@ -170,8 +170,8 @@ function assembleReview(req, dish) {
 
   let rating = req.body.review ? req.body.review.rating : req.body.rating;
 
-  let text = req.body.review ? req.body.review.text : req.body.text;
-  text = text.substring(0, allowedReviewLength);
+  /* let text = req.body.review ? req.body.review.text : req.body.text;
+  text = text.substring(0, allowedReviewLength); */
 
   const author = {
     id: req.user.id,
@@ -180,7 +180,7 @@ function assembleReview(req, dish) {
 
   let review = {
     rating: rating,
-    text: text,
+    text: "no text",
     author: author,
     dish: dish
   };
