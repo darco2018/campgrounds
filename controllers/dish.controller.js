@@ -239,10 +239,15 @@ const putDish = async (req, res) => {
 
 const deleteDish = async (req, res) => {
   try {
-    const dishId = req.params.id;
-    let deleted = await Dish.findByIdAndDelete(dishId).exec();
-    const foodplaceId = deleted.foodplace;
+    let dish = await Dish.findById(req.params.id);
+
+    // remove img from cloudinary. (pre-loaded dishes dont have imageId property)
+    if (dish.imageId) {
+      cloudinary.v2.uploader.destroy(dish.imageId);
+    }
+
     //decrease dish count for the given foodplace
+    const foodplaceId = dish.foodplace;
     await Foodplace.findOneAndUpdate(
       { _id: foodplaceId },
       { $inc: { dishesCount: -1 } }
@@ -253,9 +258,10 @@ const deleteDish = async (req, res) => {
     /* $in operator which finds all Comment and Review database entries which have ids contained 
     in dish.comments and dish.reviews, and deletes them along with the associated dish that 
     is getting removed.  */
-    await Comment.remove({ _id: { $in: deleted.comments } });
-    await Review.remove({ _id: { $in: deleted.reviews } });
-    // dish.remove(); niepotrzebne
+    await Comment.remove({ _id: { $in: dish.comments } });
+    await Review.remove({ _id: { $in: dish.reviews } });
+    dish.remove();
+    //  let deleted = await Dish.findByIdAndDelete(dishId).exec();
 
     return flashAndRedirect(
       req,
