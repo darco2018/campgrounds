@@ -87,6 +87,12 @@ const postDish = async (req, res) => {
     let dish = await assembleDish(req);
     let savedDish = await Dish.create(dish);
 
+    // create comment from dish.description
+    let comment = assembleComment(req);
+    let savedComment = await Comment.create(comment);
+    savedDish.comments.push(savedComment);
+    await savedDish.save();
+
     // increment dish count for the given foodplace
     const foodplaceId = savedDish.foodplace;
     await Foodplace.findOneAndUpdate(
@@ -310,10 +316,10 @@ function assembleDish(req) {
     let image = req.body.dish ? req.body.dish.image : req.body.image;
     image = !image ? defaultImageUrl : image;
 
-    let description = req.body.dish
+   /*  let description = req.body.dish
       ? req.body.dish.description
       : req.body.description;
-    description = description.substring(0, allowedDescriptionLength);
+    description = description.substring(0, allowedDescriptionLength); */
 
     const author = {
       id: req.user.id,
@@ -326,7 +332,7 @@ function assembleDish(req) {
       price: req.body.dish ? req.body.dish.price : req.body.price,
       image: image,
       imageId: req.body.dish ? req.body.dish.imageId : req.body.imageId,
-      description: description,
+    /*   description: description, */
       author: author
     };
 
@@ -334,6 +340,26 @@ function assembleDish(req) {
   } catch (err) {
     throw new Error(`Error assembling the dish. ${err.message}`);
   }
+}
+
+function assembleComment(req) {
+  if (!req) throw new Error('Cannot assemble a comment. Request is null.');
+
+  const allowedCommentLength = 2000;
+  let text = req.body.dish ? req.body.dish.description : req.body.description;
+  text = text.substring(0, allowedCommentLength);
+
+  const author = {
+    id: req.user.id,
+    username: req.user.username
+  };
+
+  let comment = {
+    text: text,
+    author: author
+  };
+
+  return comment;
 }
 
 module.exports = {

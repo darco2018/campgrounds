@@ -26,15 +26,17 @@
       </div>
       <div class="form-group">
         <input class="form-control" type="number" name="dish[price]" value="<%= dish.price %>" min="0.01" step="0.01" />
-      </div>      
-      <div class="form-group d-flex justify-content-start">
-        <label class="ml-3 mr-3 mt-1 text-muted" for="image">image</label>
-        <input  type="file" id="image" name="dish[image]" accept="image/*">
       </div>
+      <div class="form-group d-flex justify-content-start">
+        <label class="ml-3 mr-3 mt-1 text-muted" for="image">new image</label>
+        <input type="file" id="image" name="dish[image]" accept="image/*">
+      </div>
+      <!--
       <div class="form-group">
         <textarea class="form-control" name="dish[description]" rows="8"><%= dish.description %>
         </textarea>
       </div>
+    -->
       <div class="form-group">
         <button class="btn btn-primary btn-block w-50 mx-auto" type="submit">
           Submit changes

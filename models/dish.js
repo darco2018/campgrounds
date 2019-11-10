@@ -7,7 +7,7 @@ const dishSchema = new Schema({
   price: String,
   image: String,
   imageId: String,
-  description: { type: String, trim: true },
+  description: { type: String, trim: true, default: "No description"},
   createdAt: { type: Date, default: Date.now },
   author: {
     // includes all info about author
