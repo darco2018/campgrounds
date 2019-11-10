@@ -84,13 +84,21 @@ const postDish = async (req, res) => {
   }
 
   try {
-    let dish = await assembleDish(req);
+    let dish = await assembleDish(req);    
     let savedDish = await Dish.create(dish);
+
+    //create review    
+    let review = assembleReview(req, savedDish);
+    // no need to calculate avg rating
+    savedDish.rating = req.body.dish ? req.body.dish.rating : req.body.rating;
+    let savedReview = await Review.create(review);
+    savedDish.reviews.push(savedReview);   
 
     // create comment from dish.description
     let comment = assembleComment(req);
     let savedComment = await Comment.create(comment);
     savedDish.comments.push(savedComment);
+
     await savedDish.save();
 
     // increment dish count for the given foodplace
@@ -332,7 +340,7 @@ function assembleDish(req) {
       price: req.body.dish ? req.body.dish.price : req.body.price,
       image: image,
       imageId: req.body.dish ? req.body.dish.imageId : req.body.imageId,
-    /*   description: description, */
+    /*   description: description, */    
       author: author
     };
 
@@ -360,6 +368,26 @@ function assembleComment(req) {
   };
 
   return comment;
+}
+
+function assembleReview(req, dish) {
+  if (!req) throw new Error('Cannot assemble a review. Request is null.');
+
+  let rating = req.body.dish ? req.body.dish.rating : req.body.rating;
+
+  const author = {
+    id: req.user.id,
+    username: req.user.username
+  };
+
+  let review = {
+    rating: rating,
+    text: "no text",
+    author: author,
+    dish: dish
+  };
+
+  return review;
 }
 
 module.exports = {
