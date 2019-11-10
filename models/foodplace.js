@@ -11,6 +11,7 @@ const foodplaceSchema = new Schema({
   fullAddress: { type: String, trim: true },
   description: { type: String, trim: true },
   image: { type: String, trim: true },
+  imageId: { type: String, trim: true },
   author: {
     id: {
       type: Schema.Types.ObjectId,

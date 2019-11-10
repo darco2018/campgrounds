@@ -13,6 +13,7 @@ debugError = debug('error');
 
 const utils = require('../public/javascripts/utilities/utils');
 const geocoding = require('../services/geocoding');
+const cloudinary = require('../services/cloudinary'); // cloud image service
 const { flashAndRedirect } = require('../utils/index');
 
 // -------------------- VARS -----------------------
@@ -23,7 +24,7 @@ const allowedFoodplaceDescLength = 2000;
 const allowedDishNameLength = 49;
 const allowedIntroDescriptionLength = 66;
 
-/* ------------------------- ROUTES ------------------------------- */
+/* ------------------------- ROUTE HANDLERS ------------------------------- */
 
 const getFoodplaces = async (req, res) => {
   debug('>>>>>>>>> Just debug'); // shows when : node inspect  ./bin/www
@@ -62,6 +63,20 @@ const getNewFoodplace = (req, res) => {
 
 const postFoodplace = async (req, res) => {
   //   if (!req.user) throw new Error('You have to be logged in to do that!');
+
+  try {
+    let result = await cloudinary.v2.uploader.upload(req.file.path);
+    req.body.image = result.secure_url;
+    req.body.imageId = result.public_id;
+  } catch (err) {
+    return flashAndRedirect(
+      req,
+      res,
+      'error',
+      `Error uploading the file. Reason: ${err.message}`,
+      'back'
+    );
+  }
 
   if (req.body.address) {
     var address = req.body.address + cityCountry;
@@ -250,6 +265,7 @@ function assembleFoodplace(geodata, req) {
     lng: geodata.longitude, // provided by geocoder
     fullAddress: geodata.geoAddress, // // provided by geocoder
     image: nonEmptyimage,
+    imageId: req.body.imageId,
     description: description,
     author: author
   };
