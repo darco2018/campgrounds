@@ -382,7 +382,7 @@ function assembleReview(req, dish) {
 
   let review = {
     rating: rating,
-    text: "no text",
+    text: " ",
     author: author,
     dish: dish
   };
