@@ -35,19 +35,19 @@
                 </small>
               </p>
             </div>
-            <% if (dish.rating === 0) { %>
+            <% if (dish.avgScore === 0) { %>
             <p>
               <em>No reviews yet.</em>
             </p>
             <% } else { %>
             <p>
               <span class="fa fa-star checked"></span>
-              <span class="fa fa-star <% if (dish.rating > 1.5) { %> checked <% } %>"></span>
-              <span class="fa fa-star <% if (dish.rating > 2.5) { %> checked <% } %>"></span>
-              <span class="fa fa-star <% if (dish.rating > 3.5) { %> checked <% } %>"></span>
-              <span class="fa fa-star <% if (dish.rating > 4.5) { %> checked <% } %>"></span>
+              <span class="fa fa-star <% if (dish.avgScore > 1.5) { %> checked <% } %>"></span>
+              <span class="fa fa-star <% if (dish.avgScore > 2.5) { %> checked <% } %>"></span>
+              <span class="fa fa-star <% if (dish.avgScore > 3.5) { %> checked <% } %>"></span>
+              <span class="fa fa-star <% if (dish.avgScore > 4.5) { %> checked <% } %>"></span>
               &nbsp;&nbsp;
-              <em class="checked"><strong><%= dish.rating.toFixed(2) %></strong></em>
+              <em class="checked"><strong><%= dish.avgScore.toFixed(2) %></strong></em>
               <em>&nbsp;(total ratings: <%= dish.reviews.length %>)</em>
               <a class="ml-5" href="<%= dish.url %>/reviews">
                 <i class="fa fa-search" aria-hidden="true"></i>
@@ -82,7 +82,7 @@
         </div>
       </section>
 
-      <!-- if (dish.rating === 0) -->
+      <!-- if (dish.avgScore === 0) -->
       <% if (false) { %>
       <!-- no display?! -->
       <% } else { %>

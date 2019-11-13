@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const reviewSchema = new Schema(
   {
-    rating: {
+    score: {
       type: Number,
       required: 'Please provide a rating (1-5 stars)',
       min: 1,

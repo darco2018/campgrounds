@@ -19,14 +19,14 @@
                   <b><%= dish.foodplace ? dish.foodplace.name : "" %></b>
                 </p>
                 <section id="ratings">
-                  <% if (dish.rating === 0) { %>
+                  <% if (dish.avgScore === 0) { %>
                   <em>No reviews yet.</em>
                   <% } else { %>
                   <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star <% if (dish.rating > 1.5) { %> checked <% } %>"></span>
-                  <span class="fa fa-star <% if (dish.rating > 2.5) { %> checked <% } %>"></span>
-                  <span class="fa fa-star <% if (dish.rating > 3.5) { %> checked <% } %>"></span>
-                  <span class="fa fa-star <% if (dish.rating > 4.5) { %> checked <% } %>"></span>
+                  <span class="fa fa-star <% if (dish.avgScore > 1.5) { %> checked <% } %>"></span>
+                  <span class="fa fa-star <% if (dish.avgScore > 2.5) { %> checked <% } %>"></span>
+                  <span class="fa fa-star <% if (dish.avgScore > 3.5) { %> checked <% } %>"></span>
+                  <span class="fa fa-star <% if (dish.avgScore > 4.5) { %> checked <% } %>"></span>
                   <% } %>
                 </section>
               </div>

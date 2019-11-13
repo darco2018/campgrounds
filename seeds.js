@@ -15,7 +15,7 @@ async function seedDb() {
 
     // example review
     await Review.create({
-      rating: 2,
+      score: 2,
       text: 'Just because I can',
       author: {
         id: '5d999c195040be0ad32d5c38',

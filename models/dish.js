@@ -34,7 +34,7 @@ const dishSchema = new Schema({
       ref: 'Review'
     }
   ],
-  rating: {
+  avgScore: {
     type: Number,
     default: 0
   }

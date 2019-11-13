@@ -4,6 +4,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const Dish = require('../models/dish');
 const Foodplace = require('../models/foodplace');
+const reviewController = require('../controllers/review.controller')
 const Review = require('../models/review');
 const Comment = require('../models/comment');
 //const middleware = require('../middleware'); //index.js is imported by default from middleware folder
@@ -88,9 +89,9 @@ const postDish = async (req, res) => {
     let savedDish = await Dish.create(dish);
 
     //create review    
-    let review = assembleReview(req, savedDish);
+    let review = reviewController.assembleReview(req, savedDish);
     // no need to calculate avg rating
-    savedDish.rating = req.body.dish ? req.body.dish.rating : req.body.rating;
+    savedDish.avgScore = req.body.dish ? req.body.dish.score : req.body.score;
     let savedReview = await Review.create(review);
     savedDish.reviews.push(savedReview);   
 
@@ -187,9 +188,9 @@ const editDish = async (req, res) => {
 };
 
 const putDish = async (req, res) => {
-  // protect the dish.rating field from manipulation on update
-  if (req.body.dish.rating) {
-    delete req.body.dish.rating;
+  // protect the dish.avgScore field from manipulation on update
+  if (req.body.dish.avgScore) {
+    delete req.body.dish.avgScore;
   }
 
   // handle image upload
@@ -370,10 +371,10 @@ function assembleComment(req) {
   return comment;
 }
 
-function assembleReview(req, dish) {
+/* function assembleReview(req, dish) {
   if (!req) throw new Error('Cannot assemble a review. Request is null.');
 
-  let rating = req.body.dish ? req.body.dish.rating : req.body.rating;
+  let score = req.body.dish ? req.body.dish.avgScore : req.body.rating;
 
   const author = {
     id: req.user.id,
@@ -381,14 +382,14 @@ function assembleReview(req, dish) {
   };
 
   let review = {
-    rating: rating,
+    score: score,
     text: " ",
     author: author,
     dish: dish
   };
 
   return review;
-}
+} */
 
 module.exports = {
   getDishes,

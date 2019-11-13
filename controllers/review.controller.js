@@ -47,17 +47,22 @@ const getNewReview = async (req, res) => {
 };
 
 const postReview = async (req, res) => {
+  console.log("--------------------- ENTER POST ------------------------");
+  
   try {
     let foundDish = res.locals.foundDish;
     let review = await assembleReview(req, foundDish);
+    console.log("--------------------- ASSEMBLED REVIEW ------------------------");
     let savedReview = await Review.create(review);
 
     // populate reviews for the given dish
     foundDish = await Dish.findById(req.params.id)
       .populate('reviews')
       .exec();
+      console.log("--------------------- POPULATED DISH WITH REVIEWS ------------------------");
+
     foundDish.reviews.push(savedReview);
-    foundDish.rating = calculateDishAverageRating(foundDish.reviews);
+    foundDish.avgScore = calculateDishAverageRating(foundDish.reviews);
     await foundDish.save();
 
     return flashAndRedirect(
@@ -109,7 +114,7 @@ const putReview = async (req, res) => {
     foundDish = await Dish.findById(req.params.id)
       .populate('reviews')
       .exec();
-    foundDish.rating = calculateDishAverageRating(foundDish.reviews);
+    foundDish.avgScore = calculateDishAverageRating(foundDish.reviews);
     await foundDish.save();
     return flashAndRedirect(
       req,
@@ -144,7 +149,7 @@ const deleteReview = async (req, res) => {
       .exec();
 
     // recalculate dish average
-    dish.rating = calculateDishAverageRating(dish.reviews);
+    dish.avgScore = calculateDishAverageRating(dish.reviews);
     dish.save();
 
     return flashAndRedirect(
@@ -168,7 +173,7 @@ const deleteReview = async (req, res) => {
 function assembleReview(req, dish) {
   if (!req) throw new Error('Cannot assemble a review. Request is null.');
 
-  let rating = req.body.review ? req.body.review.rating : req.body.rating;
+  let score = req.body.review ? req.body.review.score : req.body.score;
 
   /* let text = req.body.review ? req.body.review.text : req.body.text;
   text = text.substring(0, allowedReviewLength); */
@@ -179,7 +184,7 @@ function assembleReview(req, dish) {
   };
 
   let review = {
-    rating: rating,
+    score: score,
     text: " ",
     author: author,
     dish: dish
@@ -194,7 +199,7 @@ function calculateDishAverageRating(reviews) {
   }
   var sum = 0;
   reviews.forEach(function(review) {
-    sum += review.rating;
+    sum += review.score;
   });
 
   return sum / reviews.length;
@@ -206,5 +211,6 @@ module.exports = {
   postReview,
   editReview,
   putReview,
-  deleteReview
+  deleteReview,
+  assembleReview
 };
