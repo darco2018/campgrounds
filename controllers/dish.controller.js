@@ -4,8 +4,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const Dish = require('../models/dish');
 const Foodplace = require('../models/foodplace');
-const reviewController = require('../controllers/review.controller')
-const Review = require('../models/review');
+const ratingController = require('./rating.controller');
+const Rating = require('../models/rating');
 const Comment = require('../models/comment');
 //const middleware = require('../middleware'); //index.js is imported by default from middleware folder
 const { flashAndRedirect } = require('../utils/index');
@@ -85,15 +85,15 @@ const postDish = async (req, res) => {
   }
 
   try {
-    let dish = await assembleDish(req);    
+    let dish = await assembleDish(req);
     let savedDish = await Dish.create(dish);
 
-    //create review    
-    let review = reviewController.assembleReview(req, savedDish);
+    //create rating
+    let rating = ratingController.assembleRating(req, savedDish);
     // no need to calculate avg rating
     savedDish.avgScore = req.body.dish ? req.body.dish.score : req.body.score;
-    let savedReview = await Review.create(review);
-    savedDish.reviews.push(savedReview);   
+    let savedRating = await Rating.create(rating);
+    savedDish.ratings.push(savedRating);
 
     // create comment from dish.description
     let comment = assembleComment(req);
@@ -133,7 +133,7 @@ const showDish = async (req, res) => {
       .populate('foodplace')
       .populate('comments')
       .populate({
-        path: 'reviews',
+        path: 'ratings',
         options: { sort: { createdAt: -1 } }
       })
       .exec();
@@ -269,12 +269,12 @@ const deleteDish = async (req, res) => {
     ).exec();
 
     // more on : Cascade Delete with MongoDB: https://www.youtube.com/watch?v=5iz69Wq_77k
-    // deletes all comments & reviews associated with the dish
-    /* $in operator which finds all Comment and Review database entries which have ids contained 
-    in dish.comments and dish.reviews, and deletes them along with the associated dish that 
+    // deletes all comments & ratings associated with the dish
+    /* $in operator which finds all Comment and Rating database entries which have ids contained 
+    in dish.comments and dish.ratings, and deletes them along with the associated dish that 
     is getting removed.  */
     await Comment.remove({ _id: { $in: dish.comments } });
-    await Review.remove({ _id: { $in: dish.reviews } });
+    await Rating.remove({ _id: { $in: dish.ratings } });
     dish.remove();
     //  let deleted = await Dish.findByIdAndDelete(dishId).exec();
 
@@ -325,7 +325,7 @@ function assembleDish(req) {
     let image = req.body.dish ? req.body.dish.image : req.body.image;
     image = !image ? defaultImageUrl : image;
 
-   /*  let description = req.body.dish
+    /*  let description = req.body.dish
       ? req.body.dish.description
       : req.body.description;
     description = description.substring(0, allowedDescriptionLength); */
@@ -341,7 +341,8 @@ function assembleDish(req) {
       price: req.body.dish ? req.body.dish.price : req.body.price,
       image: image,
       imageId: req.body.dish ? req.body.dish.imageId : req.body.imageId,
-    /*   description: description, */    
+      /*   description: description, */
+
       author: author
     };
 
@@ -371,8 +372,8 @@ function assembleComment(req) {
   return comment;
 }
 
-/* function assembleReview(req, dish) {
-  if (!req) throw new Error('Cannot assemble a review. Request is null.');
+/* function assembleRating(req, dish) {
+  if (!req) throw new Error('Cannot assemble a rating. Request is null.');
 
   let score = req.body.dish ? req.body.dish.avgScore : req.body.rating;
 
@@ -381,14 +382,14 @@ function assembleComment(req) {
     username: req.user.username
   };
 
-  let review = {
+  let rating = {
     score: score,
     text: " ",
     author: author,
     dish: dish
   };
 
-  return review;
+  return rating;
 } */
 
 module.exports = {

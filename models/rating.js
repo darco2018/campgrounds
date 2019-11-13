@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const reviewSchema = new Schema(
+const ratingSchema = new Schema(
   {
     score: {
       type: Number,
@@ -29,4 +29,4 @@ const reviewSchema = new Schema(
   { timestamps: true } //mongoose adds createdAt, updatedAt fields
 );
 
-module.exports = mongoose.model("Review", reviewSchema);
+module.exports = mongoose.model('Rating', ratingSchema);

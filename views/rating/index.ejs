@@ -15,7 +15,7 @@
                     <div class="text-center">
                         <% if (dish.avgScore === 0) { %>
                         <h5>
-                            <em>No reviews yet.</em>
+                            <em>No ratings yet.</em>
                         </h5>
                         <% } else { %>
                         <p>
@@ -24,7 +24,7 @@
                             <span class="fa fa-star <% if (dish.avgScore > 2.5) { %> checked <% } %>"></span>
                             <span class="fa fa-star <% if (dish.avgScore > 3.5) { %> checked <% } %>"></span>
                             <span class="fa fa-star <% if (dish.avgScore > 4.5) { %> checked <% } %>"></span>
-                            <em>&nbsp;(total reviews: <%= dish.reviews.length %>)</em>
+                            <em>&nbsp;(total ratings: <%= dish.ratings.length %>)</em>
                         </p>
                         <p>
                             Current dish rating: <strong class="checked"><%= dish.avgScore.toFixed(2) %></strong>
@@ -32,38 +32,38 @@
                         <div class="mb-3">
                             <a class="btn btn-sm btn-success my-1  
 
-                            <!-- disable Rate review button if user has already written a review -->
-                            <% if (currentUser && dish.reviews.some( 
-                                  function (review) { 
-                                      return review.author.id.equals( currentUser._id );
+                            <!-- disable Rate rating button if user has already written a rating -->
+                            <% if (currentUser && dish.ratings.some( 
+                                  function (rating) { 
+                                      return rating.author.id.equals( currentUser._id );
                                   }
                             )){ %> 
                                 disabled                             
                             <% } %>
 
-                            " href="<%= dish.url %>/reviews/new">
+                            " href="<%= dish.url %>/ratings/new">
                                 Rate the dish</a>
                         </div>
                     </div>
                     <hr style="margin-top: 0;">
-                    <% dish.reviews.forEach(function(review){ %>
+                    <% dish.ratings.forEach(function(rating){ %>
                     <div class="row">
                         <div class="col-md-3">
-                            <%- '<span class="fa fa-star checked"></span>'.repeat(review.score) %>
-                            <%- '<span class="fa fa-star"></span>'.repeat(5 - review.score) %>
-                            <div>Review by: <strong><%= review.author.username %></strong></div>
+                            <%- '<span class="fa fa-star checked"></span>'.repeat(rating.score) %>
+                            <%- '<span class="fa fa-star"></span>'.repeat(5 - rating.score) %>
+                            <div>Rating by: <strong><%= rating.author.username %></strong></div>
                             <span class="text-muted">
-                                <small><%= review.updatedAt.toDateString() %></small>
+                                <small><%= rating.updatedAt.toDateString() %></small>
                             </span>
                         </div>
                         <div class="col-md-9">
                             <p style="text-align: justify; word-wrap: break-word;">
-                                <%= review.text %>
+                                <%= rating.text %>
                             </p>
-                            <% if(currentUser && review.author.id.equals(currentUser._id)){ %>
+                            <% if(currentUser && rating.author.id.equals(currentUser._id)){ %>
                             <a class="btn btn-sm btn-warning"
-                                href="<%= dish.url %>/reviews/<%=review._id %>/edit">Edit</a>
-                            <form class="d-inline ml-1" action="<%= dish.url %>/reviews/<%=review._id %>?_method=DELETE"
+                                href="<%= dish.url %>/ratings/<%=rating._id %>/edit">Edit</a>
+                            <form class="d-inline ml-1" action="<%= dish.url %>/ratings/<%=rating._id %>?_method=DELETE"
                                 method="POST">
                                 <button class="btn btn-sm btn-danger">Delete</button>
                             </form>
@@ -83,7 +83,7 @@
             </div>
         </div>
     </div>
-    <!--Review section-->
+    <!--Rating section-->
 </div>
 
 <% include ../partials/footer %>

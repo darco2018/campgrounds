@@ -7,7 +7,7 @@ const dishSchema = new Schema({
   price: String,
   image: String,
   imageId: String,
-  description: { type: String, trim: true, default: "No description"},
+  description: { type: String, trim: true, default: 'No description' },
   createdAt: { type: Date, default: Date.now },
   author: {
     // includes all info about author
@@ -28,10 +28,10 @@ const dishSchema = new Schema({
       ref: 'Comment'
     }
   ],
-  reviews: [
+  ratings: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'Review'
+      ref: 'Rating'
     }
   ],
   avgScore: {

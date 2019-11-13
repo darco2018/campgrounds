@@ -3,18 +3,18 @@ const mongoose = require('mongoose');
 const Dish = require('./models/dish');
 const Foodplace = require('./models/foodplace');
 const Comment = require('./models/comment');
-const Review = require('./models/review');
+const Rating = require('./models/rating');
 
 async function seedDb() {
   try {
     await Dish.deleteMany({});
     await Comment.deleteMany({});
     await Foodplace.deleteMany({});
-    await Review.deleteMany({});
-    console.log('Removed dishes, comments, foodplaces, reviews');
+    await Rating.deleteMany({});
+    console.log('Removed dishes, comments, foodplaces, ratings');
 
-    // example review
-    await Review.create({
+    // example rating
+    await Rating.create({
       score: 2,
       text: 'Just because I can',
       author: {
@@ -22,7 +22,6 @@ async function seedDb() {
         username: 'q'
       },
       dish: '5d999dbd4029930fa9e8ebd3'
-      
     });
 
     for (const foodplace of mockFoodplaces) {

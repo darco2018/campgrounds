@@ -2,7 +2,7 @@
 const Dish = require('../models/dish');
 const Comment = require('../models/comment');
 const Foodplace = require('../models/foodplace');
-const Review = require('../models/review');
+const Rating = require('../models/rating');
 
 const middlewareObj = {};
 
@@ -150,50 +150,52 @@ middlewareObj.checkFoodplaceExists = function(req, res, next) {
   });
 };
 
-middlewareObj.checkReviewExists = function (req, res, next) {
+middlewareObj.checkRatingExists = function(req, res, next) {
   if (req.isAuthenticated()) {
-      Dish.findById(req.params.id).populate("reviews").exec(function (err, foundDish) {
-          if (err || !foundDish) {
-              req.flash("error", "Dish not found.");
-              res.redirect("back");
-          } else {
-              // check if req.user._id exists in foundDish.reviews
-              // some() true if any array element matches
-              var foundUserReview = foundDish.reviews.some(function (review) {
-                  return review.author.id.equals(req.user._id);
-              });
-              if (foundUserReview) {
-                  req.flash("error", "You already wrote a review.");
-                  return res.redirect("/dishes/" + foundDish._id);
-              }
-              // if the review was not found, go to the next middleware
-              next();
+    Dish.findById(req.params.id)
+      .populate('ratings')
+      .exec(function(err, foundDish) {
+        if (err || !foundDish) {
+          req.flash('error', 'Dish not found.');
+          res.redirect('back');
+        } else {
+          // check if req.user._id exists in foundDish.ratings
+          // some() true if any array element matches
+          var foundUserRating = foundDish.ratings.some(function(rating) {
+            return rating.author.id.equals(req.user._id);
+          });
+          if (foundUserRating) {
+            req.flash('error', 'You already wrote a rating.');
+            return res.redirect('/dishes/' + foundDish._id);
           }
+          // if the rating was not found, go to the next middleware
+          next();
+        }
       });
   } else {
-      req.flash("error", "You need to login first.");
-      res.redirect("back");
+    req.flash('error', 'You need to login first.');
+    res.redirect('back');
   }
 };
 
-middlewareObj.checkReviewOwnership = function(req, res, next) {
-  if(req.isAuthenticated()){
-      Review.findById(req.params.review_id, function(err, foundReview){
-          if(err || !foundReview){
-              res.redirect("back");
-          }  else {
-              // does user own the comment?
-              if(foundReview.author.id.equals(req.user._id)) {
-                  next();
-              } else {
-                  req.flash("error", "You don't have permission to do that");
-                  res.redirect("back");
-              }
-          }
-      });
+middlewareObj.checkRatingOwnership = function(req, res, next) {
+  if (req.isAuthenticated()) {
+    Rating.findById(req.params.rating_id, function(err, foundRating) {
+      if (err || !foundRating) {
+        res.redirect('back');
+      } else {
+        // does user own the comment?
+        if (foundRating.author.id.equals(req.user._id)) {
+          next();
+        } else {
+          req.flash('error', "You don't have permission to do that");
+          res.redirect('back');
+        }
+      }
+    });
   } else {
-      req.flash("error", "You need to be logged in to do that");
-      res.redirect("back");
+    req.flash('error', 'You need to be logged in to do that');
+    res.redirect('back');
   }
 };
 

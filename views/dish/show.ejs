@@ -37,7 +37,7 @@
             </div>
             <% if (dish.avgScore === 0) { %>
             <p>
-              <em>No reviews yet.</em>
+              <em>No ratings yet.</em>
             </p>
             <% } else { %>
             <p>
@@ -48,8 +48,8 @@
               <span class="fa fa-star <% if (dish.avgScore > 4.5) { %> checked <% } %>"></span>
               &nbsp;&nbsp;
               <em class="checked"><strong><%= dish.avgScore.toFixed(2) %></strong></em>
-              <em>&nbsp;(total ratings: <%= dish.reviews.length %>)</em>
-              <a class="ml-5" href="<%= dish.url %>/reviews">
+              <em>&nbsp;(total ratings: <%= dish.ratings.length %>)</em>
+              <a class="ml-5" href="<%= dish.url %>/ratings">
                 <i class="fa fa-search" aria-hidden="true"></i>
                 See all ratings
               </a>
@@ -87,15 +87,15 @@
       <!-- no display?! -->
       <% } else { %>
 
-      <!--Review section-->
-      <section id="latest-review" class="">
+      <!--Rating section-->
+      <section id="latest-rating" class="">
         <div class="card-body  pt-3 px-5">
 
           <div class="text-center">
             <a class="btn btn-sm btn-success my-1 
-            <% if (currentUser && dish.reviews.some(function (review) {
-              return review.author.id.equals(currentUser._id)})) { %> disabled <% } %>"
-              href="/dishes/<%= dish._id %>/reviews/new">
+            <% if (currentUser && dish.ratings.some(function (rating) {
+              return rating.author.id.equals(currentUser._id)})) { %> disabled <% } %>"
+              href="/dishes/<%= dish._id %>/ratings/new">
               Rate the dish
             </a>
             <a href="<%= dish.url %>/comments/new" class="btn btn-sm btn-success ml-1">Leave a comment</a>
