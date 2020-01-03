@@ -3,7 +3,11 @@
 <div id="dish-index" class="container">
   <% include ../partials/jumbotron.ejs %>
   <div class="row">
+    
     <div class="card-deck">
+        <% if( dishes.length < 1){ %>    
+          <p class="ml-5 text-danger">No dishes match your criteria...</p>  
+        <% } %>
       <% dishes.forEach((dish) =>{ %>
       <div class="col-md-6 col-xl-4 mb-3">
         <div class="card p-1 dish-card">

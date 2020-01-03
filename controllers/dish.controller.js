@@ -20,11 +20,22 @@ const allowedDescriptionLength = 2000;
 /* ------------------------- ROUTES ------------------------------- */
 
 const getDishes = async (req, res) => {
+  // freezes the code: eval(require('locus')); // req.query.search
   try {
-    let dishes = await Dish.find()
-      .populate('foodplace')
-      .populate('comments')
-      .exec(); //returns full-fledged Promise in mongoose
+    let dishes = null;
+    if (req.query.search) {
+      const regex = new RegExp(escapeRegex(req.query.search), 'gi');
+
+      dishes = await Dish.find({name: regex})
+        .populate('foodplace')
+        .populate('comments')
+        .exec(); //returns full-fledged Promise in mongoose
+    } else {
+      dishes = await Dish.find()
+        .populate('foodplace')
+        .populate('comments')
+        .exec(); //returns full-fledged Promise in mongoose
+    }
 
     dishes = await addLatestCommentTo(dishes);
     if (dishes == null) {
@@ -372,25 +383,9 @@ function assembleComment(req) {
   return comment;
 }
 
-/* function assembleRating(req, dish) {
-  if (!req) throw new Error('Cannot assemble a rating. Request is null.');
-
-  let score = req.body.dish ? req.body.dish.avgScore : req.body.rating;
-
-  const author = {
-    id: req.user.id,
-    username: req.user.username
-  };
-
-  let rating = {
-    score: score,
-    text: " ",
-    author: author,
-    dish: dish
-  };
-
-  return rating;
-} */
+function escapeRegex(text) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+}
 
 module.exports = {
   getDishes,
